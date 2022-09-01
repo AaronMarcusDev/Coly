@@ -7,7 +7,10 @@ Please do not use this yet, the syntax will likely have major changes during dev
 ## Goals
 
 The idea is to create a stack-based language with modern features.
-I am trying to implement an interpreter first, compiler might come later on in development.
+
+I am trying to implement an interpreter first, 
+
+a compiler might come later on in development.
 
 ## Todo
  - [x] basic Lexer
