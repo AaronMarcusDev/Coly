@@ -1,0 +1,5 @@
+;; infinite loop
+
+"start" set
+    "This will print forever\n" out
+    "start" jmp
