@@ -20,9 +20,9 @@ a compiler might come later on in development.
  - [ ] Keyword Identifier...
  - [ ] Control flow (if, end)
 ## Contributing
-[Pull requests]() are welcome, make sure to give a good description.
+[Pull requests](https://github.com/AaronMarcusDev/ssbl/pulls) are welcome, make sure to give a good description.
 
-Please report issues at the [Issues Page]().
+Please report issues at the [Issues Page](https://github.com/AaronMarcusDev/ssbl/issues).
 
 ## License
 SSBl uses [MIT](https://choosealicense.com/licenses/mit/) as it's license.
