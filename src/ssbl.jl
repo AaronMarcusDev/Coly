@@ -15,6 +15,15 @@ module ssbl
         "exit",
     ]
 
+    # Global helper functions
+    function applyEscapeChars(input)
+        input = replace(input, "\\n" => "\n")
+        input = replace(input, "\\t" => "\t" )
+        input = replace(input, "\\r" => "\r" )
+        input = replace(input, "\\\\" => "\\")
+        return input
+    end
+
     # The error function.
     function error(line, pos, message)
         println(string("[ERROR] ", message, " ", line, ":", pos, "."))
@@ -94,7 +103,7 @@ module ssbl
                         if isEmpty(stack)
                             emptyStack(line, charsPassed, value)
                         else
-                            println(getValue(pop!(stack)))
+                            print(getValue(pop!(stack)))
                         end
                     elseif value == "pop"
                         if isEmpty(stack)
@@ -223,6 +232,9 @@ module ssbl
             
             if type == "keyword"
                 push!(tokens, token)
+            elseif type == "string"
+                string = applyEscapeChars(value)
+                push!(tokens, Dict("string" => string))
             else
                 push!(tokens, token)
             end

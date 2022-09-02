@@ -16,7 +16,7 @@ a compiler might come later on in development.
  - [x] basic Lexer
  - [x] basic interpreter
  - [x] arithmetic OP's
- - [ ] Proper print / out command
+ - [x] Proper print / out command
  - [ ] Keyword Identifier...
  - [ ] Control flow (if, end)
 ## Contributing
