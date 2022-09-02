@@ -156,7 +156,7 @@ module ssbl
                                 unexpectedType(line, charsPassed, "number", value)
                             end
                         end
-                    end 
+                    end
                 else
                     println("whadda fuck '$value'.")
                 end
@@ -212,6 +212,86 @@ module ssbl
                             push!(stack, Dict("number" => string(Int(parse(Int, getValue(b)) / parse(Int, getValue(a))))))
                         else
                             unexpectedType(line, charsPassed, "Int", value)
+                        end
+                    end
+                end
+            elseif type == "comparator"
+                if value == "LT"
+                    if isEmpty(stack)
+                        emptyStack(line, charsPassed, value)
+                    else
+                        a = pop!(stack)
+                        b = pop!(stack)
+
+                        if expect(a, "number") && expect(b, "number")
+                            push!(stack, Dict("number" => Int(parse(Int, getValue(a)) < parse(Int, getValue(b)))))
+                        else
+                            unexpectedType(line, charsPassed, "number", "<")
+                        end
+                    end
+                elseif value == "LTE"
+                    if isEmpty(stack)
+                        emptyStack(line, charsPassed, value)
+                    else
+                        a = pop!(stack)
+                        b = pop!(stack)
+
+                        if expect(a, "number") && expect(b, "number")
+                            push!(stack, Dict("number" => Int(parse(Int, getValue(a)) <= parse(Int, getValue(b)))))
+                        else
+                            unexpectedType(line, charsPassed, "number", "<=")
+                        end
+                    end
+                elseif value == "GT"
+                    if isEmpty(stack)
+                        emptyStack(line, charsPassed, value)
+                    else
+                        a = pop!(stack)
+                        b = pop!(stack)
+
+                        if expect(a, "number") && expect(b, "number")
+                            push!(stack, Dict("number" => Int(parse(Int, getValue(a)) > parse(Int, getValue(b)))))
+                        else
+                            unexpectedType(line, charsPassed, "number", ">")
+                        end
+                    end
+                elseif value == "GTE"
+                    if isEmpty(stack)
+                        emptyStack(line, charsPassed, value)
+                    else
+                        a = pop!(stack)
+                        b = pop!(stack)
+
+                        if expect(a, "number") && expect(b, "number")
+                            push!(stack, Dict("number" => Int(parse(Int, getValue(a)) >= parse(Int, getValue(b)))))
+                        else
+                            unexpectedType(line, charsPassed, "number", ">=")
+                        end
+                    end
+                elseif value == "EQ"
+                    if isEmpty(stack)
+                        emptyStack(line, charsPassed, value)
+                    else
+                        a = pop!(stack)
+                        b = pop!(stack)
+
+                        if expect(a, "number") && expect(b, "number")
+                            push!(stack, Dict("number" => Int(parse(Int, getValue(a)) == parse(Int, getValue(b)))))
+                        else
+                            unexpectedType(line, charsPassed, "number", "=")
+                        end
+                    end
+                elseif value == "NEQ"
+                    if isEmpty(stack)
+                        emptyStack(line, charsPassed, value)
+                    else
+                        a = pop!(stack)
+                        b = pop!(stack)
+
+                        if expect(a, "number") && expect(b, "number")
+                            push!(stack, Dict("number" => Int(parse(Int, getValue(a)) != parse(Int, getValue(b)))))
+                        else
+                            unexpectedType(line, charsPassed, "number", "!=")
                         end
                     end
                 end
@@ -292,10 +372,10 @@ module ssbl
                     push!(tokens, Dict("comparator" => "GT"))
                 end
             elseif curr == "="
-                push!(tokens, Dict("assigner" => "EQUALS"))
+                push!(tokens, Dict("comparator" => "EQ"))
             elseif curr == "!"
                 if chars[i+1] == "="
-                    push!(tokens, Dict("operator" => "NOT_EQUALS"))
+                    push!(tokens, Dict("comparator" => "NEQ"))
                     i += 1
                 else
                     error(line, i, "Unexpected character.")

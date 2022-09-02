@@ -1,6 +1,8 @@
 ;; myProgram
 
-"Hello, world!" out
+"Hello, world!\n" out
+"The result is: "out
+9 8 < out "\n" out
 1 1 + 2 - 9 * 1 + 1 / 1 + out
 
 0 exit
