@@ -12,6 +12,7 @@ module ssbl
         "clr",
         "set",
         "jmp",
+        "exit",
     ]
 
     # The error function.
@@ -135,6 +136,17 @@ module ssbl
                         else
                             unexpectedType(line, charsPassed, "string", value)
                         end
+                    elseif value == "exit"
+                        if isEmpty(stack)
+                            emptyStack(line, charsPassed, value)
+                        else
+                            if expect(stack[length(stack)], "number")
+                                code = getValue(pop!(stack))
+                                exit(parse(Int, code))
+                            else
+                                unexpectedType(line, charsPassed, "number", value)
+                            end
+                        end
                     end 
                 else
                     println("whadda fuck '$value'.")
@@ -210,22 +222,14 @@ module ssbl
             value = getValue(token)
             
             if type == "keyword"
-                if value == "ass"
-                    push!(tokens, Dict("assigner" => "equals"))
-                elseif value == "eq"
-                    push!(tokens, Dict("comparator" => "equals"))
-                elseif value == "noq"
-                    push!(tokens, Dict("comparator" => "not_equals"))
-                else
-                    push!(tokens, token)
-                end
+                push!(tokens, token)
             else
                 push!(tokens, token)
             end
         end
         println(string("\n", tokens))
         interpreter(tokens)
-    end
+    end 
     
     # Regex functions.
     function isLetter(input)
