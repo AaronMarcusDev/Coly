@@ -13,6 +13,8 @@ module ssbl
         "set",
         "jmp",
         "exit",
+        "if",
+        "end",
     ]
 
     # Global helper functions
@@ -28,6 +30,10 @@ module ssbl
     function error(line, pos, message)
         println(string("[ERROR] ", message, " ", line, ":", pos, "."))
         global errors += 1
+    end
+
+    function EOFError(line, pos)
+        error(line, pos, "Unexpected end of file.")
     end
     
     function emptyStack(line, pos, cmd)
@@ -75,6 +81,7 @@ module ssbl
         global pos = 1
         global line = 1
         global charsPassed = 0
+        global lastIf = 01
         stack = []
         jumpPoints = Dict()
 
@@ -115,10 +122,10 @@ module ssbl
                         if isEmpty(stack)
                             emptyStack(line, charsPassed, value)
                         else
-                            push!(stack, stack[0])
+                            push!(stack, stack[1])
                         end
                     elseif value == "clr"
-                        clear!(stack)
+                        stack = []
                     elseif value == "set"
                         if isEmpty(stack)
                             emptyStack(line, charsPassed, value)
@@ -152,6 +159,51 @@ module ssbl
                             if expect(stack[length(stack)], "number")
                                 code = getValue(pop!(stack))
                                 exit(parse(Int, code))
+                            else
+                                unexpectedType(line, charsPassed, "number", value)
+                            end
+                        end
+                    elseif value == "if"
+                        if isEmpty(stack)
+                            emptyStack(line, charsPassed, value)
+                        else
+                            if expect(stack[length(stack)], "number")
+                                condition = getValue(pop!(stack))
+                                nestedIfs = 0
+                                linesfound = 0
+                                start = pos
+                                global pos += 1
+                                while pos <= length(tokens)
+                                    if expect(tokens[pos], "keyword")
+                                        if getValue(tokens[pos]) == "if" || getValue(tokens[pos]) == "else"
+                                            nestedIfs += 1
+                                        elseif getValue(tokens[pos]) == "end"
+                                            if nestedIfs == 0
+                                                if condition == 1
+                                                    lastIf = 1
+                                                    global line -= linesfound
+                                                    global pos = start + 1
+                                                elseif condition == 0
+                                                    lastIf = 0
+                                                    break
+                                                else
+                                                    error(line, start, "Invalid boolean, condition must be either 0 (false) or 1 (true).")
+                                                end
+                                                break
+                                            else
+                                                nestedIfs -= 1
+                                            end
+                                        end
+                                    elseif expect(tokens[pos], "EOL")
+                                        global line += 1
+                                        linesfound += 1
+                                    elseif expect(tokens[pos], "EOF")
+                                        error(line - linesfound, start, "if-statement was never closed with 'end'.")
+                                        EOFError(line, charsPassed)
+                                        break
+                                    end
+                                    global pos += 1
+                                end
                             else
                                 unexpectedType(line, charsPassed, "number", value)
                             end

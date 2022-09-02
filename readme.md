@@ -16,9 +16,11 @@ a compiler might come later on in development.
  - [x] basic Lexer
  - [x] basic interpreter
  - [x] arithmetic OP's
+ - [x] conditionals
  - [x] Proper print / out command
  - [ ] Keyword Identifier...
- - [ ] Control flow (if, end)
+ - [x] Control flow (if, end)
+ - [ ] Else-statement
 ## Contributing
 [Pull requests](https://github.com/AaronMarcusDev/ssbl/pulls) are welcome, make sure to give a good description.
 
