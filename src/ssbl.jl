@@ -81,7 +81,6 @@ module ssbl
         global pos = 1
         global line = 1
         global charsPassed = 0
-        global lastIf = 01
         stack = []
         jumpPoints = Dict()
 
@@ -269,8 +268,8 @@ module ssbl
                 end
             elseif type == "comparator"
                 if value == "LT"
-                    if isEmpty(stack)
-                        emptyStack(line, charsPassed, value)
+                    if length(stack) < 2
+                        tooLittleStackItems(line, charsPassed, value)
                     else
                         a = pop!(stack)
                         b = pop!(stack)
@@ -282,66 +281,66 @@ module ssbl
                         end
                     end
                 elseif value == "LTE"
-                    if isEmpty(stack)
-                        emptyStack(line, charsPassed, value)
+                    if length(stack) < 2
+                        tooLittleStackItems(line, charsPassed, value)
                     else
                         a = pop!(stack)
                         b = pop!(stack)
 
                         if expect(a, "number") && expect(b, "number")
-                            push!(stack, Dict("number" => Int(parse(Int, getValue(a)) <= parse(Int, getValue(b)))))
+                            push!(stack, Dict("number" => Int(parse(Int, string(getValue(a))) <= parse(Int, string(getValue(b))))))
                         else
                             unexpectedType(line, charsPassed, "number", "<=")
                         end
                     end
                 elseif value == "GT"
-                    if isEmpty(stack)
-                        emptyStack(line, charsPassed, value)
+                    if length(stack) < 2
+                        tooLittleStackItems(line, charsPassed, value)
                     else
                         a = pop!(stack)
                         b = pop!(stack)
 
                         if expect(a, "number") && expect(b, "number")
-                            push!(stack, Dict("number" => Int(parse(Int, getValue(a)) > parse(Int, getValue(b)))))
+                            push!(stack, Dict("number" => Int(parse(Int, string(getValue(a))) > parse(Int, string(getValue(b))))))
                         else
                             unexpectedType(line, charsPassed, "number", ">")
                         end
                     end
                 elseif value == "GTE"
-                    if isEmpty(stack)
-                        emptyStack(line, charsPassed, value)
+                    if length(stack) < 2
+                        tooLittleStackItems(line, charsPassed, value)
                     else
                         a = pop!(stack)
                         b = pop!(stack)
 
                         if expect(a, "number") && expect(b, "number")
-                            push!(stack, Dict("number" => Int(parse(Int, getValue(a)) >= parse(Int, getValue(b)))))
+                            push!(stack, Dict("number" => Int(parse(Int, string(getValue(a))) >= parse(Int, string(getValue(b))))))
                         else
                             unexpectedType(line, charsPassed, "number", ">=")
                         end
                     end
                 elseif value == "EQ"
-                    if isEmpty(stack)
-                        emptyStack(line, charsPassed, value)
+                    if length(stack) < 2
+                        tooLittleStackItems(line, charsPassed, value)
                     else
                         a = pop!(stack)
                         b = pop!(stack)
 
                         if expect(a, "number") && expect(b, "number")
-                            push!(stack, Dict("number" => Int(parse(Int, getValue(a)) == parse(Int, getValue(b)))))
+                            push!(stack, Dict("number" => Int(parse(Int, string(getValue(a))) == parse(Int, string(getValue(b))))))
                         else
                             unexpectedType(line, charsPassed, "number", "=")
                         end
                     end
                 elseif value == "NEQ"
-                    if isEmpty(stack)
-                        emptyStack(line, charsPassed, value)
+                    if length(stack) < 2
+                        tooLittleStackItems(line, charsPassed, value)
                     else
                         a = pop!(stack)
                         b = pop!(stack)
 
                         if expect(a, "number") && expect(b, "number")
-                            push!(stack, Dict("number" => Int(parse(Int, getValue(a)) != parse(Int, getValue(b)))))
+                            push!(stack, Dict("number" => Int(parse(Int, string(getValue(a))) != parse(Int, string(getValue(b))))))
                         else
                             unexpectedType(line, charsPassed, "number", "!=")
                         end

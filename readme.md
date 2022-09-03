@@ -18,8 +18,8 @@ a compiler might come later on in development.
  - [x] arithmetic OP's
  - [x] conditionals
  - [x] Proper print / out command
- - [ ] Keyword Identifier...
  - [x] Control flow (if, end)
+ - [ ] Keyword Identifier...
  - [ ] Else-statement
 ## Contributing
 [Pull requests](https://github.com/AaronMarcusDev/ssbl/pulls) are welcome, make sure to give a good description.
