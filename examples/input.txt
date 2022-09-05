@@ -1,0 +1,11 @@
+;; loop with conditions
+
+6
+"start" set
+    1 - dup 
+    dup out "\n" out
+     0 != if
+        "start" jmp
+    end
+
+"Done.\n" out

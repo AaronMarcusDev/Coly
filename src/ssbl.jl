@@ -223,7 +223,7 @@ module ssbl
                             push!(stack, Dict("number" => string(parse(Int, getValue(a)) + parse(Int, getValue(b)))))
                         else
                             println(a)
-                            unexpectedType(line, charsPassed, "Int", value)
+                            unexpectedType(line, charsPassed, "number", "+")
                         end
                     end
                 elseif value == "SUB"
@@ -236,7 +236,7 @@ module ssbl
                         if expect(a, "number") && expect(b, "number")
                             push!(stack, Dict("number" => string(parse(Int, getValue(b)) - parse(Int, getValue(a)))))
                         else
-                            unexpectedType(line, charsPassed, "Int", value)
+                            unexpectedType(line, charsPassed, "number", "-")
                         end
                     end
                 elseif value == "MUL"
@@ -249,7 +249,7 @@ module ssbl
                         if expect(a, "number") && expect(b, "number")
                             push!(stack, Dict("number" => string(parse(Int, getValue(a)) * parse(Int, getValue(b)))))
                         else
-                            unexpectedType(line, charsPassed, "Int", value)
+                            unexpectedType(line, charsPassed, "number", "*")
                         end
                     end
                 elseif value == "DIV"
@@ -262,7 +262,7 @@ module ssbl
                         if expect(a, "number") && expect(b, "number")
                             push!(stack, Dict("number" => string(Int(parse(Int, getValue(b)) / parse(Int, getValue(a))))))
                         else
-                            unexpectedType(line, charsPassed, "Int", value)
+                            unexpectedType(line, charsPassed, "number", "/")
                         end
                     end
                 end
