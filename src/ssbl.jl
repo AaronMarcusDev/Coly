@@ -15,6 +15,7 @@ module ssbl
         "exit",
         "if",
         "end",
+        "swp",
     ]
 
     # Global helper functions
@@ -206,6 +207,15 @@ module ssbl
                             else
                                 unexpectedType(line, charsPassed, "number", value)
                             end
+                        end
+                    elseif value == "swp"
+                        if length(stack) < 2
+                            tooLittleStackItems(line, charsPassed, value)
+                        else
+                            a = pop!(stack)
+                            b = pop!(stack)
+                            push!(stack, b)
+                            push!(stack, a)
                         end
                     end
                 else
