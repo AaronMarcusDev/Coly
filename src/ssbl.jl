@@ -265,6 +265,19 @@ module ssbl
                             unexpectedType(line, charsPassed, "number", "/")
                         end
                     end
+                elseif value == "MOD"
+                    if length(stack) < 2
+                        tooLittleStackItems(line, charsPassed, value)
+                    else
+                        a = pop!(stack)
+                        b = pop!(stack)
+
+                        if expect(a, "number") && expect(b, "number")
+                            push!(stack, Dict("number" => string(parse(Int, getValue(b)) % parse(Int, getValue(a)))))
+                        else
+                            unexpectedType(line, charsPassed, "number", "%")
+                        end
+                    end
                 end
             elseif type == "comparator"
                 if value == "LT"
@@ -408,6 +421,8 @@ module ssbl
                 push!(tokens, Dict("arithmetic" => "MUL"))
             elseif curr == "/"
                 push!(tokens, Dict("arithmetic" => "DIV"))
+            elseif curr == "%"
+                push!(tokens, Dict("arithmetic" => "MOD"))
             elseif curr == "<"
                 if chars[i+1] == "="
                     push!(tokens, Dict("comparator" => "LTE"))
