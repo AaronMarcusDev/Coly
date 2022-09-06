@@ -8,21 +8,15 @@ Please do not use this yet, the syntax will likely have major changes during dev
 
 The idea is to create a stack-based language with modern features.
 
-I am trying to implement an interpreter first, 
-
-a compiler might come later on in development.
-
 ## Todo
- - [x] basic Lexer
- - [x] basic interpreter
- - [x] arithmetic OP's
- - [x] conditionals
- - [x] Proper print / out command
- - [x] Control flow (if, end)
- - [ ] Keyword Identifier...
- - [ ] Else-statement
+- [x] Lexer
+- [x] Basic Interpreter
+- [ ] Keyword identifier
+- [ ] File I/O
+- [ ] CMD calls
+ 
 ## Contributing
-[Pull requests](https://github.com/AaronMarcusDev/ssbl/pulls) are welcome, make sure to give a good description.
+[Pull requests](https://github.com/AaronMarcusDev/ssbl/pulls) are welcome, make sure to write a good description.
 
 Please report issues at the [Issues Page](https://github.com/AaronMarcusDev/ssbl/issues).
 
