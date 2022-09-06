@@ -18,6 +18,7 @@ module ssbl
         "end",
         "swp",
         "in",
+        "num",
     ]
 
     # Global helper functions
@@ -60,7 +61,8 @@ module ssbl
 
     function isInt(x)
         try
-            return Int(x)
+            parse(Int, x)
+            return true
         catch
             return false
         end
@@ -87,13 +89,12 @@ module ssbl
         stack = []
         jumpPoints = Dict()
 
-        println("\nOutput: ")
         while pos <= length(tokens)
             type = getType(tokens[pos])
             value = getValue(tokens[pos])
 
             # Check if an error was found on every token.
-            if errors > 1
+            if errors > 0
                 println("[INFO] Interpreter halted due to $errors error(s).")
                 break
             end
@@ -227,9 +228,22 @@ module ssbl
                         end
                     elseif value == "in"
                         push!(stack, Dict("string" => readline()))
+                    elseif value == "num"
+                        if isEmpty(stack)
+                            emptyStack(line, charsPassed, value)
+                        else
+                            a = pop!(stack)
+
+                            if isInt(getValue(a))
+                                push!(stack, Dict("number" => getValue(a)))
+                            else
+                                a = getValue(a)
+                                error(line, charsPassed, "Cannot convert '$a' to integer.")
+                            end
+                        end
                     end
                 else
-                    println("whadda fuck '$value'.")
+                    error(line, charsPassed, "Unknown command:'$value'.")
                 end
             elseif type == "arithmetic"
                 if value == "ADD"
@@ -403,7 +417,6 @@ module ssbl
                 push!(tokens, token)
             end
         end
-        println(string("\n", tokens))
         interpreter(tokens)
     end 
     
@@ -542,7 +555,7 @@ module ssbl
             exit(1)
         else
             push!(tokens, Dict("EOF" => "EOF"))
-            println("[INFO] Lexing successful.")
+            # println("[INFO] Lexing successful.")
             identifier(tokens)
         end
     end
