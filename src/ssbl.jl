@@ -7,6 +7,7 @@ module ssbl
     keywords = [
         "debug",
         "out",
+        "prt",
         "pop",
         "dup",
         "clr",
@@ -16,6 +17,7 @@ module ssbl
         "if",
         "end",
         "swp",
+        "in",
     ]
 
     # Global helper functions
@@ -111,6 +113,12 @@ module ssbl
                             emptyStack(line, charsPassed, value)
                         else
                             print(getValue(pop!(stack)))
+                        end
+                    elseif value == "prt"
+                        if isEmpty(stack)
+                            emptyStack(line, charsPassed, value)
+                        else
+                            println(getValue(pop!(stack)))
                         end
                     elseif value == "pop"
                         if isEmpty(stack)
@@ -217,6 +225,8 @@ module ssbl
                             push!(stack, b)
                             push!(stack, a)
                         end
+                    elseif value == "in"
+                        push!(stack, Dict("string" => readline()))
                     end
                 else
                     println("whadda fuck '$value'.")

@@ -1,0 +1,3 @@
+"loop" set
+    in prt
+    "loop" jmp
