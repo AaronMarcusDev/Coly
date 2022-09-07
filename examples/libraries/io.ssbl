@@ -1,0 +1,3 @@
+"prt" mac
+    out "\n" out
+end

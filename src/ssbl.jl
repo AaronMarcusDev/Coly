@@ -116,6 +116,7 @@ module ssbl
                     if value == "end"
                         if inMacro
                             pos = lastloc
+                            inMacro = false
                         end
                     elseif value == "out"
                         if isEmpty(stack)
