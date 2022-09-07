@@ -19,6 +19,7 @@ module ssbl
         "swp",
         "in",
         "num",
+        "mac",
     ]
 
     # Global helper functions
@@ -86,8 +87,11 @@ module ssbl
         global pos = 1
         global line = 1
         global charsPassed = 0
+        global lastloc = 0
+        inMacro = false
         stack = []
         jumpPoints = Dict()
+        macros = Dict()
 
         while pos <= length(tokens)
             type = getType(tokens[pos])
@@ -109,7 +113,11 @@ module ssbl
                     if value == "debug"
                         println(stack)
                     end
-                    if value == "out"
+                    if value == "end"
+                        if inMacro
+                            pos = lastloc
+                        end
+                    elseif value == "out"
                         if isEmpty(stack)
                             emptyStack(line, charsPassed, value)
                         else
@@ -184,7 +192,7 @@ module ssbl
                                 global pos += 1
                                 while pos <= length(tokens)
                                     if expect(tokens[pos], "keyword")
-                                        if getValue(tokens[pos]) == "if" || getValue(tokens[pos]) == "else"
+                                        if getValue(tokens[pos]) == "if" || getValue(tokens[pos]) == "mac"
                                             nestedIfs += 1
                                         elseif getValue(tokens[pos]) == "end"
                                             if nestedIfs == 0
@@ -241,6 +249,58 @@ module ssbl
                                 error(line, charsPassed, "Cannot convert '$a' to integer.")
                             end
                         end
+                    elseif value == "mac"
+                        if isEmpty(stack)
+                            emptyStack(line, charsPassed, value)
+                            return
+                        end
+
+                        name = pop!(stack)
+
+                        if !expect(name, "string")
+                            unexpectedType(line, charsPassed, "string", value)
+                            return
+                        end
+
+                        name = getValue(name)
+
+                        nestedIfs = 0
+                        start = pos
+                        global pos += 1
+                        while pos <= length(tokens)
+                            if expect(tokens[pos], "keyword")
+                                if getValue(tokens[pos]) == "if" || getValue(tokens[pos]) == "mac"
+                                    nestedIfs += 1
+                                elseif getValue(tokens[pos]) == "end"
+                                    if nestedIfs == 0
+                                        if haskey(macros, name)
+                                            error(line, charsPassed, "Macro '$name' already exists.")
+                                        else
+                                            if name in keywords
+                                                error(line, charsPassed, "Cannot use keyword '$name' as macro name.")
+                                            else
+                                                macros[name] = start + 1
+                                                push!(keywords, name)
+                                            end
+                                        end
+                                        break
+                                    else
+                                        nestedIfs -= 1
+                                    end
+                                end
+                            elseif expect(tokens[pos], "EOL")
+                                global line += 1
+                            elseif expect(tokens[pos], "EOF")
+                                error(start, start, "Macro was never closed with 'end'.")
+                                EOFError(line, charsPassed)
+                                break
+                            end
+                            global pos += 1
+                        end
+                    else
+                        global lastloc = pos
+                        inMacro = true
+                        pos = macros[value]
                     end
                 else
                     error(line, charsPassed, "Unknown command:'$value'.")
