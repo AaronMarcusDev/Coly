@@ -23,6 +23,7 @@ module ssbl
         "num",
         "str",
         "mac",
+        "con",
         "sys",
     ]
 
@@ -261,6 +262,14 @@ module ssbl
                         else
                             a = pop!(stack)
                             push!(stack, Dict("string" => string(getValue(a))))
+                        end
+                    elseif value == "con"
+                        if length(stack) < 2
+                            tooLittleStackItems(line, charsPassed, value)
+                        else
+                            a = pop!(stack)
+                            b = pop!(stack)
+                            push!(stack, Dict("string" => string(getValue(b), getValue(a))))
                         end
                     elseif value == "mac"
                         if isEmpty(stack)
