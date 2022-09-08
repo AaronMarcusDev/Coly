@@ -1,3 +1,5 @@
+import Base.run
+
 module ssbl
     
     # Int to keep track of the amount of errors.
@@ -20,6 +22,7 @@ module ssbl
         "in",
         "num",
         "mac",
+        "sys",
     ]
 
     # Global helper functions
@@ -297,6 +300,29 @@ module ssbl
                                 break
                             end
                             global pos += 1
+                        end
+                    elseif value == "sys"
+                        if isEmpty(stack)
+                            emptyStack(line, charsPassed, value)
+                        else
+                            a = pop!(stack)
+
+                            if expect(a, "string")
+                                a = getValue(a)
+                                try
+                                    if occursin(" ", a)
+                                        a = split(a, " ")
+                                        Base.run(`$(a[1]) $(a[2:end])`)
+                                    else
+                                        Base.run(`$a`)
+                                    end
+                                catch
+                                    a = join(a, " ")
+                                    error(line, charsPassed, "Command '$a' failed.")
+                                end
+                            else
+                                unexpectedType(line, charsPassed, "string", value)
+                            end
                         end
                     else
                         global lastloc = pos

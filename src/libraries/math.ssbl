@@ -1,5 +1,3 @@
 "sqr" mac
     dup *
 end
-
-10 sqr prt
