@@ -21,6 +21,7 @@ module ssbl
         "swp",
         "in",
         "num",
+        "str",
         "mac",
         "sys",
     ]
@@ -115,6 +116,7 @@ module ssbl
                 if value in keywords
                     if value == "debug"
                         println(stack)
+                        return
                     end
                     if value == "end"
                         if inMacro
@@ -252,6 +254,13 @@ module ssbl
                                 a = getValue(a)
                                 error(line, charsPassed, "Cannot convert '$a' to integer.")
                             end
+                        end
+                    elseif value == "str"
+                        if isEmpty(stack)
+                            emptyStack(line, charsPassed, value)
+                        else
+                            a = pop!(stack)
+                            push!(stack, Dict("string" => string(getValue(a))))
                         end
                     elseif value == "mac"
                         if isEmpty(stack)
