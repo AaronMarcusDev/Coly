@@ -667,15 +667,17 @@ module ssbl
 
     # Opening and reading file.
     function readFile(name)
-        content = open(name) do file
-            read(file, String)
+        open(name) do file
+            return read(file, String)
         end
-        lexer(content)
     end
 
     # Run the language
     function run(file, mode)
-        readFile(file)
+        content = readFile(file)
+        if length(strip(content)) != 0
+            lexer(content)
+        end
     end
 
     # Entry point of language.
