@@ -11,9 +11,9 @@ The idea is to create a stack-based language with modern features.
 ## Todo
 - [x] Lexer
 - [x] Basic Interpreter
+- [x] CMD calls
 - [ ] Keyword identifier
 - [ ] File I/O
-- [ ] CMD calls
  
 ## Contributing
 [Pull requests](https://github.com/AaronMarcusDev/ssbl/pulls) are welcome, make sure to write a good description.
