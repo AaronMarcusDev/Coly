@@ -181,8 +181,8 @@ function interpreter(tokens)
                     else
                         a = pop!(stack)
                         b = pop!(stack)
-                        push!(stack, b)
                         push!(stack, a)
+                        push!(stack, b)
                     end
                 elseif value == "in"
                     push!(stack, Dict("string" => readline()))
