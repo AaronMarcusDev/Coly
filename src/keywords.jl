@@ -1,0 +1,21 @@
+# All keywords
+keywords = [
+    "debug",
+    "out",
+    "prt",
+    "pop",
+    "dup",
+    "clr",
+    "set",
+    "jmp",
+    "exit",
+    "if",
+    "end",
+    "swp",
+    "in",
+    "num",
+    "str",
+    "mac",
+    "con",
+    "sys",
+]
