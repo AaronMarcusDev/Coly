@@ -21,4 +21,4 @@ The idea is to create a stack-based language with modern features.
 Please report issues at the [Issues Page](https://github.com/AaronMarcusDev/ssbl/issues).
 
 ## License
-SSBl uses [MIT](https://choosealicense.com/licenses/mit/) as it's license.
+SSBL uses [MIT](https://choosealicense.com/licenses/mit/) as it's license.
