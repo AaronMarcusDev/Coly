@@ -6,6 +6,7 @@ module ssbl
     include("error.jl")
     include("interpreter.jl")
     include("identifier.jl")
+    include("preprocessor.jl")
     include("lexer.jl")
 
     # Opening and reading file.

@@ -134,6 +134,7 @@ function lexer(content)
     else
         push!(tokens, Dict("EOF" => "EOF"))
         # println("[INFO] Lexing successful.")
-        identifier(tokens)
+        # identifier(tokens)
+        preprocess(tokens)
     end
 end
