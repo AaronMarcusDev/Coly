@@ -5,15 +5,15 @@
 Please do not use this yet, the syntax will likely have major changes during development.
 
 ## Goals
-The general goal create a stack-based language with modern features.
+The general goal is to create a stack-oriented language with modern features.
 
 **Aims:**
 
 - Easy to use
 - Consice syntax with short keywords
 - Type conversion
-- dynamically typed
-- interpreted & compiled
+- Dynamically typed
+- Interpreted & compiled
 
 ## Working on
 - [ ] File Preprocessor
