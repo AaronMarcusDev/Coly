@@ -8,13 +8,22 @@ Please do not use this yet, the syntax will likely have major changes during dev
 
 The idea is to create a stack-based language with modern features.
 
+## Working on
+- [ ] File Preprocessor
+- [ ] Keyword checker (before runtime)
+- [ ] Call arguments
+
 ## Todo
+- Keyword identifier
+- File I/O
+
+## Done
 - [x] Lexer
 - [x] Basic Interpreter
+- [x] Control-Flow
 - [x] CMD calls
-- [ ] Keyword identifier
-- [ ] File I/O
- 
+- [x] Macro's
+
 ## Contributing
 [Pull requests](https://github.com/AaronMarcusDev/ssbl/pulls) are welcome, make sure to write a good description.
 
