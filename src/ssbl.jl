@@ -30,11 +30,10 @@ module ssbl
         exit(1)
     else
         if !isfile(ARGS[1])
-            println(string("File not found: ", ARGS[1]))
+            println(string("[ERROR] File not found: ", ARGS[1]))
             exit(1)
         else
-            # full_path = string(@__DIR__, "\\", ARGS[1], ":2")
-            # println(full_path)
+            filePath = string(@__DIR__, "\\", ARGS[1])
             run(ARGS[1], "run")
         end
     end

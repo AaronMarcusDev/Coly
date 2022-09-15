@@ -52,7 +52,7 @@ function preprocess(tokens)
                         elseif getValue(tokens[pos]) == "end"
                             if nestedIfs == 0
                                 if haskey(macros, name)
-                                    error(line, 0, "Macro '$name' already exists.")
+                                    error(line, "Macro '$name' already exists.")
                                 else
                                     macros[name] = macrotokens
                                 end
@@ -64,8 +64,8 @@ function preprocess(tokens)
                     elseif expect(tokens[pos], "EOL")
                         global line += 1
                     elseif expect(tokens[pos], "EOF")
-                        error(start, 0, "Macro was never closed with 'end'.")
-                        EOFError(line, 0)
+                        error(start, "Macro was never closed with 'end'.")
+                        EOFError(line)
                         break
                     end
                     if getType(tokens[pos]) != "EOL"
@@ -94,7 +94,7 @@ function preprocess(tokens)
     if errors > 0
         println("[INFO] Preprocessing failed due to $errors error(s).")
     else
-        println("[INFO] Preprocessing completed successfully.")
+        # println("[INFO] Preprocessing completed successfully.")
         identifier(result)
     end
 end
