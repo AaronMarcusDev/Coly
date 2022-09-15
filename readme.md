@@ -16,14 +16,14 @@ The general goal is to create a stack-oriented language with modern features.
 - Interpreted & compiled
 
 ## Working on
-- [ ] File Preprocessor
-- [ ] Consts
-- [ ] Keyword checker (before runtime)
-- [ ] Call arguments
+- File Preprocessor
+- Consts
+- Keyword checker (before runtime)
+- Call arguments
 
 ## Todo
 - Keyword identifier
-- File I/O
+-  File I/O
 
 ## Done
 - [x] Lexer
