@@ -5,16 +5,33 @@
 Please do not use this yet, the syntax will likely have major changes during development.
 
 ## Goals
+The general goal is to create a stack-oriented language with modern features.
 
-The idea is to create a stack-based language with modern features.
+**Aims:**
+
+- Easy to use
+- Consice syntax with short keywords
+- Type conversion
+- Dynamically typed
+- Interpreted & compiled
+
+## Working on
+- [ ] File Preprocessor
+- [ ] Consts
+- [ ] Keyword checker (before runtime)
+- [ ] Call arguments
 
 ## Todo
+- Keyword identifier
+- File I/O
+
+## Done
 - [x] Lexer
 - [x] Basic Interpreter
+- [x] Control-Flow
 - [x] CMD calls
-- [ ] Keyword identifier
-- [ ] File I/O
- 
+- [x] Macro's
+
 ## Contributing
 [Pull requests](https://github.com/AaronMarcusDev/ssbl/pulls) are welcome, make sure to write a good description.
 
