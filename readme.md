@@ -23,7 +23,7 @@ The general goal is to create a stack-oriented language with modern features.
 
 ## Todo
 - Keyword identifier
--  File I/O
+- File I/O
 
 ## Done
 - [x] Lexer
@@ -31,6 +31,9 @@ The general goal is to create a stack-oriented language with modern features.
 - [x] Control-Flow
 - [x] CMD calls
 - [x] Macro's
+- [x] Preprocessor
+- [x] Macro fetcher 
+- [x] Include files
 
 ## Contributing
 [Pull requests](https://github.com/AaronMarcusDev/ssbl/pulls) are welcome, make sure to write a good description.
