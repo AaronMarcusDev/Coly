@@ -13,29 +13,79 @@ end
 function preprocess(tokens)
     global pos = 1
     global line += 1
-    charsPassed = 0
     macros = Dict()
     stack = []
     result = []
+    preresult = []
 
     while pos <= length(tokens)
         type = getType(tokens[pos])
         value = getValue(tokens[pos])
 
         if type == "EOL"
-            push!(result, tokens[pos])
+            push!(preresult, tokens[pos])
+            global line += 1
+        elseif type == "keyword"
+            if value == "inc"
+                if isEmpty(stack)
+                    emptyStack(line, value)
+                else
+                    a = pop!(stack)
+                    if !expect(a, "string")
+                        unexpectedType(line, "string", value)
+                        return
+                    end
+
+                    a = getValue(a)
+                    if !isfile(a)
+                        error(line, "Failed to include file. File does not exist.")
+                        return
+                    end
+                    pop!(preresult)
+                    push!(preresult, Dict("file" => string(@__DIR__, "\\", a)))
+                    for item in lexer(readFile(a), true)
+                        push!(preresult, item)
+                    end
+                    pop!(preresult)
+                    push!(preresult, Dict("file" => string(@__DIR__, "\\", filePath)))
+                end
+            else
+            push!(preresult, tokens[pos])
+            end
+        elseif type == "arithmetic"
+            push!(preresult, tokens[pos])
+        elseif type == "comparator"
+            push!(preresult, tokens[pos])
+        elseif type == "EOF"
+            push!(preresult, tokens[pos])
+        else
+            push!(stack, tokens[pos])
+            push!(preresult, tokens[pos])
+        end
+        global pos += 1
+    end
+    # println(preresult)
+    stack = []
+    global pos = 1
+    
+    while pos <= length(preresult)
+        type = getType(preresult[pos])
+        value = getValue(preresult[pos])
+
+        if type == "EOL"
+            push!(result, preresult[pos])
             global line += 1
         elseif type == "keyword"
             if value == "mac"
                 if isEmpty(stack)
-                    emptyStack(line, 0, value)
+                    emptyStack(line, value)
                     return
                 end
 
                 name = pop!(stack)
 
                 if !expect(name, "string")
-                    unexpectedType(line, 0, "string", value)
+                    unexpectedType(line, "string", value)
                     return
                 end
                 pop!(result)
@@ -45,14 +95,16 @@ function preprocess(tokens)
                 nestedIfs = 0
                 start = pos
                 global pos += 1
-                while pos <= length(tokens)
-                    if expect(tokens[pos], "keyword")
-                        if getValue(tokens[pos]) == "if" || getValue(tokens[pos]) == "mac"
+                while pos <= length(preresult)
+                    if expect(preresult[pos], "keyword")
+                        if getValue(preresult[pos]) == "if" || getValue(preresult[pos]) == "mac"
                             nestedIfs += 1
-                        elseif getValue(tokens[pos]) == "end"
+                        elseif getValue(preresult[pos]) == "end"
                             if nestedIfs == 0
                                 if haskey(macros, name)
                                     error(line, "Macro '$name' already exists.")
+                                elseif name in keywords
+                                    error(line, "Cannot use keyword '$name' as macro name.")
                                 else
                                     macros[name] = macrotokens
                                 end
@@ -61,32 +113,46 @@ function preprocess(tokens)
                                 nestedIfs -= 1
                             end
                         end
-                    elseif expect(tokens[pos], "EOL")
+                    elseif expect(preresult[pos], "EOL")
                         global line += 1
-                    elseif expect(tokens[pos], "EOF")
+                    elseif expect(preresult[pos], "EOF")
                         error(start, "Macro was never closed with 'end'.")
                         EOFError(line)
                         break
                     end
-                    if getType(tokens[pos]) != "EOL"
-                        push!(macrotokens, tokens[pos])
+                    if getType(preresult[pos]) != "EOL"
+                        push!(macrotokens, preresult[pos])
                     end
                     global pos += 1
                 end
+            elseif value == "pop"
+                if isEmpty(stack)
+                    emptyStack(line, value)
+                    return
+                end
+                pop!(stack)
+            elseif value == "clr"
+                stack = []
+            elseif value == "dup"
+                if length(stack) < 2
+                    tooLittleStackItems(line, value)
+                    return
+                end
+                push!(stack, stack[length(stack)])
             elseif haskey(macros, value)
                 for item in macros[value]
                      push!(result, item)
                 end
             else
-                push!(result, tokens[pos])
+                push!(result, preresult[pos])
             end
         elseif type == "arithmetic"
-            push!(result, tokens[pos])
+            push!(result, preresult[pos])
         elseif type == "comparator"
-            push!(result, tokens[pos])
+            push!(result, preresult[pos])
         else
-            push!(stack, tokens[pos])
-            push!(result, tokens[pos])
+            push!(stack, preresult[pos])
+            push!(result, preresult[pos])
         end
         global pos += 1
     end

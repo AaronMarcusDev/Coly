@@ -2,7 +2,6 @@
 keywords = [
     "debug",
     "out",
-    "prt",
     "pop",
     "dup",
     "clr",

@@ -73,12 +73,6 @@ function interpreter(tokens)
                     else
                         print(getValue(pop!(stack)))
                     end
-                elseif value == "prt"
-                    if isEmpty(stack)
-                        emptyStack(line, value)
-                    else
-                        println(getValue(pop!(stack)))
-                    end
                 elseif value == "pop"
                     if isEmpty(stack)
                         emptyStack(line, value)
@@ -89,7 +83,9 @@ function interpreter(tokens)
                     if isEmpty(stack)
                         emptyStack(line, value)
                     else
-                        push!(stack, stack[1])
+                        a = pop!(stack)
+                        push!(stack, a)
+                        push!(stack, a)
                     end
                 elseif value == "clr"
                     stack = []
@@ -441,6 +437,8 @@ function interpreter(tokens)
                     end
                 end
             end
+        elseif type == "file"
+            global filePath = value
         else
             push!(stack, tokens[pos])
         end

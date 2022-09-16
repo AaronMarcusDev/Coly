@@ -1,1 +1,3 @@
-"Hello, world!\n" out
+"io.ssbl" inc
+
+"Hello, world!" prt

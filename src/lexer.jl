@@ -10,7 +10,7 @@ function isDigit(input)
 end
 
 # Lexer.
-function lexer(content)
+function lexer(content, needReturn = false)
     # Turning file into array of characters.
     chars = split(replace(content, "\r" => ""), "")
     push!(chars, " ") # Is needed for the lexer to function correctly.
@@ -55,7 +55,7 @@ function lexer(content)
                 push!(tokens, Dict("comparator" => "NEQ"))
                 i += 1
             else
-                error(line, i, "Unexpected character.")
+                error(line, "Unexpected character.")
             end
         elseif curr == "("
             push!(tokens, Dict("special" => "LPAREN"))
@@ -76,14 +76,14 @@ function lexer(content)
                     global i += 1
                 end
             else
-                error(line, i, "Unexpected character.")
+                error(line, "Unexpected character.")
             end
         elseif curr == "\""
             result = []
             global i += 1
             while true
                 if i > length(chars)
-                    error(line, i, "Unterminated string.")
+                    error(line, "Unterminated string.")
                     break
                 elseif chars[i] == "\""
                     push!(tokens, Dict("string" => join(result, "")))
@@ -124,7 +124,7 @@ function lexer(content)
             end
             global i -= 1
         else
-            error(line, i, "Unexpected character.")
+            error(line, "Unexpected character.")
         end
         global i += 1
     end
@@ -133,8 +133,12 @@ function lexer(content)
         exit(1)
     else
         push!(tokens, Dict("EOF" => "EOF"))
-        # println("[INFO] Lexing successful.")
-        # identifier(tokens)
-        preprocess(tokens)
+        if needReturn
+            return tokens
+        else
+            # println("[INFO] Lexing successful.")
+            # identifier(tokens)
+            preprocess(tokens)
+        end
     end
 end
