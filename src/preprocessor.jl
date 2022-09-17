@@ -122,9 +122,7 @@ function preprocess(tokens)
                         EOFError(line)
                         break
                     end
-                    if getType(preresult[pos]) != "EOL"
-                        push!(macrotokens, preresult[pos])
-                    end
+                    push!(macrotokens, preresult[pos])
                     global pos += 1
                 end
             elseif value == "pop"
