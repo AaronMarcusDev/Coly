@@ -18,4 +18,5 @@ keywords = [
     "con",
     "sys",
     "peek",
+    "len",
 ]

@@ -287,6 +287,8 @@ function interpreter(tokens)
                             unexpectedType(line, "string", value)
                         end
                     end
+                elseif value == "len"
+                    push!(stack, Dict("number" => length(getValue(pop!(stack)))))
                 else
                     # global lastloc = pos
                     # inMacro = true
