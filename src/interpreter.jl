@@ -34,12 +34,12 @@ end
 function interpreter(tokens)
     global pos = 1
     global line = 1
-    global charsPassed = 0
+    global lastLine = 0
     # global lastloc = 0
     # inMacro = false
+    # macros = Dict()
     stack = []
     jumpPoints = Dict()
-    macros = Dict()
 
     while pos <= length(tokens)
         type = getType(tokens[pos])
@@ -52,7 +52,7 @@ function interpreter(tokens)
         end
 
         if type == "EOL"
-                global charsPassed = 0
+                # global charsPassed = 0
                 global line += 1
 
         #Commands
@@ -89,6 +89,12 @@ function interpreter(tokens)
                     end
                 elseif value == "clr"
                     stack = []
+                elseif value == "peek"
+                    if isEmpty(stack)
+                        emptyStack(line, value)
+                    else
+                        println(getValue(stack[length(stack)]))
+                    end
                 elseif value == "set"
                     if isEmpty(stack)
                         emptyStack(line, value)
@@ -439,10 +445,16 @@ function interpreter(tokens)
             end
         elseif type == "file"
             global filePath = value
+            if filePath != mainFile
+                global lastLine = line
+                global line = 1
+            else
+                global line = lastLine
+            end
         else
             push!(stack, tokens[pos])
         end
-        global charsPassed += length(getValue(tokens[pos]))
+        # global charsPassed += length(getValue(tokens[pos]))
         global pos += 1
     end
 end

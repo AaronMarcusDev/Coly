@@ -14,6 +14,8 @@ function preprocess(tokens)
     global pos = 1
     global line += 1
     macros = Dict()
+    macrolocs = Dict()
+    currentFile = mainFile
     stack = []
     result = []
     preresult = []
@@ -64,7 +66,6 @@ function preprocess(tokens)
         end
         global pos += 1
     end
-    # println(preresult)
     stack = []
     global pos = 1
     
@@ -107,6 +108,7 @@ function preprocess(tokens)
                                     error(line, "Cannot use keyword '$name' as macro name.")
                                 else
                                     macros[name] = macrotokens
+                                    macrolocs[name] = currentFile
                                 end
                                 break
                             else
@@ -140,9 +142,11 @@ function preprocess(tokens)
                 end
                 push!(stack, stack[length(stack)])
             elseif haskey(macros, value)
+                push!(result, Dict("file" => macrolocs[value]))
                 for item in macros[value]
                      push!(result, item)
                 end
+                push!(result, Dict("file" => currentFile))
             else
                 push!(result, preresult[pos])
             end
@@ -150,6 +154,9 @@ function preprocess(tokens)
             push!(result, preresult[pos])
         elseif type == "comparator"
             push!(result, preresult[pos])
+        elseif type == "file"
+            # push!(result, preresult[pos])
+            currentFile = value
         else
             push!(stack, preresult[pos])
             push!(result, preresult[pos])

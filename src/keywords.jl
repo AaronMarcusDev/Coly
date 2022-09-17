@@ -17,4 +17,5 @@ keywords = [
     "mac",
     "con",
     "sys",
+    "peek",
 ]
