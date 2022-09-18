@@ -42,6 +42,9 @@ function preprocess(tokens)
                     if !isfile(a)
                         error(line, "Failed to include file. File does not exist.")
                         return
+                    elseif replace(string(@__DIR__, "\\", a), "\\./" => "\\") == mainFile
+                        error(line, "Failed to include file. Cannot include main file.")
+                        return
                     end
                     pop!(preresult)
                     push!(preresult, Dict("file" => string(@__DIR__, "\\", a)))
