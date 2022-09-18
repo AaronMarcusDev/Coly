@@ -1,0 +1,3 @@
+"./libraries/io.ssbl" inc
+
+10 10 dup pop prt prt prt

@@ -12,6 +12,7 @@ end
 
 function emptyStack(line, cmd)
     error(line, "Cannot issue '$cmd' command. Stack is empty.")
+    println(string("[TRACE] ", mainFile, ":", line))
 end
 
 function tooLittleStackItems(line, cmd)

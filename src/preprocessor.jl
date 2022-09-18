@@ -131,14 +131,17 @@ function preprocess(tokens)
                     return
                 end
                 pop!(stack)
+                push!(result, preresult[pos])
             elseif value == "clr"
                 stack = []
+                push!(result, preresult[pos])
             elseif value == "dup"
-                if length(stack) < 2
-                    tooLittleStackItems(line, value)
+                if isEmpty(stack)
+                    emptyStack(line, value)
                     return
                 end
                 push!(stack, stack[length(stack)])
+                push!(result, preresult[pos])
             elseif haskey(macros, value)
                 push!(result, Dict("file" => macrolocs[value]))
                 for item in macros[value]
