@@ -36,7 +36,6 @@ module ssbl
         else
             global filePath = string(@__DIR__, "\\", ARGS[1])
             mainFile = filePath
-
             run(ARGS[1], "run")
         end
     end

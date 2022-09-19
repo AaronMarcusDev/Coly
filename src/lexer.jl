@@ -65,7 +65,7 @@ function lexer(content, needReturn = false)
                 push!(tokens, Dict("comparator" => "NEQ"))
                 i += 1
             else
-                error(line, "Unexpected character.")
+                error(line, "Unexpected character: '$curr'.")
             end
         elseif curr == "("
             push!(tokens, Dict("special" => "LPAREN"))
@@ -80,13 +80,14 @@ function lexer(content, needReturn = false)
                     if i >= length(chars)
                         break
                     elseif chars[i] == "\n"
+                        global line += 1
                         push!(tokens, Dict("EOL" => "EOL"))
                         break
                     end
                     global i += 1
                 end
             else
-                error(line, "Unexpected character.")
+                error(line, "Unexpected character: '$curr'.")
             end
         elseif curr == "\""
             result = []
@@ -109,7 +110,7 @@ function lexer(content, needReturn = false)
                 if i > length(chars)
                     push!(tokens, Dict("keyword" => join(result, "")))
                     break
-                elseif !isLetter(chars[i])
+                elseif !isLetter(chars[i]) && chars[i] != "_"
                     push!(tokens, Dict("keyword" => join(result, "")))
                     break
                 else
@@ -134,7 +135,7 @@ function lexer(content, needReturn = false)
             end
             global i -= 1
         else
-            error(line, "Unexpected character.")
+            error(line, "Unexpected character: '$curr'.")
         end
         global i += 1
     end
