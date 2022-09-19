@@ -25,9 +25,19 @@ function lexer(content, needReturn = false)
             push!(tokens, Dict("EOL" => "EOL"))
             global line += 1
         elseif curr == "+"
-            push!(tokens, Dict("arithmetic" => "ADD"))
+            if chars[i+1] == "+"
+                push!(tokens, Dict("arithmetic" => "INC"))
+                i += 1
+            else
+                push!(tokens, Dict("arithmetic" => "ADD"))
+            end
         elseif curr == "-"
-            push!(tokens, Dict("arithmetic" => "SUB"))
+            if chars[i+1] == "-"
+                push!(tokens, Dict("arithmetic" => "DEC"))
+                i += 1
+            else
+                push!(tokens, Dict("arithmetic" => "SUB"))
+            end
         elseif curr == "*"
             push!(tokens, Dict("arithmetic" => "MUL"))
         elseif curr == "/"

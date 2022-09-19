@@ -364,6 +364,28 @@ function interpreter(tokens)
                         unexpectedType(line, "number", "%")
                     end
                 end
+            elseif value == "INC"
+                if isEmpty(stack)
+                    tooLittleStackItems(line, value)
+                else
+                    a = pop!(stack)
+                    if expect(a, "number")
+                        push!(stack, Dict("number" => string(parse(Int, getValue(a)) + 1)))
+                    else
+                        unexpectedType(line, "number", "++")
+                    end
+                end
+            elseif value == "DEC"
+                if isEmpty(stack)
+                    tooLittleStackItems(line, value)
+                else
+                    a = pop!(stack)
+                    if expect(a, "number")
+                        push!(stack, Dict("number" => string(parse(Int, getValue(a)) - 1)))
+                    else
+                        unexpectedType(line, "number", "--")
+                    end
+                end
             end
         elseif type == "comparator"
             if value == "LT"
