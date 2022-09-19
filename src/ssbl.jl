@@ -25,8 +25,9 @@ module ssbl
     end
 
     # Entry point of language.
-    if length(ARGS) != 1
-        println("Usage: ssbl <file>")
+    if isEmpty(ARGS)
+        println("[ERROR] No file specified.")
+        println("[INFOR] Usage: ssbl <file> <args>")
         exit(1)
     else
         if !isfile(ARGS[1])
@@ -35,6 +36,7 @@ module ssbl
         else
             global filePath = string(@__DIR__, "\\", ARGS[1])
             mainFile = filePath
+
             run(ARGS[1], "run")
         end
     end

@@ -288,7 +288,13 @@ function interpreter(tokens)
                         end
                     end
                 elseif value == "len"
-                    push!(stack, Dict("number" => length(getValue(pop!(stack)))))
+                    if isEmpty(stack)
+                        emptyStack(line, value)
+                    else
+                        push!(stack, Dict("number" => length(getValue(pop!(stack)))))
+                    end
+                elseif value == "rev"
+                    stack = reverse(stack)
                 else
                     # global lastloc = pos
                     # inMacro = true
@@ -475,6 +481,7 @@ function interpreter(tokens)
             else
                 global line = lastLine
             end
+            
         else
             push!(stack, tokens[pos])
         end
