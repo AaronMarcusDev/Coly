@@ -6,3 +6,4 @@ argc 0 != if
 end
 
 "No arguments provided." prt
+1 exit
