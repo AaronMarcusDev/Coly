@@ -295,6 +295,18 @@ function interpreter(tokens)
                     end
                 elseif value == "rev"
                     stack = reverse(stack)
+                elseif value == "args"
+                    if !isEmpty(ARGS)
+                        for argument in reverse(deepcopy(ARGS[2:length(ARGS)]))
+                            push!(stack, Dict("string" => argument))
+                        end
+                    end
+                elseif value == "argc"
+                    if length(ARGS) > 1
+                        push!(stack, Dict("number" => length(ARGS) - 1))
+                    else
+                        push!(stack, Dict("number" => 0))
+                    end
                 else
                     # global lastloc = pos
                     # inMacro = true

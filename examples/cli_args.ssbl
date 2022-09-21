@@ -1,0 +1,8 @@
+"./libraries/io.ssbl" inc
+
+argc 0 != if
+    args prt
+    0 exit
+end
+
+"No arguments provided." prt

@@ -20,4 +20,6 @@ keywords = [
     "peek",
     "len",
     "rev",
+    "args",
+    "argc",
 ]
