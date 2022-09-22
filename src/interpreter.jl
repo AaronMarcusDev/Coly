@@ -307,6 +307,16 @@ function interpreter(tokens)
                     else
                         push!(stack, Dict("number" => 0))
                     end
+                elseif value == "over"
+                    if length(stack) < 2
+                        tooLittleStackItems(line, value)
+                    else
+                        a = pop!(stack)
+                        b = pop!(stack)
+                        push!(stack, b)
+                        push!(stack, a)
+                        push!(stack, b)
+                    end
                 else
                     # global lastloc = pos
                     # inMacro = true
