@@ -294,7 +294,9 @@ function interpreter(tokens)
                         push!(stack, Dict("number" => length(getValue(pop!(stack)))))
                     end
                 elseif value == "rev"
-                    stack = reverse(stack)
+                    if !isEmpty(stack)
+                        stack = reverse(stack)
+                    end
                 elseif value == "args"
                     if !isEmpty(ARGS)
                         for argument in reverse(deepcopy(ARGS[2:length(ARGS)]))
