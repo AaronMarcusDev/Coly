@@ -21,7 +21,6 @@ The general goal is to create a stack-oriented language with modern features.
 - File Preprocessor
 - Consts
 - Keyword checker (before runtime)
-- Call arguments
 
 ## Todo
 - Keyword identifier
@@ -36,6 +35,7 @@ The general goal is to create a stack-oriented language with modern features.
 - [x] Preprocessor
 - [x] Macro fetcher 
 - [x] Include files
+- [x] Call arguments
 
 ## Contributing
 [Pull requests](https://github.com/AaronMarcusDev/ssbl/pulls) are welcome, make sure to write a good description.
