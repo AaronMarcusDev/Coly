@@ -148,7 +148,6 @@ function lexer(content, needReturn = false)
             return tokens
         else
             # println("[INFO] Lexing successful.")
-            # identifier(tokens)
             preprocess(tokens)
         end
     end

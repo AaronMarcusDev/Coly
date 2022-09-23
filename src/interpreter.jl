@@ -35,9 +35,7 @@ function interpreter(tokens)
     global pos = 1
     global line = 1
     global lastLine = 0
-    # global lastloc = 0
-    # inMacro = false
-    # macros = Dict()
+    expectEnd = false
     stack = []
     jumpPoints = Dict()
 
@@ -63,10 +61,10 @@ function interpreter(tokens)
                     return
                 end
                 if value == "end"
-                    # if inMacro
-                    #     pos = lastloc
-                    #     inMacro = false
-                    # end
+                    if !expectEnd
+                        error(line, "Unexpected 'end' keyword.")
+                    end
+                    expectEnd = false
                 elseif value == "out"
                     if isEmpty(stack)
                         emptyStack(line, value)
@@ -150,6 +148,7 @@ function interpreter(tokens)
                                         if nestedIfs == 0
                                             if condition == 1
                                                 lastIf = 1
+                                                expectEnd = true
                                                 global line -= linesfound
                                                 global pos = start + 1
                                             elseif condition == 0
@@ -217,53 +216,8 @@ function interpreter(tokens)
                         push!(stack, Dict("string" => string(getValue(b), getValue(a))))
                     end
                 elseif value == "mac"
-                    # if isEmpty(stack)
-                    #     emptyStack(line, value)
-                    #     return
-                    # end
-
-                    # name = pop!(stack)
-
-                    # if !expect(name, "string")
-                    #     unexpectedType(line, "string", value)
-                    #     return
-                    # end
-
-                    # name = getValue(name)
-
-                    # nestedIfs = 0
-                    # start = pos
-                    # global pos += 1
-                    # while pos <= length(tokens)
-                    #     if expect(tokens[pos], "keyword")
-                    #         if getValue(tokens[pos]) == "if" || getValue(tokens[pos]) == "mac"
-                    #             nestedIfs += 1
-                    #         elseif getValue(tokens[pos]) == "end"
-                    #             if nestedIfs == 0
-                    #                 if haskey(macros, name)
-                    #                     error(line, "Macro '$name' already exists.")
-                    #                 else
-                    #                     if name in keywords
-                    #                         error(line, "Cannot use keyword '$name' as macro name.")
-                    #                     else
-                    #                         macros[name] = start + 1
-                    #                         push!(keywords, name)
-                    #                     end
-                    #                 end
-                    #                 break
-                    #             else
-                    #                 nestedIfs -= 1
-                    #             end
-                    #         end
-                    #     elseif expect(tokens[pos], "EOL")
-                    #         global line += 1
-                    #     elseif expect(tokens[pos], "EOF")
-                    #         error(start, start, "Macro was never closed with 'end'.")
-                    #         EOFError(line)
-                    #         break
-                    #     end
-                    #     global pos += 1
-                    # end
+                    error(line, "Unexpected Macro definition.")
+                    error(line, "Expected Coly-preprocessor error.")
                 elseif value == "sys"
                     if isEmpty(stack)
                         emptyStack(line, value)
@@ -320,9 +274,6 @@ function interpreter(tokens)
                         push!(stack, b)
                     end
                 else
-                    # global lastloc = pos
-                    # inMacro = true
-                    # pos = macros[value]
                 end
             else
                 error(line, "Unknown command:'$value'.")
@@ -509,7 +460,6 @@ function interpreter(tokens)
         else
             push!(stack, tokens[pos])
         end
-        # global charsPassed += length(getValue(tokens[pos]))
         global pos += 1
     end
 end
