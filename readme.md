@@ -1,7 +1,7 @@
 # Coly Programming Language
 Recently renamed.
 
-Formerly: SSBL (Simple Stack Based Language.)
+Formerly: SSBL (**S**imple **S**tack **B**ased **L**anguage.)
 
 ## THIS IS STILL IN VERY EARLY STAGES, LONG FROM PRODUCTION READY!
 Please do not use this yet, the syntax will likely have major changes during development.
