@@ -1,6 +1,6 @@
 import Base.run
 
-module ssbl
+module coly
     # Included jl files
     include("keywords.jl")
     include("error.jl")
@@ -27,7 +27,7 @@ module ssbl
     # Entry point of language.
     if isEmpty(ARGS)
         println("[ERROR] No file specified.")
-        println("[INFOR] Usage: ssbl <file> <args>")
+        println("[INFOR] Usage: coly <file> <args>")
         exit(1)
     else
         if !isfile(ARGS[1])
@@ -39,4 +39,4 @@ module ssbl
             run(ARGS[1], "run")
         end
     end
-end # module ssbl
+end # module coly

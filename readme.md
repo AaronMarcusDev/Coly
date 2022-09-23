@@ -1,5 +1,7 @@
-# SSBL
- Simple Stack Based Language (Temporary name)
+# Coly Programming Language
+Recently renamed.
+
+Formerly: SSBL (Simple Stack Based Language.)
 
 ## THIS IS STILL IN VERY EARLY STAGES, LONG FROM PRODUCTION READY!
 Please do not use this yet, the syntax will likely have major changes during development.
@@ -41,4 +43,4 @@ The general goal is to create a stack-oriented language with modern features.
 Please report issues at the [Issues Page](https://github.com/AaronMarcusDev/ssbl/issues).
 
 ## License
-SSBL uses [MIT](https://choosealicense.com/licenses/mit/) as it's license.
+Coly uses [MIT](https://choosealicense.com/licenses/mit/) as it's license.
