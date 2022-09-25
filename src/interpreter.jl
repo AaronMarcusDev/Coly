@@ -213,7 +213,7 @@ function interpreter(tokens)
                     else
                         a = pop!(stack)
                         b = pop!(stack)
-                        push!(stack, Dict("string" => string(getValue(b), getValue(a))))
+                        push!(stack, Dict("string" => string(getValue(a), getValue(b))))
                     end
                 elseif value == "mac"
                     error(line, "Unexpected Macro definition.")
