@@ -1,3 +1,5 @@
+"/libraries/io.ssbl" inc
+
 "loop" set
     in prt
     "loop" jmp

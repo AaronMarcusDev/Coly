@@ -1,3 +1,5 @@
+"/libraries/io.ssbl" inc
+
 "Enter a number to get the square!" prt
 "Your number: " out
 in num dup * prt
