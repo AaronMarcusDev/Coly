@@ -69,7 +69,15 @@ function interpreter(tokens)
                     if isEmpty(stack)
                         emptyStack(line, value)
                     else
-                        print(getValue(pop!(stack)))
+                        if getType(stack[length(stack)]) != "list"
+                            print(getValue(pop!(stack)))
+                        else
+                            print("[")
+                            for item in pop!(stack)
+                                print(getValue(item))
+                            end
+                            print("]")
+                        end
                     end
                 elseif value == "pop"
                     if isEmpty(stack)
@@ -461,5 +469,4 @@ function interpreter(tokens)
         end
         global pos += 1
     end
-    println(stack)
 end
