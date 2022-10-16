@@ -43,7 +43,7 @@ function interpreter(tokens)
         type = getType(tokens[pos])
         value = getValue(tokens[pos])
 
-        # Check if an error was found on every token.
+        # Check if an error was found on every token iteration.
         if errors > 0
             println("[INFO] Interpreter halted due to $errors error(s).")
             break
