@@ -456,10 +456,10 @@ function interpreter(tokens)
             else
                 global line = lastLine
             end
-            
         else
             push!(stack, tokens[pos])
         end
         global pos += 1
     end
+    println(stack)
 end

@@ -10,7 +10,7 @@ function isDigit(input)
 end
 
 # Lexer.
-function lexer(content, needReturn = false)
+function lexer(content, needReturn=false)
     # Turning file into array of characters.
     chars = split(replace(content, "\r" => ""), "")
     push!(chars, " ") # Is needed for the lexer to function correctly.
@@ -104,6 +104,10 @@ function lexer(content, needReturn = false)
                     global i += 1
                 end
             end
+        elseif curr == "["
+            push!(tokens, Dict("special" => "LBRACKET"))
+        elseif curr == "]"
+            push!(tokens, Dict("special" => "RBRACKET"))
         elseif isLetter(curr)
             result = []
             while true
@@ -147,8 +151,7 @@ function lexer(content, needReturn = false)
         if needReturn
             return tokens
         else
-            # println("[INFO] Lexing successful.")
-            preprocess(tokens)
+            parser(tokens)
         end
     end
 end

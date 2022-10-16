@@ -7,6 +7,7 @@ module coly
     include("interpreter.jl")
     include("identifier.jl")
     include("preprocessor.jl")
+    include("parser.jl")
     include("lexer.jl")
 
     # Opening and reading file.

@@ -10,7 +10,7 @@ function getValue(token)
     end
 end
 
-function preprocess(tokens)
+function preprocessor(tokens)
     global pos = 1
     global line += 1
     macros = Dict()
