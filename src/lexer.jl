@@ -24,6 +24,14 @@ function lexer(content, needReturn=false)
         elseif curr == "\n"
             push!(tokens, Dict("EOL" => "EOL"))
             global line += 1
+        elseif curr == "@"
+            push!(tokens, Dict("keyword" => "con"))
+        elseif curr == "*"
+            push!(tokens, Dict("arithmetic" => "MUL"))
+        elseif curr == "/"
+            push!(tokens, Dict("arithmetic" => "DIV"))
+        elseif curr == "%"
+            push!(tokens, Dict("arithmetic" => "MOD"))
         elseif curr == "+"
             if chars[i+1] == "+"
                 push!(tokens, Dict("arithmetic" => "INC"))
@@ -38,12 +46,6 @@ function lexer(content, needReturn=false)
             else
                 push!(tokens, Dict("arithmetic" => "SUB"))
             end
-        elseif curr == "*"
-            push!(tokens, Dict("arithmetic" => "MUL"))
-        elseif curr == "/"
-            push!(tokens, Dict("arithmetic" => "DIV"))
-        elseif curr == "%"
-            push!(tokens, Dict("arithmetic" => "MOD"))
         elseif curr == "<"
             if chars[i+1] == "="
                 push!(tokens, Dict("comparator" => "LTE"))

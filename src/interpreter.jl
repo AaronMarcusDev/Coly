@@ -217,7 +217,7 @@ function interpreter(tokens)
                     end
                 elseif value == "con"
                     if length(stack) < 2
-                        tooLittleStackItems(line, value)
+                        tooLittleStackItems(line, "@")
                     else
                         a = pop!(stack)
                         b = pop!(stack)
