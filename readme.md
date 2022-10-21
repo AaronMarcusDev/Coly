@@ -18,17 +18,16 @@ The general goal is to create a stack-oriented language with modern features.
 - Interpreted & compiled
 
 ## Working on
-- File Preprocessor
-- Consts
 - Keyword checker (before runtime)
 
 ## Todo
-- Keyword identifier
 - File I/O
+- Proper loops
+- Deprecate labels
 
 ## Done
 - [x] Lexer
-- [x] Basic Interpreter
+- [x] Interpreter
 - [x] Control-Flow
 - [x] CMD calls
 - [x] Macro's
@@ -36,6 +35,8 @@ The general goal is to create a stack-oriented language with modern features.
 - [x] Macro fetcher 
 - [x] Include files
 - [x] Call arguments
+- [x] Parser
+- [x] Iterable data type (List)
 
 ## Contributing
 [Pull requests](https://github.com/AaronMarcusDev/ssbl/pulls) are welcome, make sure to write a good description.
