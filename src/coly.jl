@@ -1,7 +1,14 @@
 import Base.run
 
 module coly
-    # Included jl files
+    # Opening and reading file.
+    function readFile(name)
+        open(name) do file
+            return read(file, String)
+        end
+    end
+
+    # Included .jl files
     include("keywords.jl")
     include("error.jl")
     include("interpreter.jl")
@@ -9,13 +16,6 @@ module coly
     include("preprocessor.jl")
     include("parser.jl")
     include("lexer.jl")
-
-    # Opening and reading file.
-    function readFile(name)
-        open(name) do file
-            return read(file, String)
-        end
-    end
 
     # Run the program.
     function run(file, mode)

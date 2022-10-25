@@ -22,5 +22,6 @@ keywords = [
     "rev",
     "args",
     "argc",
+    "argv",
     "over",
 ]

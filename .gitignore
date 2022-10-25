@@ -26,3 +26,4 @@ Manifest.toml
 # Custom
 /sketches
 /test
+/src/input.coly
