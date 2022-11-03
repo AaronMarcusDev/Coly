@@ -26,3 +26,6 @@ Manifest.toml
 # Custom
 /sketches
 /test
+/src/input.coly
+/src/alt_interpreter.jl
+/src/checker.jl

@@ -2,13 +2,13 @@ import Base.run
 
 module coly
     # Included jl files
-    include("keywords.jl")
-    include("error.jl")
-    include("interpreter.jl")
-    include("identifier.jl")
-    include("preprocessor.jl")
-    include("parser.jl")
-    include("lexer.jl")
+    include("error/error.jl")
+    include("interpreter/keywords.jl")
+    include("interpreter/interpreter.jl")
+    include("parser/identifier.jl")
+    include("parser/preprocessor.jl")
+    include("parser/parser.jl")
+    include("lexer/lexer.jl")
 
     # Opening and reading file.
     function readFile(name)
@@ -36,7 +36,7 @@ module coly
             exit(1)
         else
             global filePath = string(@__DIR__, "\\", ARGS[1])
-            mainFile = filePath
+            global const mainFile = filePath
             run(ARGS[1], "run")
         end
     end

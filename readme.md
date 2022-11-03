@@ -1,13 +1,10 @@
 # Coly Programming Language
-Recently renamed.
-
-Formerly: SSBL (**S**imple **S**tack **B**ased **L**anguage.)
 
 ## THIS IS STILL IN VERY EARLY STAGES, LONG FROM PRODUCTION READY!
 Please do not use this yet, the syntax will likely have major changes during development.
 
 ## Goals
-The general goal is to create a stack-oriented language with modern features.
+My goal is to create a stack-oriented language with modern features.
 
 **Aims:**
 
