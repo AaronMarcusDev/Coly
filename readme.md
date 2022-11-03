@@ -41,9 +41,9 @@ My goal is to create a stack-oriented language with modern features.
 - [Datatypes](https://github.com/AaronMarcusDev/Coly/blob/main/md/datatypes.md)
 
 ## Contributing
-[Pull requests](https://github.com/AaronMarcusDev/ssbl/pulls) are welcome, make sure to write a good description.
+[Pull requests](https://github.com/AaronMarcusDev/Coly/pulls) are welcome, make sure to write a good description.
 
-Please report issues at the [Issues Page](https://github.com/AaronMarcusDev/ssbl/issues).
+Please report issues at the [Issues Page](https://github.com/AaronMarcusDev/Coly/issues).
 
 ## License
 Coly uses [MIT](https://choosealicense.com/licenses/mit/) as it's license.
