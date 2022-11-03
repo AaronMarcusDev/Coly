@@ -9,7 +9,6 @@ module coly
     include("parser/preprocessor.jl")
     include("parser/parser.jl")
     include("lexer/lexer.jl")
-
     # Opening and reading file.
     function readFile(name)
         open(name) do file

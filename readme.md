@@ -35,6 +35,11 @@ My goal is to create a stack-oriented language with modern features.
 - [x] Parser
 - [x] Iterable data type (List)
 
+## Learn
+
+**Learn more about Coly:**
+- [Datatypes](https://github.com/AaronMarcusDev/Coly/blob/main/md/datatypes.md)
+
 ## Contributing
 [Pull requests](https://github.com/AaronMarcusDev/ssbl/pulls) are welcome, make sure to write a good description.
 

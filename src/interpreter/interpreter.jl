@@ -72,9 +72,13 @@ function interpreter(tokens)
                         if getType(stack[length(stack)]) != "list"
                             print(getValue(pop!(stack)))
                         else
-                            print("[")
-                            for item in pop!(stack)
-                                print(getValue(item))
+                            print("[ ")
+                            for item in getValue(pop!(stack))
+                                if getType(item) == "string"
+                                    print("\"", getValue(item), "\" ")
+                                else
+                                    print(getValue(item), " ")
+                                end
                             end
                             print("]")
                         end
@@ -272,6 +276,12 @@ function interpreter(tokens)
                     else
                         push!(stack, Dict("number" => 0))
                     end
+                elseif value == "argv"
+                    R = []
+                    for arg in ARGS
+                        push!(R, Dict("string" => arg))
+                    end
+                    push!(stack, Dict("list" => R))
                 elseif value == "over"
                     if length(stack) < 2
                         tooLittleStackItems(line, value)
