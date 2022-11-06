@@ -8,7 +8,7 @@ My goal is to create a stack-oriented language with modern features.
 
 **Aims:**
 
-- Easy to use
+- Easy to learn
 - Consice syntax with short keywords
 - Type conversion
 - Dynamically typed
@@ -46,4 +46,4 @@ My goal is to create a stack-oriented language with modern features.
 Please report issues at the [Issues Page](https://github.com/AaronMarcusDev/Coly/issues).
 
 ## License
-Coly uses [MIT](https://choosealicense.com/licenses/mit/) as it's license.
+Coly is licensed under the [MIT license](https://choosealicense.com/licenses/mit/). 
