@@ -1,20 +1,18 @@
 # Regex functions.
 function isLetter(input)
-    check = string(input)
-    return occursin(r"[a-zA-Z]", check)
+    return occursin(r"[a-zA-Z]", string(input))
 end
 
-function isDigit(input)
-    check = string(input)
-    return occursin(r"[0-9]", check)
+function isDigit(input::Any)
+    return occursin(r"[0-9]", string(input))
 end
 
 # Lexer.
-function lexer(content, needReturn=false)
+function lexer(content::String, needReturn::Bool = false)
     # Turning file into array of characters.
     chars = split(replace(content, "\r" => ""), "")
     push!(chars, " ") # Is needed for the lexer to function correctly.
-    tokens = []
+    tokens::Array{Any} = []
     global i = 1
     global line = 1
 

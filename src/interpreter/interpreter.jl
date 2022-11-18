@@ -36,8 +36,8 @@ function interpreter(tokens)
     global line = 1
     global lastLine = 0
     expectEnd = false
-    stack = []
     jumpPoints = Dict()
+    stack = []
 
     while pos <= length(tokens)
         type = getType(tokens[pos])
@@ -237,7 +237,6 @@ function interpreter(tokens)
                         a = pop!(stack)
 
                         if expect(a, "string")
-                            a = getValue(a)
                             try
                                 if occursin(" ", a)
                                     a = split(a, " ")
@@ -260,7 +259,9 @@ function interpreter(tokens)
                         push!(stack, Dict("number" => length(getValue(pop!(stack)))))
                     end
                 elseif value == "rev"
-                    if !isEmpty(stack)
+                    if isEmpty(stack)
+                        emptyStack(line, value)
+                    else
                         stack = reverse(stack)
                     end
                 elseif value == "args"
@@ -292,6 +293,7 @@ function interpreter(tokens)
                         push!(stack, b)
                     end
                 else
+                    error(line, "Unknown keyword '$value'.")
                 end
             else
                 error(line, "Unknown command:'$value'.")

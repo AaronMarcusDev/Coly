@@ -1,17 +1,14 @@
 # Coly Programming Language
-Recently renamed.
-
-Formerly: SSBL (**S**imple **S**tack **B**ased **L**anguage.)
 
 ## THIS IS STILL IN VERY EARLY STAGES, LONG FROM PRODUCTION READY!
 Please do not use this yet, the syntax will likely have major changes during development.
 
 ## Goals
-The general goal is to create a stack-oriented language with modern features.
+My goal is to create a stack-oriented language with modern features.
 
 **Aims:**
 
-- Easy to use
+- Easy to learn
 - Consice syntax with short keywords
 - Type conversion
 - Dynamically typed
@@ -44,9 +41,9 @@ The general goal is to create a stack-oriented language with modern features.
 - [Datatypes](https://github.com/AaronMarcusDev/Coly/blob/main/md/datatypes.md)
 
 ## Contributing
-[Pull requests](https://github.com/AaronMarcusDev/ssbl/pulls) are welcome, make sure to write a good description.
+[Pull requests](https://github.com/AaronMarcusDev/Coly/pulls) are welcome, make sure to write a good description.
 
-Please report issues at the [Issues Page](https://github.com/AaronMarcusDev/ssbl/issues).
+Please report issues at the [Issues Page](https://github.com/AaronMarcusDev/Coly/issues).
 
 ## License
-Coly uses [MIT](https://choosealicense.com/licenses/mit/) as it's license.
+Coly is licensed under the [MIT license](https://choosealicense.com/licenses/mit/). 

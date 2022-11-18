@@ -14,10 +14,10 @@
 1 is equivalent to `true` .
 
 #### string
-- Strings **must** start and end with a double quotation mark ( " ) .   
+- Strings must start and end with a double quotation mark ( " ) .   
 Single quotation marks ( ' ) are not allowed.
 
 #### list
-- Lists must start with a bracket ( [ ) and closed with a bracket ( ] ) .
+- Lists must be opened with a bracket ( [ ) and closed with a bracket ( ] ) .
 
 - List items are seperated using spaces ( [123 456] ) .
