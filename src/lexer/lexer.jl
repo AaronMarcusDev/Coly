@@ -41,6 +41,21 @@ function lexer(content::String, needReturn::Bool = false)
             if chars[i+1] == "-"
                 push!(tokens, Dict("arithmetic" => "DEC"))
                 i += 1
+            elseif isDigit(chars[i+1])
+                global i += 1
+                result = ["-"]
+                while true
+                    if i > length(chars)
+                        push!(tokens, Dict("number" => join(result, "")))
+                        break
+                    elseif !isDigit(chars[i])
+                        push!(tokens, Dict("number" => join(result, "")))
+                        break
+                    else
+                        push!(result, chars[i])
+                        global i += 1
+                    end
+                end
             else
                 push!(tokens, Dict("arithmetic" => "SUB"))
             end
