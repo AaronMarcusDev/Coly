@@ -11,7 +11,7 @@ keywords = [
     "if",
     "end",
     "swap",
-    "in",
+    "input",
     "num",
     "str",
     "mac",
@@ -24,4 +24,6 @@ keywords = [
     "argc",
     "argv",
     "over",
+    "enum",
+    "renum"
 ]

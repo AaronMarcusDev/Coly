@@ -35,6 +35,7 @@ function interpreter(tokens)
     global pos = 1
     global line = 1
     global lastLine = 0
+    global enum = -1
     expectEnd = false
     jumpPoints = Dict()
     stack = []
@@ -197,7 +198,7 @@ function interpreter(tokens)
                         push!(stack, a)
                         push!(stack, b)
                     end
-                elseif value == "in"
+                elseif value == "input"
                     push!(stack, Dict("string" => readline()))
                 elseif value == "num"
                     if isEmpty(stack)
@@ -292,6 +293,11 @@ function interpreter(tokens)
                         push!(stack, a)
                         push!(stack, b)
                     end
+                elseif value == "enum"
+                    global enum += 1
+                    push!(stack, Dict("number" => enum))
+                elseif value == "renum"
+                    global enum = -1
                 else
                     error(line, "Unknown keyword '$value'.")
                 end

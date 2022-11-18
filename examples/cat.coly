@@ -1,5 +1,5 @@
 "/libraries/io.coly" inc
 
 "loop" set
-    in prt
+    input prt
     "loop" jmp

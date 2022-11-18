@@ -40,7 +40,7 @@ function preprocessor(tokens)
 
                     a = getValue(a)
                     if !isfile(a)
-                        error(line, "Failed to include file. File does not exist.")
+                        error(line, "Failed to include file '$a'. File does not exist.")
                         return
                     elseif replace(string(@__DIR__, "\\", a), "\\./" => "\\") == mainFile
                         error(line, "Failed to include file. Cannot include main file.")
