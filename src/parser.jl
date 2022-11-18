@@ -76,7 +76,7 @@ function parser(tokens)
         i += 1
     end
     if errors > 0
-        println("[INFO] Parsing failed due to $errors error(s).")
+        println("[INFOR] Parsing failed due to $errors error(s).")
     else
         # println("[INFO] Preprocessing completed successfully.")
         preprocessor(tree)

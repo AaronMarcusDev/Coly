@@ -169,7 +169,7 @@ function preprocessor(tokens)
     end
 
     if errors > 0
-        println("[INFO] Preprocessing failed due to $errors error(s).")
+        println("[INFOR] Preprocessing failed due to $errors error(s).")
     else
         # println("[INFO] Preprocessing completed successfully.")
         identifier(result)

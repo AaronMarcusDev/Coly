@@ -146,7 +146,7 @@ function lexer(content, needReturn=false)
         global i += 1
     end
     if errors > 0
-        println("[INFO] Lexing failed due to $errors error(s).")
+        println("[INFOR] Lexing failed due to $errors error(s).")
         exit(1)
     else
         push!(tokens, Dict("EOF" => "EOF"))

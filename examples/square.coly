@@ -1,5 +1,5 @@
-"/libraries/io.ssbl" inc
+"/libraries/io.coly" inc
 
-"Enter a number to get the square!" prt
+"Enter a number to get the square!" puts
 "Your number: " out
-in num dup * prt
+in num dup * puts

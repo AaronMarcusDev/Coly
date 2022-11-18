@@ -1,7 +1,7 @@
-"/libraries/io.ssbl" inc
+"/libraries/io.coly" inc
 
 "greet" mac
-    "Greetings!" prt
+    "Greetings!" puts
 end
 
 greet

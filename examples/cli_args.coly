@@ -1,9 +1,9 @@
-"./libraries/io.ssbl" inc
+"./libraries/io.coly" inc
 
 argc 0 != if
-    args prt
+    args puts
     0 exit
 end
 
-"No arguments provided." prt
+"No arguments provided." puts
 1 exit

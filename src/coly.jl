@@ -16,7 +16,7 @@ module coly
     include("preprocessor.jl")
     include("parser.jl")
     include("lexer.jl")
-
+    
     # Run the program.
     function run(file, mode)
         content = readFile(file)

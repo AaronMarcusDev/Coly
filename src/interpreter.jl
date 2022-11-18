@@ -115,7 +115,7 @@ function interpreter(tokens)
                             unexpectedType(line, "string", value)
                         end
                     end
-                elseif value == "jmp"
+                elseif value == "jump"
                     if isEmpty(stack)
                         emptyStack(line, value)
                         return
@@ -188,7 +188,7 @@ function interpreter(tokens)
                             unexpectedType(line, "number", value)
                         end
                     end
-                elseif value == "swp"
+                elseif value == "swap"
                     if length(stack) < 2
                         tooLittleStackItems(line, value)
                     else

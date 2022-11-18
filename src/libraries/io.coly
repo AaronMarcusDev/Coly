@@ -1,0 +1,7 @@
+"puts" mac
+    out "\n" out
+end
+
+"windows_cmd" mac
+    "cmd.exe /c " @ sys
+end
