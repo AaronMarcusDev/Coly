@@ -192,6 +192,5 @@ function preprocessor(tokens)
     else
         # println("[INFO] Preprocessing completed successfully.")
         identifier(result)
-        println(result)
     end
 end

@@ -1,0 +1,7 @@
+;; Fruits
+"Banana" mac enum end
+"Apple"  mac enum end
+"Orange" mac enum end
+
+Orange puts
+Apple puts
