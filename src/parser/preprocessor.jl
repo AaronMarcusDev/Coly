@@ -13,6 +13,25 @@ end
 function preprocessor(tokens)
     global pos = 1
     global line += 1
+    global enum = -1
+    prepreresult = []
+
+    while pos <= length(tokens)
+        type = getType(tokens[pos])
+        value = getValue(tokens[pos])
+        if type == "keyword" && value == "enum"
+            enum += 1
+            push!(prepreresult, Dict("number" => string(enum)))
+        elseif type == "keyword" && value == "renum"
+            enum = -1
+        else
+            push!(prepreresult, tokens[pos])
+        end
+        global pos += 1
+    end
+
+    tokens = prepreresult
+    global pos = 1
     macros = Dict()
     macrolocs = Dict()
     currentFile = mainFile
@@ -173,5 +192,6 @@ function preprocessor(tokens)
     else
         # println("[INFO] Preprocessing completed successfully.")
         identifier(result)
+        println(result)
     end
 end

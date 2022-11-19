@@ -293,13 +293,6 @@ function interpreter(tokens)
                         push!(stack, a)
                         push!(stack, b)
                     end
-                elseif value == "enum"
-                    global enum += 1
-                    push!(stack, Dict("number" => enum))
-                elseif value == "renum"
-                    global enum = -1
-                else
-                    error(line, "Unknown keyword '$value'.")
                 end
             else
                 error(line, "Unknown command:'$value'.")

@@ -24,6 +24,4 @@ keywords = [
     "argc",
     "argv",
     "over",
-    "enum",
-    "renum"
 ]
