@@ -24,8 +24,11 @@ docs/site/
 Manifest.toml
 
 # Custom
-/sketches
-/test
-/src/input.coly
-/src/alt_interpreter.jl
-/src/checker.jl
+Julia/sketches
+Julia/test
+Julia/src/input.coly
+Julia/src/alt_interpreter.jl
+Julia/src/checker.jl
+
+Dart/coly/.dart_tool
+Dart/coly/.packages
