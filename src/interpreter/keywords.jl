@@ -2,7 +2,7 @@
 keywords = [
     "debug",
     "out",
-    "pop",
+    "dump",
     "dup",
     "clr",
     "set",
@@ -24,4 +24,7 @@ keywords = [
     "argc",
     "argv",
     "over",
+    "index",
+    "join",
+    "pop",
 ]

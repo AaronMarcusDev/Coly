@@ -46,15 +46,15 @@ function interpreter(tokens)
 
         # Check if an error was found on every token iteration.
         if errors > 0
-            println("[INFO] Interpreter halted due to $errors error(s).")
+            println("[INFOR] Interpreter halted due to $errors error(s).")
             break
         end
 
         if type == "EOL"
-                # global charsPassed = 0
-                global line += 1
+            # global charsPassed = 0
+            global line += 1
 
-        #Commands
+            #Commands
         elseif type == "keyword"
             if value in keywords
                 if value == "debug"
@@ -84,7 +84,7 @@ function interpreter(tokens)
                             print("]")
                         end
                     end
-                elseif value == "pop"
+                elseif value == "dump"
                     if isEmpty(stack)
                         emptyStack(line, value)
                     else
@@ -293,6 +293,35 @@ function interpreter(tokens)
                         push!(stack, a)
                         push!(stack, b)
                     end
+                elseif value == "index"
+                    if length(stack) < 2
+                        tooLittleStackItems(line, value)
+                    else
+                        a = pop!(stack)
+                        b = pop!(stack)
+
+                        if expect(a, "number")
+                            if expect(b, "list")
+                                if parse(Int, getValue(a)) > length(getValue(b)) || parse(Int, getValue(a)) < 0
+                                    error(line, "List index out of bounds for 'index'.")
+                                else
+                                    push!(stack, getValue(b)[parse(Int, getValue(a))+1])
+                                end
+                            else
+                                unexpectedType(line, "list", value)
+                            end
+                        else
+                            unexpectedType(line, "number", value)
+                        end
+                    end
+                # elseif value == "pop"
+                #     if isEmpty(stack)
+                #         emptyStack(line, value)
+                #     else
+                #         a = getValue(pop!(stack))
+                #         pop!(a)
+                #         push!(stack, Dict("list" => a))
+                #     end
                 end
             else
                 error(line, "Unknown command:'$value'.")
@@ -480,4 +509,5 @@ function interpreter(tokens)
         end
         global pos += 1
     end
+    # println(stack)
 end

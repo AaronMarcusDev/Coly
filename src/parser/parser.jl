@@ -62,7 +62,7 @@ function parser(tokens)
                     i += 1
                 end
             elseif value == "RBRACKET"
-                error(line, "Unexpected ']'")
+                error(line, "Unexpected ']'.")
                 errors += 1
             else
                 push!(tree, tokens[i])

@@ -5,3 +5,7 @@ end
 "windows_cmd" mac
     "cmd.exe /c " @ sys
 end
+
+"windows_start" mac
+    "start " @ sys
+end

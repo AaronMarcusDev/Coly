@@ -1,5 +1,8 @@
 # Coly Programming Language
 
+**Update**: I'm thinking of switching the language from Julia to Dart, because Julia is really slow and hard to maintain.
+I will also be changing the syntax of Coly completely.
+
 ## THIS IS STILL IN VERY EARLY STAGES, LONG FROM PRODUCTION READY!
 Please do not use this yet, the syntax will likely have major changes during development.
 
