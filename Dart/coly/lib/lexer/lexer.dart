@@ -53,88 +53,120 @@ class Lexer {
           }
           break;
 
-        case '(':
-          {
-            tokens.add(Token(
-                file, TokenType.CHARACTER, line, curr, Tokens.LEFT_PAREN));
-          }
-          break;
+        // case '(':
+        //   {
+        //     tokens.add(Token(
+        //         file, TokenType.CHARACTER, line, curr, Tokens.LEFT_PAREN));
+        //   }
+        //   break;
 
-        case ')':
-          {
-            tokens.add(Token(
-                file, TokenType.CHARACTER, line, curr, Tokens.RIGHT_PAREN));
-          }
-          break;
+        // case ')':
+        //   {
+        //     tokens.add(Token(
+        //         file, TokenType.CHARACTER, line, curr, Tokens.RIGHT_PAREN));
+        //   }
+        //   break;
 
-        case '{':
-          {
-            tokens.add(Token(
-                file, TokenType.CHARACTER, line, curr, Tokens.LEFT_BRACE));
-          }
-          break;
+        // case '{':
+        //   {
+        //     tokens.add(Token(
+        //         file, TokenType.CHARACTER, line, curr, Tokens.LEFT_BRACE));
+        //   }
+        //   break;
 
-        case '}':
-          {
-            tokens.add(Token(
-                file, TokenType.CHARACTER, line, curr, Tokens.RIGHT_BRACE));
-          }
-          break;
+        // case '}':
+        //   {
+        //     tokens.add(Token(
+        //         file, TokenType.CHARACTER, line, curr, Tokens.RIGHT_BRACE));
+        //   }
+        //   break;
 
-        case '.':
-          {
-            tokens
-                .add(Token(file, TokenType.CHARACTER, line, curr, Tokens.DOT));
-          }
-          break;
+        // case '.':
+        //   {
+        //     tokens
+        //         .add(Token(file, TokenType.CHARACTER, line, curr, Tokens.DOT));
+        //   }
+        //   break;
 
-        case ',':
-          {
-            tokens.add(
-                Token(file, TokenType.CHARACTER, line, curr, Tokens.COMMA));
-          }
-          break;
+        // case ',':
+        //   {
+        //     tokens.add(
+        //         Token(file, TokenType.CHARACTER, line, curr, Tokens.COMMA));
+        //   }
+        //   break;
 
-        case ';':
-          {
-            tokens.add(
-                Token(file, TokenType.CHARACTER, line, curr, Tokens.SEMICOLON));
-          }
-          break;
+        // case ';':
+        //   {
+        //     tokens.add(
+        //         Token(file, TokenType.CHARACTER, line, curr, Tokens.SEMICOLON));
+        //   }
+        //   break;
 
         case '+':
           {
-            tokens
-                .add(Token(file, TokenType.OPERATOR, line, curr, Tokens.PLUS));
-          }
-          break;
-
-        case '-':
-          {
-            if (_isNumber(peek(curr))) {
+            if (peek(curr) == '.') {
+              tokens.add(Token(
+                  file, TokenType.OPERATOR, line, curr, Tokens.FLOAT_PLUS));
               curr++;
-              List<String> numberArray = [];
-              while (true) {
-                if (_isAtEnd() || !_isNumber(chars[curr])) {
-                  tokens.add(Token(file, TokenType.INTEGER, line, curr,
-                      int.parse('-${numberArray.join("")}')));
-                  curr--;
-                  break;
-                }
-                numberArray.add(chars[curr]);
-                curr++;
-              }
             } else {
-              tokens
-                .add(Token(file, TokenType.OPERATOR, line, curr, Tokens.MINUS));
+              tokens.add(
+                  Token(file, TokenType.OPERATOR, line, curr, Tokens.PLUS));
             }
           }
           break;
 
         case '*':
           {
-            tokens
-                .add(Token(file, TokenType.OPERATOR, line, curr, Tokens.STAR));
+            if (peek(curr) == '.') {
+              tokens.add(Token(
+                  file, TokenType.OPERATOR, line, curr, Tokens.FLOAT_STAR));
+              curr++;
+            } else {
+              tokens.add(
+                  Token(file, TokenType.OPERATOR, line, curr, Tokens.STAR));
+            }
+          }
+          break;
+
+        case '-':
+          {
+            if (_isNumber(peek(curr))) {
+              List<String> numberArray = ['-'];
+              curr++;
+              while (true) {
+                if (_isAtEnd() || !_isNumber(chars[curr])) {
+                  if (chars[curr] == '.') {
+                    numberArray.add(chars[curr]);
+                    curr++;
+                    while (true) {
+                      if (_isAtEnd() || !_isNumber(chars[curr])) {
+                        tokens.add(Token(file, TokenType.FLOAT, line, curr,
+                            double.parse(numberArray.join(""))));
+                        curr--;
+                        break;
+                      }
+                      numberArray.add(chars[curr]);
+                      curr++;
+                    }
+                    break;
+                  } else {
+                    tokens.add(Token(file, TokenType.INTEGER, line, curr,
+                        int.parse(numberArray.join(""))));
+                    curr--;
+                    break;
+                  }
+                }
+                numberArray.add(chars[curr]);
+                curr++;
+              }
+            } else if (peek(curr) == '.') {
+              tokens.add(Token(
+                  file, TokenType.OPERATOR, line, curr, Tokens.FLOAT_MINUS));
+              curr++;
+            } else {
+              tokens.add(
+                  Token(file, TokenType.OPERATOR, line, curr, Tokens.MINUS));
+            }
           }
           break;
 
@@ -144,6 +176,10 @@ class Lexer {
               while (peek(curr) != '\n' && !_isAtEnd()) {
                 curr++;
               }
+            } else if (peek(curr) == '.') {
+              tokens.add(Token(
+                  file, TokenType.OPERATOR, line, curr, Tokens.FLOAT_SLASH));
+              curr++;
             } else {
               tokens.add(
                   Token(file, TokenType.OPERATOR, line, curr, Tokens.SLASH));
@@ -153,14 +189,9 @@ class Lexer {
 
         case '=':
           {
-            if (peek(curr) == '=') {
-              tokens.add(Token(
-                  file, TokenType.COMPARATOR, line, curr, Tokens.EQUAL_EQUAL));
-              curr++;
-            } else {
-              tokens
-                  .add(Token(file, TokenType.ASSIGN, line, curr, Tokens.EQUAL));
-            }
+            tokens.add(Token(
+                file, TokenType.COMPARATOR, line, curr, Tokens.EQUAL_EQUAL));
+            curr++;
           }
           break;
 
@@ -228,18 +259,23 @@ class Lexer {
           }
           break;
 
-        case '`':
+        case "'":
           {
             List<String> stringArray = [];
+            int start = curr;
             curr++;
             while (true) {
               if (_isAtEnd()) {
-                error.error(file, line, "Unterminated raw_string.");
+                error.error(file, line, "Unterminated string.");
                 errors++;
                 break;
               } else if (chars[curr] == '\n') {
-                error.error(file, line, "Unterminated raw_string.");
+                error.error(file, line, "Unterminated string.");
                 errors++;
+                break;
+              } else if (chars[curr] == "'") {
+                tokens.add(Token(
+                    file, TokenType.STRING, line, start, stringArray.join("")));
                 break;
               }
               stringArray.add(chars[curr]);
@@ -275,10 +311,26 @@ class Lexer {
               List<String> numberArray = [];
               while (true) {
                 if (_isAtEnd() || !_isNumber(chars[curr])) {
-                  tokens.add(Token(file, TokenType.INTEGER, line, curr,
-                      int.parse(numberArray.join(""))));
-                  curr--;
-                  break;
+                  if (chars[curr] == '.') {
+                    numberArray.add(chars[curr]);
+                    curr++;
+                    while (true) {
+                      if (_isAtEnd() || !_isNumber(chars[curr])) {
+                        tokens.add(Token(file, TokenType.FLOAT, line, curr,
+                            double.parse(numberArray.join(""))));
+                        curr--;
+                        break;
+                      }
+                      numberArray.add(chars[curr]);
+                      curr++;
+                    }
+                    break;
+                  } else {
+                    tokens.add(Token(file, TokenType.INTEGER, line, curr,
+                        int.parse(numberArray.join(""))));
+                    curr--;
+                    break;
+                  }
                 }
                 numberArray.add(chars[curr]);
                 curr++;

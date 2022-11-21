@@ -10,7 +10,7 @@ Interpreter interpreter = Interpreter();
 void run(List<String> args) {
   if (args.length != 1) {
     print("\x1B[31m[ERROR] Not enough arguments provided.\x1B[0m");
-    print("[INFOR] Usage: speculate <file>");
+    print("[INFOR] Usage: coly <file>");
     exit(1);
   }
 
