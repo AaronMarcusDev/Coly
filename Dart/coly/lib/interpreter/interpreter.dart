@@ -92,7 +92,7 @@ class Interpreter {
           Token b = _pop();
           if (a.type != TokenType.FLOAT || b.type != TokenType.FLOAT) {
             report.error(file, line,
-                "Command `+.` failed. Both items on stack must be integers OR floats.");
+                "Command `+.` failed. Both items on stack must be floats.");
             _errorExit();
           }
           _push(Token(file, TokenType.FLOAT, line, i, a.value + b.value));
@@ -100,32 +100,32 @@ class Interpreter {
           ifTooLittleItemsThrowError(2, "-.");
           Token a = _pop();
           Token b = _pop();
-          if (a.type != TokenType.INTEGER || b.type != TokenType.INTEGER || a.type != TokenType.FLOAT || b.type != TokenType.FLOAT) {
+          if (a.type != TokenType.FLOAT || b.type != TokenType.FLOAT) {
             report.error(file, line,
-                "Command `-.` failed. Both items on stack must be integers OR floats.");
+                "Command `-.` failed. Both items on stack must be floats.");
             _errorExit();
           }
-          _push(Token(file, TokenType.FLOAT, line, i, double.parse(b.value - a.value)));
+          _push(Token(file, TokenType.FLOAT, line, i, b.value - a.value));
         } else if (value == Tokens.FLOAT_STAR) {
           ifTooLittleItemsThrowError(2, "*.");
           Token a = _pop();
           Token b = _pop();
-          if (a.type != TokenType.INTEGER || b.type != TokenType.INTEGER || a.type != TokenType.FLOAT || b.type != TokenType.FLOAT) {
+          if (a.type != TokenType.FLOAT || b.type != TokenType.FLOAT) {
             report.error(file, line,
-                "Command `*.` failed. Both items on stack must be integers OR floats.");
+                "Command `*.` failed. Both items on stack must be floats.");
             _errorExit();
           }
-          _push(Token(file, TokenType.FLOAT, line, i, double.parse(a.value * b.value)));
+          _push(Token(file, TokenType.FLOAT, line, i, a.value * b.value));
         } else if (value == Tokens.FLOAT_SLASH) {
           ifTooLittleItemsThrowError(2, "/.");
           Token a = _pop();
           Token b = _pop();
-          if (a.type != TokenType.INTEGER || b.type != TokenType.INTEGER || a.type != TokenType.FLOAT || b.type != TokenType.FLOAT) {
+          if (a.type != TokenType.FLOAT || b.type != TokenType.FLOAT) {
             report.error(file, line,
-                "Command `/.` failed. Both items on stack must be integers OR floats.");
+                "Command `/.` failed. Both items on stack must be floats.");
             _errorExit();
           }
-          _push(Token(file, TokenType.FLOAT, line, i, double.parse(a.value + b.value)));
+          _push(Token(file, TokenType.FLOAT, line, i, b.value / a.value));
         }
       } else if (type == TokenType.COMPARATOR) {
       } else if (type == TokenType.KEYWORD) {
