@@ -1,5 +1,6 @@
+// Dart
 import 'dart:io';
-
+// Custom
 import 'package:coly/token/token.dart';
 import 'package:coly/token/token_type.dart';
 import 'package:coly/reporter/reporter.dart';
@@ -196,7 +197,7 @@ class Interpreter {
           print(_pop().value);
         }
       } else if (type == TokenType.LANGUAGE) {
-        if (i != tokens.length - 1) {
+        if (i != (tokens.length - 1)) {
           report.error(file, line, "Unexpected end of file.");
         }
       } else {

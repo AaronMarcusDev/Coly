@@ -1,7 +1,9 @@
+// Dart
+import 'dart:io';
+// Custom
 import 'package:coly/token/token.dart';
 import 'package:coly/token/token_type.dart';
 import 'package:coly/reporter/reporter.dart';
-import 'dart:io';
 
 Reporter error = Reporter();
 

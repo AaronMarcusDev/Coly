@@ -1,5 +1,7 @@
-import 'package:coly/reporter/reporter.dart';
+// Dart
 import 'dart:io';
+// Custom
+import 'package:coly/reporter/reporter.dart';
 
 Reporter reporter = Reporter();
 
