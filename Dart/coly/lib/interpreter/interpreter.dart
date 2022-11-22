@@ -128,6 +128,67 @@ class Interpreter {
           _push(Token(file, TokenType.FLOAT, line, i, b.value / a.value));
         }
       } else if (type == TokenType.COMPARATOR) {
+        if (value == Tokens.EQUAL_EQUAL) {
+          ifTooLittleItemsThrowError(2, "=");
+          Token a = _pop();
+          Token b = _pop();
+          if (a.type != b.type) {
+            report.error(file, line,
+                "Command `=` failed. Both items on stack must be the same type.");
+            _errorExit();
+          }
+          _push(Token(file, TokenType.BOOLEAN, line, i, a.value == b.value));
+        } else if (value == Tokens.BANG_EQUAL) {
+          ifTooLittleItemsThrowError(2, "!=");
+          Token a = _pop();
+          Token b = _pop();
+          if (a.type != b.type) {
+            report.error(file, line,
+                "Command `!=` failed. Both items on stack must be the same type.");
+            _errorExit();
+          }
+          _push(Token(file, TokenType.BOOLEAN, line, i, a.value != b.value));
+        } else if (value == Tokens.GREATER) {
+          ifTooLittleItemsThrowError(2, ">");
+          Token a = _pop();
+          Token b = _pop();
+          if (a.type != TokenType.INTEGER || b.type != TokenType.INTEGER) {
+            report.error(file, line,
+                "Command `>` failed. Both items on stack must be integers.");
+            _errorExit();
+          }
+          _push(Token(file, TokenType.BOOLEAN, line, i, b.value > a.value));
+        } else if (value == Tokens.GREATER_EQUAL) {
+          ifTooLittleItemsThrowError(2, ">=");
+          Token a = _pop();
+          Token b = _pop();
+          if (a.type != TokenType.INTEGER || b.type != TokenType.INTEGER) {
+            report.error(file, line,
+                "Command `>=` failed. Both items on stack must be integers.");
+            _errorExit();
+          }
+          _push(Token(file, TokenType.BOOLEAN, line, i, b.value >= a.value));
+        } else if (value == Tokens.LESS_EQUAL) {
+          ifTooLittleItemsThrowError(2, "<=");
+          Token a = _pop();
+          Token b = _pop();
+          if (a.type != TokenType.INTEGER || b.type != TokenType.INTEGER) {
+            report.error(file, line,
+                "Command `>=` failed. Both items on stack must be integers.");
+            _errorExit();
+          }
+          _push(Token(file, TokenType.BOOLEAN, line, i, b.value <= a.value));
+        } else if (value == Tokens.LESS) {
+          ifTooLittleItemsThrowError(2, "<");
+          Token a = _pop();
+          Token b = _pop();
+          if (a.type != TokenType.INTEGER || b.type != TokenType.INTEGER) {
+            report.error(file, line,
+                "Command `<` failed. Both items on stack must be integers.");
+            _errorExit();
+          }
+          _push(Token(file, TokenType.BOOLEAN, line, i, b.value < a.value));
+        }
       } else if (type == TokenType.KEYWORD) {
         if (value == "out") {
           ifIsEmptyThrowError("out");
