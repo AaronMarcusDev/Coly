@@ -5,7 +5,7 @@ import 'package:coly/reporter/reporter.dart';
 
 Reporter reporter = Reporter();
 
-String loadFile(f) {
+String loadFile(String f) {
   if (File(f).existsSync()) {
     return File(f).readAsStringSync();
   } else {

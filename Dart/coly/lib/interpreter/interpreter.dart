@@ -17,7 +17,7 @@ class Interpreter {
 
     // Iterate over tokens (interpret)
     for (int i = 0; i < tokens.length; i++) {
-      _errorExit() {
+      void _errorExit() {
         print("\x1B[34m[INFOR] Error(s) found. Interpreting failed.\x1B[0m");
         exit(1);
       }
@@ -28,7 +28,7 @@ class Interpreter {
       String file = tokens[i].file;
       dynamic value = tokens[i].value;
 
-      print("Type: $type, Value: $value");
+      // print("Type: $type, Value: $value");
 
       void ifIsEmptyThrowError(String command) {
         if (stack.isEmpty) {
@@ -38,8 +38,8 @@ class Interpreter {
         }
       }
 
-      void ifTooLittleItemsThrowError(int items, String command) {
-        if (stack.length != items) {
+      void ifTooLittleItemsThrowError(int amountOfItems, String command) {
+        if (stack.length != amountOfItems) {
           report.error(file, line,
               "Command `$command` failed. Stack too little items on stack.");
           _errorExit();
