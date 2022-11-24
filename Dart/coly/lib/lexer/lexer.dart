@@ -8,7 +8,7 @@ import 'package:coly/reporter/reporter.dart';
 Reporter error = Reporter();
 
 class Lexer {
-  lex(file, source) {
+  List<Token> lex(file, source) {
     List<Token> tokens = [];
     int curr = 0;
     int line = 1;

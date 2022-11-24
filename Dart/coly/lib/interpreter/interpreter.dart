@@ -28,7 +28,7 @@ class Interpreter {
       String file = tokens[i].file;
       dynamic value = tokens[i].value;
 
-      // print("Type: $type, Value: $value");
+      print("Type: $type, Value: $value");
 
       void ifIsEmptyThrowError(String command) {
         if (stack.isEmpty) {
