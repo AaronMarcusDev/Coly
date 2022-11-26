@@ -195,16 +195,39 @@ class Interpreter {
           ifIsEmptyThrowError("out");
           // stdout.write(_pop().value);
           print(_pop().value);
-        } else if (value == "stof") {
-          ifIsEmptyThrowError("stof"); // String To Float
-          Token a = _pop();
+        } else if (value == "stoi") {
+          ifIsEmptyThrowError("stoi"); // String To Integer
           try {
-            _push(Token(file, TokenType.FLOAT, line, i, double.parse(a.value)));
+            _push(Token(
+                file, TokenType.INTEGER, line, i, int.parse(_pop().value)));
           } catch (e) {
             report.error(file, line,
-                "Command `float` failed. Item on stack must contain number.");
+                "Command `stoi` failed. string must contain only an integer number.");
             _errorExit();
           }
+        } else if (value == "stof") {
+          ifIsEmptyThrowError("stof"); // String To Float
+          try {
+            _push(Token(
+                file, TokenType.FLOAT, line, i, double.parse(_pop().value)));
+          } catch (e) {
+            report.error(file, line,
+                "Command `stof` failed. string must contain only a floating-point number.");
+            _errorExit();
+          }
+        } else if (value == "itof") {
+          ifIsEmptyThrowError("itof"); // Integer to Float
+          try {
+            _push(Token(file, TokenType.FLOAT, line, i, _pop().value / 1));
+          } catch (e) {
+            report.error(file, line,
+                "Command `itof` failed. Item on stack must be of type integer.");
+            _errorExit();
+          }
+        } else if (value == "atos") {
+          ifIsEmptyThrowError("atos"); // Any To String
+          _push(
+              Token(file, TokenType.STRING, line, i, _pop().value.toString()));
         }
       } else if (type == TokenType.LANGUAGE) {
         if (i != (tokens.length - 1)) {
