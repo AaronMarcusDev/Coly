@@ -195,6 +195,16 @@ class Interpreter {
           ifIsEmptyThrowError("out");
           // stdout.write(_pop().value);
           print(_pop().value);
+        } else if (value == "float") {
+          ifIsEmptyThrowError("stof");
+          Token a = _pop();
+          try {
+            _push(Token(file, TokenType.FLOAT, line, i, double.parse(a.value)));
+          } catch (e) {
+            report.error(file, line,
+                "Command `float` failed. Item on stack must contain number.");
+            _errorExit();
+          }
         }
       } else if (type == TokenType.LANGUAGE) {
         if (i != (tokens.length - 1)) {
