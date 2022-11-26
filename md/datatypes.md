@@ -2,22 +2,13 @@
 
 | Type | example value |
 |-|-|
-| `number` | 123 |
-| `boolean` | 0 **/** 1 |
+| `integer` | 123 |
+| `float` | 123.456 |
+| `boolean` | true **/** false |
 | `string` | "Hello, world!" |
-| `list`| ["string" 123 1] |
 
-### Important:
-#### boolean 
-- Booleans are represented as type `number` .   
-0 is equivalent to `false` ,
-1 is equivalent to `true` .
+## Important:
 
-#### string
+### string
 - Strings must start and end with a double quotation mark ( " ) .   
-Single quotation marks ( ' ) are not allowed.
-
-#### list
-- Lists must be opened with a bracket ( [ ) and closed with a bracket ( ] ) .
-
-- List items are seperated using spaces ( [123 456] ) .
+Single quotation marks ( ' ) can also be used, recommended when using a double quotation mark as character in the string.

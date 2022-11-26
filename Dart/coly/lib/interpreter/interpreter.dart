@@ -195,8 +195,8 @@ class Interpreter {
           ifIsEmptyThrowError("out");
           // stdout.write(_pop().value);
           print(_pop().value);
-        } else if (value == "float") {
-          ifIsEmptyThrowError("stof");
+        } else if (value == "stof") {
+          ifIsEmptyThrowError("stof"); // String To Float
           Token a = _pop();
           try {
             _push(Token(file, TokenType.FLOAT, line, i, double.parse(a.value)));
