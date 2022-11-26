@@ -18,25 +18,8 @@ My goal is to create a stack-oriented language with modern features.
 - Interpreted & compiled
 
 ## Working on
-- Keyword checker (before runtime)
-
-## Todo
-- File I/O
-- Proper loops
-- Deprecate labels
-
-## Done
-- [x] Lexer
-- [x] Interpreter
-- [x] Control-Flow
-- [x] CMD calls
-- [x] Macro's
-- [x] Preprocessor
-- [x] Macro fetcher 
-- [x] Include files
-- [x] Call arguments
-- [x] Parser
-- [x] Iterable data type (List)
+Currently rewriting the entire language in Dart.\
+I will also be making a compiler for Coly.
 
 ## Learn
 
