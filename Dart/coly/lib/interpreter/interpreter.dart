@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:coly/token/token.dart';
 import 'package:coly/token/token_type.dart';
 import 'package:coly/reporter/reporter.dart';
+import 'package:coly/interpreter/passthrough.dart' as passthrough;
 
 Reporter report = Reporter();
 
@@ -11,6 +12,9 @@ class Interpreter {
   void interpret(List<Token> tokens) {
     // Initialize stack
     List<Token> stack = [];
+    for (String arg in passthrough.args) {
+      stack.add(Token("ARGS", TokenType.STRING, 0, 0, arg));
+    }
     // Variables
     Map<String, int> jumpLocations = {};
     // Stack Operations
