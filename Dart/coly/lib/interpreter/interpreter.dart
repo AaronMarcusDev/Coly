@@ -11,6 +11,8 @@ class Interpreter {
   void interpret(List<Token> tokens) {
     // Initialize stack
     List<Token> stack = [];
+    // Variables
+    Map<String, int> jumpLocations = {};
     // Stack Operations
     void _push(token) => stack.add(token);
     Token _pop() => stack.removeLast();
@@ -277,6 +279,38 @@ class Interpreter {
             }
 
             i++;
+          }
+        } else if (value == "set") {
+          if (_isAtEnd()) {
+            report.error(
+                file, line, "Command `set` is not followed by a name.");
+            _errorExit();
+          }
+          i++;
+          if (tokens[i].type != TokenType.KEYWORD) {
+            report.error(file, line,
+                "Command `set` is not followed by a name. Expected identifier.");
+            _errorExit();
+          }
+          jumpLocations[tokens[i].value] = i;
+        } else if (value == "jump") {
+          if (_isAtEnd()) {
+            report.error(
+                file, line, "Command `set` is not followed by a name.");
+            _errorExit();
+          }
+          i++;
+          if (tokens[i].type != TokenType.KEYWORD) {
+            report.error(file, line,
+                "Command `set` is not followed by a name. Expected identifier.");
+            _errorExit();
+          }
+          try {
+            i = jumpLocations[tokens[i].value]!;
+          } catch (e) {
+            report.error(file, line,
+                "Command `jump` failed. Jump location does not exist.");
+            _errorExit();
           }
         }
       } else if (type == TokenType.LANGUAGE) {

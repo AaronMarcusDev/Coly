@@ -1,6 +1,6 @@
 # Coly Programming Language
 
-**Update**: I'm switching the language from Julia to Dart, because Julia is really slow and hard to maintain.
+**Update**: I'm switching the bootstrap-language from Julia to Dart, because Julia is really slow and hard to maintain.
 I will also be changing the syntax of Coly completely.
 
 ## THIS IS STILL IN VERY EARLY STAGES, LONG FROM PRODUCTION READY!
