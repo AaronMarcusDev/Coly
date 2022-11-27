@@ -33,3 +33,4 @@ Julia/src/checker.jl
 Dart/coly/.dart_tool
 Dart/coly/.packages
 Dart/coly/bin/.input.coly
+Dart/coly/bin/*.bat

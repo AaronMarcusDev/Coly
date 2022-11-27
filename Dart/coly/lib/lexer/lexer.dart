@@ -69,19 +69,19 @@ class Lexer {
         //   }
         //   break;
 
-        // case '{':
-        //   {
-        //     tokens.add(Token(
-        //         file, TokenType.CHARACTER, line, curr, Tokens.LEFT_BRACE));
-        //   }
-        //   break;
+        case '{':
+          {
+            tokens.add(Token(
+                file, TokenType.CHARACTER, line, curr, Tokens.LEFT_BRACE));
+          }
+          break;
 
-        // case '}':
-        //   {
-        //     tokens.add(Token(
-        //         file, TokenType.CHARACTER, line, curr, Tokens.RIGHT_BRACE));
-        //   }
-        //   break;
+        case '}':
+          {
+            tokens.add(Token(
+                file, TokenType.CHARACTER, line, curr, Tokens.RIGHT_BRACE));
+          }
+          break;
 
         // case '.':
         //   {

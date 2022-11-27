@@ -23,12 +23,14 @@ class Interpreter {
       }
 
       Token token = tokens[i];
-      TokenType type = tokens[i].type;
-      int line = tokens[i].line;
-      String file = tokens[i].file;
-      dynamic value = tokens[i].value;
+      TokenType type = token.type;
+      int line = token.line;
+      String file = token.file;
+      dynamic value = token.value;
 
       // print("Type: $type, Value: $value");
+
+      bool _isAtEnd() => i >= tokens.length - 1;
 
       void ifIsEmptyThrowError(String command) {
         if (stack.isEmpty) {
@@ -195,6 +197,7 @@ class Interpreter {
           ifIsEmptyThrowError("out");
           // stdout.write(_pop().value);
           print(_pop().value);
+          // Type conversion commands
         } else if (value == "stoi") {
           ifIsEmptyThrowError("stoi"); // String To Integer
           try {
@@ -212,7 +215,7 @@ class Interpreter {
                 file, TokenType.FLOAT, line, i, double.parse(_pop().value)));
           } catch (e) {
             report.error(file, line,
-                "Command `stof` failed. string must contain only a floating-point number.");
+                "Command `stof` failed. string must only contain a floating-point number.");
             _errorExit();
           }
         } else if (value == "itof") {
@@ -229,8 +232,55 @@ class Interpreter {
           _push(
               Token(file, TokenType.STRING, line, i, _pop().value.toString()));
         }
+        // Control flow
+        else if (value == "if") {
+          ifIsEmptyThrowError("if");
+
+          Token a = _pop();
+
+          if (a.type != TokenType.BOOLEAN) {
+            report.error(file, line,
+                "Command `if` failed. Item on stack must be of type boolean.");
+            _errorExit();
+          }
+
+          if (_isAtEnd()) {
+            report.error(file, line, "Command `if` is not followed by a block");
+            _errorExit();
+          }
+          i++;
+
+          if (tokens[i].value != Tokens.LEFT_BRACE) {
+            report.error(
+                file, line, "Command `if` is not followed by a block.");
+            _errorExit();
+          }
+          i++;
+
+          int startJMP = i - 1;
+          int nest = 0;
+          while (true) {
+            if (_isAtEnd()) {
+              report.error(
+                  file, line, "Block has not been closed. Missing '{'.");
+              _errorExit();
+            } else if (tokens[i].value == Tokens.LEFT_BRACE) {
+              nest++;
+            } else if (tokens[i].value == Tokens.RIGHT_BRACE) {
+              if (nest == 0) {
+                if (!a.value) break;
+                i = startJMP;
+                break;
+              } else {
+                nest--;
+              }
+            }
+
+            i++;
+          }
+        }
       } else if (type == TokenType.LANGUAGE) {
-        if (i != (tokens.length - 1)) {
+        if (!_isAtEnd()) {
           report.error(file, line, "Unexpected end of file.");
         }
       } else {
