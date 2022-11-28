@@ -252,7 +252,18 @@ class Lexer {
                 break;
               } else if (chars[curr] == '"') {
                 tokens.add(Token(
-                    file, TokenType.STRING, line, start, stringArray.join("")));
+                    file,
+                    TokenType.STRING,
+                    line,
+                    start,
+                    stringArray
+                        .join("")
+                        .replaceAll("\\n", "\n")
+                        .replaceAll("\\t", "\t")
+                        .replaceAll("\\r", "\r")
+                        .replaceAll("\\b", "\b")
+                        .replaceAll("\\f", "\f")
+                        .replaceAll("\\\\", "\\")));
                 break;
               }
               stringArray.add(chars[curr]);
@@ -277,7 +288,18 @@ class Lexer {
                 break;
               } else if (chars[curr] == "'") {
                 tokens.add(Token(
-                    file, TokenType.STRING, line, start, stringArray.join("")));
+                    file,
+                    TokenType.STRING,
+                    line,
+                    start,
+                    stringArray
+                        .join("")
+                        .replaceAll("\\n", "\n")
+                        .replaceAll("\\t", "\t")
+                        .replaceAll("\\r", "\r")
+                        .replaceAll("\\b", "\b")
+                        .replaceAll("\\f", "\f")
+                        .replaceAll("\\\\", "\\")));
                 break;
               }
               stringArray.add(chars[curr]);
