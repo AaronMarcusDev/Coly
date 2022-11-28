@@ -199,10 +199,41 @@ class Interpreter {
           _push(Token(file, TokenType.BOOLEAN, line, i, b.value < a.value));
         }
       } else if (type == TokenType.KEYWORD) {
-        if (value == "out") {
+        if (value == "exit") {
+          ifIsEmptyThrowError("exit");
+          Token a = _pop();
+          if (a.type != TokenType.INTEGER) {
+            report.error(file, line,
+                "Command `exit` failed. Item on stack must be an integer.");
+            _errorExit();
+          }
+          exit(a.value);
+        } else if (value == "out") {
           ifIsEmptyThrowError("out");
           // stdout.write(_pop().value);
           print(_pop().value);
+          // Basic stack operations
+        } else if (value == "dump") {
+          ifIsEmptyThrowError("dump");
+          _pop();
+        } else if (value == "dup") {
+          ifIsEmptyThrowError("dup");
+          _push(stack.last);
+        } else if (value == "clear") {
+          stack = [];
+        } else if (value == "swap") {
+          ifTooLittleItemsThrowError(2, "swap");
+          Token a = _pop();
+          Token b = _pop();
+          _push(a);
+          _push(b);
+        } else if (value == "over") {
+          ifTooLittleItemsThrowError(2, "over");
+          Token a = _pop();
+          Token b = _pop();
+          _push(b);
+          _push(a);
+          _push(b);
           // Type conversion commands
         } else if (value == "stoi") {
           ifIsEmptyThrowError("stoi"); // String To Integer
