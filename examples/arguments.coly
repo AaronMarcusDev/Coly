@@ -1,0 +1,11 @@
+count dup 0 = if { 
+    "ERROR: No arguments provided." out 
+    1 exit 
+}
+
+set start
+    dup 0 != if {
+        1 -
+        swap out
+        jump start
+    }

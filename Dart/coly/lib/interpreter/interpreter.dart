@@ -47,9 +47,9 @@ class Interpreter {
       }
 
       void ifTooLittleItemsThrowError(int amountOfItems, String command) {
-        if (stack.length != amountOfItems) {
+        if (stack.length < amountOfItems) {
           report.error(file, line,
-              "Command `$command` failed. Stack too little items on stack.");
+              "Command `$command` failed. Too little items on stack.");
           _errorExit();
         }
       }
@@ -212,8 +212,9 @@ class Interpreter {
           ifIsEmptyThrowError("out");
           // stdout.write(_pop().value);
           print(_pop().value);
-          // Basic stack operations
-        } else if (value == "dump") {
+        }
+        // Basic stack operations
+        else if (value == "dump") {
           ifIsEmptyThrowError("dump");
           _pop();
         } else if (value == "dup") {
@@ -234,8 +235,11 @@ class Interpreter {
           _push(b);
           _push(a);
           _push(b);
-          // Type conversion commands
-        } else if (value == "stoi") {
+        } else if (value == "count") {
+          _push(Token(file, TokenType.INTEGER, line, i, stack.length));
+        }
+        // Type conversion commands
+        else if (value == "stoi") {
           ifIsEmptyThrowError("stoi"); // String To Integer
           try {
             _push(Token(
