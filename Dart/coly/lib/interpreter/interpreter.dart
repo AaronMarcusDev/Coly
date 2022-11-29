@@ -360,7 +360,26 @@ class Interpreter {
                 "Command `jump` failed. Jump location does not exist.");
             _errorExit();
           }
-        } else {
+        } else if (value == "free") {
+          if (_isAtEnd()) {
+            report.error(
+                file, line, "Command `set` is not followed by a name.");
+            _errorExit();
+          }
+          i++;
+          if (tokens[i].type != TokenType.KEYWORD) {
+            report.error(file, line,
+                "Command `set` is not followed by a name. Expected identifier.");
+            _errorExit();
+          }
+          if (jumpLocations.remove(tokens[i].value) == null) {
+            report.error(file, line,
+                "Command `free` failed. Jump location does not exist.");
+            _errorExit();
+          }
+        }
+        // Unknown keyword
+        else {
           report.error(file, line, "Unknown command `$value`.");
           _errorExit();
         }

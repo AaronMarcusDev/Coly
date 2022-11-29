@@ -175,7 +175,11 @@ class Lexer {
         case '/':
           {
             if (peek(curr) == '/') {
-              while (peek(curr) != '\n' && !_isAtEnd()) {
+              curr++;
+              while (true) {
+                if (_isAtEnd() || chars[curr] == '\n') {
+                  break;
+                }
                 curr++;
               }
             } else if (peek(curr) == '.') {
