@@ -210,7 +210,9 @@ class Interpreter {
           exit(a.value);
         } else if (value == "out") {
           ifIsEmptyThrowError("out");
-          // stdout.write(_pop().value);
+          stdout.write(_pop().value);
+        } else if (value == "puts") {
+          ifIsEmptyThrowError("puts");
           print(_pop().value);
         }
         // Basic stack operations
