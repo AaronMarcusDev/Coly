@@ -199,6 +199,7 @@ class Interpreter {
           _push(Token(file, TokenType.BOOLEAN, line, i, b.value < a.value));
         }
       } else if (type == TokenType.KEYWORD) {
+        // System
         if (value == "exit") {
           ifIsEmptyThrowError("exit");
           Token a = _pop();
@@ -208,12 +209,16 @@ class Interpreter {
             _errorExit();
           }
           exit(a.value);
-        } else if (value == "out") {
+        } 
+        // Input / Output
+        else if (value == "out") {
           ifIsEmptyThrowError("out");
           stdout.write(_pop().value);
         } else if (value == "puts") {
           ifIsEmptyThrowError("puts");
           print(_pop().value);
+        } else if (value == "input") {
+          _push(Token(file, TokenType.STRING, line, i, stdin.readLineSync()));
         }
         // Basic stack operations
         else if (value == "dump") {
@@ -239,6 +244,8 @@ class Interpreter {
           _push(b);
         } else if (value == "count") {
           _push(Token(file, TokenType.INTEGER, line, i, stack.length));
+        } else if (value == "reverse") {
+          stack = stack.reversed.toList();
         }
         // Type conversion commands
         else if (value == "stoi") {
@@ -353,6 +360,9 @@ class Interpreter {
                 "Command `jump` failed. Jump location does not exist.");
             _errorExit();
           }
+        } else {
+          report.error(file, line, "Unknown command `$value`.");
+          _errorExit();
         }
       } else if (type == TokenType.LANGUAGE) {
         if (!_isAtEnd()) {

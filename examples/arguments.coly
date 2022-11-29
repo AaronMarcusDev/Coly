@@ -1,11 +1,15 @@
-count dup 0 = if { 
-    "ERROR: No arguments provided." out 
+// Argument printer
+
+reverse // Reverse the stack order
+
+count dup 0 = if { // Check if arguments are present
+    "ERROR: No arguments provided." puts
     1 exit 
 }
 
-set start
-    dup 0 != if {
+set start // Start of loop
+    dup 0 != if { // Check if there are arguments left
         1 -
-        swap out
+        swap puts // Print argument
         jump start
     }
