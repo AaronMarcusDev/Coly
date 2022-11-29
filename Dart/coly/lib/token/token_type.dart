@@ -11,6 +11,7 @@ enum TokenType {
   OPERATOR,
   COMPARATOR,
   ASSIGN,
+  NULL
 }
 
 enum Tokens {
