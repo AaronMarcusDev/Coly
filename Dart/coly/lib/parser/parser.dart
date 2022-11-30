@@ -134,6 +134,24 @@ class Parser {
         preresult.add(tokens[i]);
       }
     }
+
+    for (var key in macros.keys) {
+      List<Token> result = [];
+      var macro = macros[key];
+      for (var item in macro) {
+        if (item.type == TokenType.KEYWORD) {
+          if (macros.containsKey(item.value)) {
+            result.addAll(macros[item.value]);
+          } else {
+            result.add(item);
+          }
+        } else {
+          result.add(item);
+        }
+      }
+      macros[key] = result;
+    }
+
     List<Token> result = [];
     for (int i = 0; i < preresult.length; i++) {
       if (preresult[i].type == TokenType.KEYWORD) {
@@ -149,6 +167,10 @@ class Parser {
         result.add(preresult[i]);
       }
     }
+    // for (var key in macros.keys) {
+    //   print(key);
+    //   print(macros[key]);
+    // }
     if (errors > 0) exit(1);
     return result;
   }

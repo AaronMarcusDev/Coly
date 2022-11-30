@@ -201,7 +201,7 @@ class Interpreter {
       } else if (type == TokenType.KEYWORD) {
         // System
         if (value == "exit") {
-          ifIsEmptyThrowError("exit");
+          if (stack.isEmpty) exit(0);
           Token a = _pop();
           if (a.type != TokenType.INTEGER) {
             report.error(file, line,
