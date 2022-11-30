@@ -1,3 +1,0 @@
-macro greet {
-    "Hello hello!" puts
-}

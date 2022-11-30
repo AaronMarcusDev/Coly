@@ -209,6 +209,26 @@ class Interpreter {
             _errorExit();
           }
           exit(a.value);
+        } else if (value == "system") {
+          ifIsEmptyThrowError("system");
+          Token a = _pop();
+          if (a.type != TokenType.STRING) {
+            report.error(file, line,
+                "Command `system` failed. Item on stack must be a string.");
+            _errorExit();
+          }
+          List<String> keywords = a.value.split(" ");
+          String cmd = keywords[0];
+          keywords.removeAt(0);
+          try {
+            // make a shell command and print the result
+            ProcessResult result = Process.runSync(cmd, keywords);
+            _push(Token(file, TokenType.STRING, line, i, result.stdout));
+          } catch (e) {
+            report.error(file, line,
+                "Command `system` failed. Could not run command `${a.value}`.");
+            _errorExit();
+          }
         }
         // Input / Output
         else if (value == "out") {
@@ -377,6 +397,27 @@ class Interpreter {
                 "Command `free` failed. Jump location does not exist.");
             _errorExit();
           }
+        }
+        // Concat
+        else if (value == "concat") {
+          ifTooLittleItemsThrowError(2, "concat");
+          Token a = _pop();
+          Token b = _pop();
+          if (a.type != TokenType.STRING || b.type != TokenType.STRING) {
+            report.error(file, line,
+                "Command `concat` failed. Both items on stack must be of type string.");
+            _errorExit();
+          }
+          _push(Token(file, TokenType.STRING, line, i, b.value + a.value));
+        } else if (value == "trim") {
+          ifIsEmptyThrowError("trim");
+          Token a = _pop();
+          if (a.type != TokenType.STRING) {
+            report.error(file, line,
+                "Command `trim` failed. Item on stack must be of type string.");
+            _errorExit();
+          }
+          _push(Token(file, TokenType.STRING, line, i, a.value.trim()));
         }
         // Unknown keyword
         else {
