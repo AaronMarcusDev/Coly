@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:coly/token/token.dart';
 import 'package:coly/token/token_type.dart';
 import 'package:coly/reporter/reporter.dart';
+import 'package:coly/lexer/lexer.dart';
 
 Reporter report = Reporter();
+Lexer lexer = Lexer();
 
 class Parser {
   List<Token> parse(List<Token> tokens) {
@@ -15,11 +17,43 @@ class Parser {
     for (int i = 0; i < tokens.length; i++) {
       bool _isAtEnd() => i >= tokens.length - 1;
 
-      Token token = tokens[i];
-      TokenType type = token.type;
-      int line = token.line;
-      String file = token.file;
-      dynamic value = token.value;
+      if (tokens[i].type == TokenType.KEYWORD && tokens[i].value == "include") {
+        if (_isAtEnd()) {
+          report.error(tokens[i].file, tokens[i].line,
+              "Expected a string after `include`.");
+          errors++;
+          break;
+        }
+        i++;
+        if (tokens[i].type != TokenType.STRING) {
+          report.error(tokens[i].file, tokens[i].line,
+              "Expected a string after `include`.");
+          errors++;
+          break;
+        }
+        String fileName = tokens[i].value.trim();
+        if (!File(fileName).existsSync()) {
+          report.error(tokens[i].file, tokens[i].line,
+              "File `$fileName` does not exist.");
+          errors++;
+          break;
+        }
+        List<Token> lexedTokens =
+            lexer.lex(fileName, File(fileName).readAsStringSync());
+        for (Token token in lexedTokens.sublist(0, lexedTokens.length - 1)) {
+          preresult.add(token);
+        }
+      } else {
+        preresult.add(tokens[i]);
+      }
+    }
+    tokens = preresult;
+    preresult = [];
+
+    for (int i = 0; i < tokens.length; i++) {
+      bool _isAtEnd() => i >= tokens.length - 1;
+      int line = tokens[i].line;
+      String file = tokens[i].file;
 
       if (tokens[i].type == TokenType.KEYWORD) {
         if (tokens[i].value == "true") {
@@ -102,14 +136,6 @@ class Parser {
     }
     List<Token> result = [];
     for (int i = 0; i < preresult.length; i++) {
-      bool _isAtEnd() => i >= preresult.length - 1;
-
-      Token token = preresult[i];
-      TokenType type = token.type;
-      int line = token.line;
-      String file = token.file;
-      dynamic value = token.value;
-
       if (preresult[i].type == TokenType.KEYWORD) {
         if (macros.containsKey(preresult[i].value)) {
           List<Token> macroTokens = macros[preresult[i].value];

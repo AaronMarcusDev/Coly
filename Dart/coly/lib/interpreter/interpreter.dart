@@ -209,7 +209,7 @@ class Interpreter {
             _errorExit();
           }
           exit(a.value);
-        } 
+        }
         // Input / Output
         else if (value == "out") {
           ifIsEmptyThrowError("out");
@@ -386,9 +386,10 @@ class Interpreter {
       } else if (type == TokenType.LANGUAGE) {
         if (!_isAtEnd()) {
           report.error(file, line, "Unexpected end of file.");
+          _errorExit();
         }
       } else {
-        _push(token);
+        if (type != TokenType.CHARACTER) _push(token);
       }
     }
   }

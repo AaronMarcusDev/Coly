@@ -1,0 +1,24 @@
+macro emptyCLIArgs {
+    count
+    set start
+        dup 0 != if {
+            1 -
+            swap dump
+            jump start
+        }
+    free start
+}
+
+emptyCLIArgs
+
+"CAT - Written in Coly by AaronMarcusDev\n" puts
+"Type anything to get it printed back onto the screen." puts
+"Type `stop` to exit." puts
+
+set start
+input dup "stop" = if {
+    free start
+     0 exit
+}
+puts
+jump start

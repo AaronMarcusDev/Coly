@@ -9,6 +9,8 @@ Reporter error = Reporter();
 
 class Lexer {
   List<Token> lex(file, source) {
+    if (source.trim() == "") return [];
+    
     List<Token> tokens = [];
     int curr = 0;
     int line = 1;
