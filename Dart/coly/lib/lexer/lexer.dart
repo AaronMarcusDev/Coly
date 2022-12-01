@@ -10,7 +10,7 @@ Reporter error = Reporter();
 class Lexer {
   List<Token> lex(file, source) {
     if (source.trim() == "") return [];
-    
+
     List<Token> tokens = [];
     int curr = 0;
     int line = 1;
@@ -184,6 +184,7 @@ class Lexer {
                 }
                 curr++;
               }
+              curr--;
             } else if (peek(curr) == '.') {
               tokens.add(Token(
                   file, TokenType.OPERATOR, line, curr, Tokens.FLOAT_SLASH));

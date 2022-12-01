@@ -420,6 +420,18 @@ class Interpreter {
           _push(Token(file, TokenType.STRING, line, i, a.value.trim()));
         } else if (value == "endl") {
           print("");
+        } else if (value == "split") {
+          ifTooLittleItemsThrowError(2, "split");
+          Token a = _pop();
+          Token b = _pop();
+          if (a.type != TokenType.STRING || b.type != TokenType.STRING) {
+            report.error(file, line,
+                "Command `split` failed. Both items on stack must be of type string.");
+            _errorExit();
+          }
+          for (String s in b.value.split(a.value)) {
+            _push(Token(file, TokenType.STRING, line, i, s));
+          }
         }
         // FileStream
         else if (value == "fRead") {
