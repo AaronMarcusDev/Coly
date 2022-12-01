@@ -398,7 +398,7 @@ class Interpreter {
             _errorExit();
           }
         }
-        // Concat
+        // String
         else if (value == "concat") {
           ifTooLittleItemsThrowError(2, "concat");
           Token a = _pop();
@@ -418,6 +418,98 @@ class Interpreter {
             _errorExit();
           }
           _push(Token(file, TokenType.STRING, line, i, a.value.trim()));
+        } else if (value == "endl") {
+          print("");
+        }
+        // FileStream
+        else if (value == "fRead") {
+          ifIsEmptyThrowError("fRead");
+          Token a = _pop();
+          if (a.type != TokenType.STRING) {
+            report.error(file, line,
+                "Command `fRead` failed. Item on stack must be of type string.");
+            _errorExit();
+          }
+          try {
+            _push(Token(file, TokenType.STRING, line, i,
+                File(a.value).readAsStringSync()));
+          } catch (e) {
+            report.error(file, line,
+                "Command `fRead` failed. File does not exist or is not readable.");
+            _errorExit();
+          }
+        } else if (value == "fWrite") {
+          ifTooLittleItemsThrowError(2, "fWrite");
+          Token a = _pop();
+          Token b = _pop();
+          if (a.type != TokenType.STRING || b.type != TokenType.STRING) {
+            report.error(file, line,
+                "Command `fWrite` failed. Both items on stack must be of type string.");
+            _errorExit();
+          }
+          try {
+            File(a.value).writeAsStringSync(b.value);
+          } catch (e) {
+            report.error(file, line,
+                "Command `fWrite` failed. File does not exist or is not writable.");
+            _errorExit();
+          }
+        } else if (value == "fAppend") {
+          ifTooLittleItemsThrowError(2, "fAppend");
+          Token a = _pop();
+          Token b = _pop();
+          if (a.type != TokenType.STRING || b.type != TokenType.STRING) {
+            report.error(file, line,
+                "Command `fAppend` failed. Both items on stack must be of type string.");
+            _errorExit();
+          }
+          try {
+            File(a.value).writeAsStringSync(b.value, mode: FileMode.append);
+          } catch (e) {
+            report.error(file, line,
+                "Command `fAppend` failed. File does not exist or is not writable.");
+            _errorExit();
+          }
+        } else if (value == "fDelete") {
+          ifIsEmptyThrowError("fDelete");
+          Token a = _pop();
+          if (a.type != TokenType.STRING) {
+            report.error(file, line,
+                "Command `fDelete` failed. Item on stack must be of type string.");
+            _errorExit();
+          }
+          try {
+            File(a.value).deleteSync();
+          } catch (e) {
+            report.error(file, line,
+                "Command `fDelete` failed. File does not exist or is not writable.");
+            _errorExit();
+          }
+        } else if (value == "fExists") {
+          ifIsEmptyThrowError("fExists");
+          Token a = _pop();
+          if (a.type != TokenType.STRING) {
+            report.error(file, line,
+                "Command `fExists` failed. Item on stack must be of type string.");
+            _errorExit();
+          }
+          _push(Token(file, TokenType.BOOLEAN, line, i,
+              File(a.value).existsSync()));
+        } else if (value == "fCreate") {
+          ifIsEmptyThrowError("fCreate");
+          Token a = _pop();
+          if (a.type != TokenType.STRING) {
+            report.error(file, line,
+                "Command `fCreate` failed. Item on stack must be of type string.");
+            _errorExit();
+          }
+          try {
+            File(a.value).createSync();
+          } catch (e) {
+            report.error(file, line,
+                "Command `fCreate` failed.");
+            _errorExit();
+          }
         }
         // Unknown keyword
         else {
