@@ -196,6 +196,13 @@ class Lexer {
           }
           break;
 
+        case '%':
+          {
+            tokens.add(
+                Token(file, TokenType.OPERATOR, line, curr, Tokens.MODULO));
+          }
+          break;
+
         case '=':
           {
             tokens.add(Token(

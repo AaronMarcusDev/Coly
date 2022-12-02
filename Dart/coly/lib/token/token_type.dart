@@ -24,13 +24,14 @@ enum Tokens {
   DOT,
   MINUS,
   PLUS,
-  FLOAT_PLUS,
-  FLOAT_MINUS,
-  SEMICOLON,
   SLASH,
   STAR,
+  MODULO,
+  FLOAT_PLUS,
+  FLOAT_MINUS,
   FLOAT_SLASH,
   FLOAT_STAR,
+  SEMICOLON,
 
   // Single-or-Double-character tokens.
   BANG,

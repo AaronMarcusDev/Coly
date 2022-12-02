@@ -1,0 +1,12 @@
+macro loop {
+    set LOOP
+}
+
+macro endLoop {
+    jump LOOP
+}
+
+macro closeLoop {
+    free LOOP
+}
+

@@ -34,3 +34,6 @@ Dart/coly/.dart_tool
 Dart/coly/.packages
 Dart/coly/bin/*.coly
 Dart/coly/bin/*.bat
+Dart/coly/bin/*.ll
+Dart/coly/bin/*.js
+Dart/coly/bin/*.exe

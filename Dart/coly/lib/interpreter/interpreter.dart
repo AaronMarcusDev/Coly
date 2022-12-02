@@ -95,6 +95,16 @@ class Interpreter {
             _errorExit();
           }
           _push(Token(file, TokenType.FLOAT, line, i, b.value / a.value));
+        } else if (value == Tokens.MODULO) {
+          ifTooLittleItemsThrowError(2, "%");
+          Token a = _pop();
+          Token b = _pop();
+          if (a.type != TokenType.INTEGER || b.type != TokenType.INTEGER) {
+            report.error(file, line,
+                "Command `%` failed. Both items on stack must be integers.");
+            _errorExit();
+          }
+          _push(Token(file, TokenType.INTEGER, line, i, b.value % a.value));
         } else if (value == Tokens.FLOAT_PLUS) {
           ifTooLittleItemsThrowError(2, "+.");
           Token a = _pop();
@@ -237,6 +247,13 @@ class Interpreter {
         } else if (value == "puts") {
           ifIsEmptyThrowError("puts");
           print(_pop().value);
+        } else if (value == "endl") {
+          print("");
+        } else if (value == "peek") {
+          ifIsEmptyThrowError("peek");
+          stdout.write(stack[stack.length - 1].value);
+        } else if (value == "in") {
+          _push(Token(file, TokenType.STRING, line, i, stdin.readLineSync()));
         } else if (value == "input") {
           _push(Token(file, TokenType.STRING, line, i, stdin.readLineSync()));
         }
@@ -418,8 +435,6 @@ class Interpreter {
             _errorExit();
           }
           _push(Token(file, TokenType.STRING, line, i, a.value.trim()));
-        } else if (value == "endl") {
-          print("");
         } else if (value == "split") {
           ifTooLittleItemsThrowError(2, "split");
           Token a = _pop();
@@ -432,6 +447,76 @@ class Interpreter {
           for (String s in b.value.split(a.value)) {
             _push(Token(file, TokenType.STRING, line, i, s));
           }
+        } else if (value == "revsplit") {
+          ifTooLittleItemsThrowError(2, "revsplit");
+          Token a = _pop();
+          Token b = _pop();
+          if (a.type != TokenType.STRING || b.type != TokenType.STRING) {
+            report.error(file, line,
+                "Command `split` failed. Both items on stack must be of type string.");
+            _errorExit();
+          }
+          
+          List<String> split = b.value.split(a.value);
+          for (int i = split.length - 1; i >= 0; i--) {
+            _push(Token(file, TokenType.STRING, line, i, split[i]));
+          }
+        } else if (value == "length") {
+          ifIsEmptyThrowError("length");
+          Token a = _pop();
+          if (a.type != TokenType.STRING) {
+            report.error(file, line,
+                "Command `length` failed. Item on stack must be of type string.");
+            _errorExit();
+          }
+          _push(Token(file, TokenType.INTEGER, line, i, a.value.length));
+        } else if (value == "replace") {
+          ifTooLittleItemsThrowError(3, "replace");
+          Token a = _pop();
+          Token b = _pop();
+          Token c = _pop();
+          if (a.type != TokenType.STRING ||
+              b.type != TokenType.STRING ||
+              c.type != TokenType.STRING) {
+            report.error(file, line,
+                "Command `replace` failed. All items on stack must be of type string.");
+            _errorExit();
+          }
+          _push(Token(file, TokenType.STRING, line, i,
+              c.value.replaceAll(b.value, a.value)));
+        } else if (value == "contains") {
+          ifTooLittleItemsThrowError(2, "contains");
+          Token a = _pop();
+          Token b = _pop();
+          if (a.type != TokenType.STRING || b.type != TokenType.STRING) {
+            report.error(file, line,
+                "Command `contains` failed. Both items on stack must be of type string.");
+            _errorExit();
+          }
+          _push(Token(
+              file, TokenType.BOOLEAN, line, i, b.value.contains(a.value)));
+        } else if (value == "startswith") {
+          ifTooLittleItemsThrowError(2, "startswith");
+          Token a = _pop();
+          Token b = _pop();
+          if (a.type != TokenType.STRING || b.type != TokenType.STRING) {
+            report.error(file, line,
+                "Command `startswith` failed. Both items on stack must be of type string.");
+            _errorExit();
+          }
+          _push(Token(
+              file, TokenType.BOOLEAN, line, i, b.value.startsWith(a.value)));
+        } else if (value == "endswith") {
+          ifTooLittleItemsThrowError(2, "endswith");
+          Token a = _pop();
+          Token b = _pop();
+          if (a.type != TokenType.STRING || b.type != TokenType.STRING) {
+            report.error(file, line,
+                "Command `endswith` failed. Both items on stack must be of type string.");
+            _errorExit();
+          }
+          _push(Token(
+              file, TokenType.BOOLEAN, line, i, b.value.endsWith(a.value)));
         }
         // FileStream
         else if (value == "fRead") {
@@ -505,8 +590,8 @@ class Interpreter {
                 "Command `fExists` failed. Item on stack must be of type string.");
             _errorExit();
           }
-          _push(Token(file, TokenType.BOOLEAN, line, i,
-              File(a.value).existsSync()));
+          _push(Token(
+              file, TokenType.BOOLEAN, line, i, File(a.value).existsSync()));
         } else if (value == "fCreate") {
           ifIsEmptyThrowError("fCreate");
           Token a = _pop();
@@ -518,8 +603,7 @@ class Interpreter {
           try {
             File(a.value).createSync();
           } catch (e) {
-            report.error(file, line,
-                "Command `fCreate` failed.");
+            report.error(file, line, "Command `fCreate` failed.");
             _errorExit();
           }
         }
