@@ -7,6 +7,7 @@ import 'package:coly/reporter/reporter.dart';
 import 'package:coly/interpreter/passthrough.dart' as passthrough;
 
 Reporter report = Reporter();
+Stopwatch stopwatch = Stopwatch()..start();
 
 class Interpreter {
   void interpret(List<Token> tokens) {
@@ -239,6 +240,9 @@ class Interpreter {
                 "Command `system` failed. Could not run command `${a.value}`.");
             _errorExit();
           }
+        } else if (value == "elapsed") {
+          _push(Token(
+              file, TokenType.STRING, line, i, stopwatch.elapsed.toString()));
         }
         // Input / Output
         else if (value == "out") {
@@ -312,6 +316,15 @@ class Interpreter {
           } catch (e) {
             report.error(file, line,
                 "Command `itof` failed. Item on stack must be of type integer.");
+            _errorExit();
+          }
+        } else if (value == "ftoi") {
+          ifIsEmptyThrowError("ftoi");
+          try {
+            _push(Token(file, TokenType.INTEGER, line, i, _pop().value ~/ 1));
+          } catch (e) {
+            report.error(file, line,
+                "Command `ftoi` failed. Item on stack must be of type float.");
             _errorExit();
           }
         } else if (value == "atos") {
@@ -456,7 +469,7 @@ class Interpreter {
                 "Command `split` failed. Both items on stack must be of type string.");
             _errorExit();
           }
-          
+
           List<String> split = b.value.split(a.value);
           for (int i = split.length - 1; i >= 0; i--) {
             _push(Token(file, TokenType.STRING, line, i, split[i]));
