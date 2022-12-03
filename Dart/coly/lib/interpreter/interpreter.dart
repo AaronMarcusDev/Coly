@@ -26,7 +26,7 @@ class Interpreter {
     // Iterate over tokens (interpret)
     for (int i = 0; i < tokens.length; i++) {
       void _errorExit() {
-        print("\x1B[34m[INFOR] Error(s) found. Interpreting failed.\x1B[0m");
+        // print("\x1B[34m[INFOR] Error(s) found. Interpreting failed.\x1B[0m");
         exit(1);
       }
 
@@ -257,8 +257,6 @@ class Interpreter {
         } else if (value == "peek") {
           ifIsEmptyThrowError("peek");
           stdout.write(stack[stack.length - 1].value);
-        } else if (value == "in") {
-          _push(Token(file, TokenType.STRING, line, i, stdin.readLineSync()));
         } else if (value == "input") {
           _push(Token(file, TokenType.STRING, line, i, stdin.readLineSync()));
         }
