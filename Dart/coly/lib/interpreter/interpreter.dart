@@ -11,6 +11,7 @@ Stopwatch stopwatch = Stopwatch()..start();
 
 class Interpreter {
   void interpret(List<Token> tokens) {
+    stopwatch.elapsedMilliseconds;
     // Initialize stack
     List<Token> stack = [];
     for (String arg in passthrough.args) {
@@ -242,7 +243,7 @@ class Interpreter {
           }
         } else if (value == "elapsed") {
           _push(Token(
-              file, TokenType.STRING, line, i, stopwatch.elapsed.toString()));
+              file, TokenType.STRING, line, i, (stopwatch.elapsedMilliseconds / 1000).toString()));
         }
         // Input / Output
         else if (value == "out") {
