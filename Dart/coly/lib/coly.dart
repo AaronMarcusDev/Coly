@@ -17,17 +17,28 @@ Interpreter interpreter = Interpreter();
 Compiler compiler = Compiler();
 
 void run(List<String> args) {
-  if (args.isEmpty) {
-    print("\x1B[31m[ERROR] Not enough arguments provided.\x1B[0m");
-    print("[INFOR] Usage: coly <file> <args>");
+  if (args.length == 2) {
+    String mode = args[0];
+    String file = args[1];
+
+    if (mode == "build") {
+      passthrough.args = args.sublist(1);
+
+      String source = tools.loadFile(file);
+      List<Token> tokens = lexer.lex("compile", args[0], source);
+      List<Token> CFG = parser.parse("compile", tokens);
+      compiler.generate(CFG);
+    } else if (mode == "run") {
+      passthrough.args = args.sublist(1);
+
+      String source = tools.loadFile(file);
+      List<Token> tokens = lexer.lex("interpret", args[0], source);
+      List<Token> CFG = parser.parse("interpret", tokens);
+      interpreter.interpret(CFG);
+    }
+  } else {
+    print("\x1B[31m[ERROR] Unexpected amount of arguments provided.\x1B[0m");
+    print("[INFOR] Usage: coly <mode> <file> [args]");
     exit(1);
   }
-
-  passthrough.args = args.sublist(1);
-
-  String source = tools.loadFile(args[0]);
-  List<Token> tokens = lexer.lex(args[0], source);
-  List<Token> CFG = parser.parse(tokens);
-  // interpreter.interpret(CFG);
-  compiler.generate(CFG);
 }

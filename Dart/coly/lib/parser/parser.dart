@@ -9,7 +9,7 @@ Reporter report = Reporter();
 Lexer lexer = Lexer();
 
 class Parser {
-  List<Token> parse(List<Token> tokens) {
+  List<Token> parse(String mode, List<Token> tokens) {
     List<Token> preresult = [];
     int errors = 0;
     Map macros = {};
@@ -39,7 +39,7 @@ class Parser {
           break;
         }
         List<Token> lexedTokens =
-            lexer.lex(fileName, File(fileName).readAsStringSync());
+            lexer.lex(mode, fileName, File(fileName).readAsStringSync());
         for (Token token in lexedTokens.sublist(0, lexedTokens.length - 1)) {
           preresult.add(token);
         }

@@ -5,7 +5,6 @@ import 'package:coly/compiler/init.dart' as init;
 import 'package:coly/token/token.dart';
 import 'package:coly/token/token_type.dart';
 import 'package:coly/reporter/reporter.dart';
-import 'package:coly/interpreter/passthrough.dart' as passthrough;
 
 Reporter report = Reporter();
 Stopwatch stopwatch = Stopwatch()..start();
@@ -15,11 +14,8 @@ class Compiler {
     List<String> code = [];
     // Init
     code.add(init.init);
-    code.add("int main() {");
-    code.add("// INIT\nstd::stack<value> stack;");
-    // for (String arg in passthrough.args) {
-    //   stack.add(Token("ARGS", TokenType.STRING, 0, 0, arg));
-    // }
+    code.add("int main(int argc, char *argv[]) {");
+    code.add("// INIT\nclock_t start = clock();");
 
     // Iterate over tokens (interpret)
     for (int i = 0; i < tokens.length; i++) {
@@ -61,27 +57,27 @@ class Compiler {
           code.add("// MINUS");
           code.add("""
         {
-          if (stack.size() < 2) panic("+", "Insufficient stack values");
+          if (stack.size() < 2) panic("-", "Insufficient stack values");
                   value v1 = stack.top();
                   stack.pop();
                   value v2 = stack.top();
                   stack.pop();
-                  if (v1.type != "integer" || v2.type != "integer") panic("+", "Invalid stack values");
+                  if (v1.type != "integer" || v2.type != "integer") panic("-", "Invalid stack values");
                   value v;
                   v.type = "integer";
-                  v.value = std::to_string(std::stoi(v2.value) + std::stoi(v1.value));
+                  v.value = std::to_string(std::stoi(v2.value) - std::stoi(v1.value));
                   stack.push(v);
           }
           """);
         } else if (value == Tokens.STAR) {
           code.add("// STAR");
           code.add("""
-          if (stack.size() < 2) panic("+", "Insufficient stack values");
+          if (stack.size() < 2) panic("*", "Insufficient stack values");
                   value v1 = stack.top();
                   stack.pop();
                   value v2 = stack.top();
                   stack.pop();
-                  if (v1.type != "integer" || v2.type != "integer") panic("+", "Invalid stack values");
+                  if (v1.type != "integer" || v2.type != "integer") panic("*", "Invalid stack values");
                   value v;
                   v.type = "integer";
                   v.value = std::to_string(std::stoi(v1.value) * std::stoi(v2.value));
@@ -91,12 +87,12 @@ class Compiler {
           code.add("// SLASH");
           code.add("""
           {
-          if (stack.size() < 2) panic("+", "Insufficient stack values");
+          if (stack.size() < 2) panic("/", "Insufficient stack values");
                   value v1 = stack.top();
                   stack.pop();
                   value v2 = stack.top();
                   stack.pop();
-                  if (v1.type != "integer" || v2.type != "integer") panic("+", "Invalid stack values");
+                  if (v1.type != "integer" || v2.type != "integer") panic("*", "Invalid stack values");
                   value v;
                   v.type = "integer";
                   v.value = std::to_string(std::stoi(v2.value) / std::stoi(v1.value));
@@ -107,12 +103,12 @@ class Compiler {
           code.add("// MODULO");
           code.add("""
           {
-          if (stack.size() < 2) panic("+", "Insufficient stack values");
+          if (stack.size() < 2) panic("%", "Insufficient stack values");
                   value v1 = stack.top();
                   stack.pop();
                   value v2 = stack.top();
                   stack.pop();
-                  if (v1.type != "integer" || v2.type != "integer") panic("+", "Invalid stack values");
+                  if (v1.type != "integer" || v2.type != "integer") panic("%", "Invalid stack values");
                   value v;
                   v.type = "integer";
                   v.value = std::to_string(std::stoi(v2.value) % std::stoi(v1.value));
@@ -287,28 +283,29 @@ class Compiler {
           if (v.type == "integer") exit(std::stoi(v.value)); else panic("exit", "Invalid stack value");
           """);
         } else if (value == "system") {
-          // ifIsEmptyThrowError("system");
-          // Token a = _pop();
-          // if (a.type != TokenType.STRING) {
-          //   report.error(file, line,
-          //       "Command `system` failed. Item on stack must be a string.");
-          //   _errorExit();
-          // }
-          // List<String> keywords = a.value.split(" ");
-          // String cmd = keywords[0];
-          // keywords.removeAt(0);
-          // try {
-          //   // make a shell command and print the result
-          //   ProcessResult result = Process.runSync(cmd, keywords);
-          //   _push(Token(file, TokenType.STRING, line, i, result.stdout));
-          // } catch (e) {
-          //   report.error(file, line,
-          //       "Command `system` failed. Could not run command `${a.value}`.");
-          //   _errorExit();
-          // }
+          code.add("// SYSTEM");
+          // make c++ program call a system command for value
+          tooLittleItemsPanic(1);
+          code.add("""
+        {
+          value v = stack.top();
+          stack.pop();
+          if (v.type != "string") panic("system", "Invalid stack value");
+          system(v.value.c_str());
+        }
+          """);
         } else if (value == "elapsed") {
-          // _push(Token(file, TokenType.STRING, line, i,
-          //     (stopwatch.elapsedMilliseconds / 1000).toString()));
+          code.add("// ELAPSED");
+          code.add("""
+          {
+            clock_t end = clock();
+            double elapsed = (double)(end - start) / CLOCKS_PER_SEC;
+            value v;
+            v.type = "float";
+            v.value = std::to_string(elapsed);
+            stack.push(v);
+          }
+        """);
         }
         // Input / Output
         else if (value == "out") {
@@ -361,18 +358,37 @@ class Compiler {
           code.add("// SWAP");
           tooLittleItemsPanic(2);
           code.add("""
+        {
           value v1 = stack.top();
           stack.pop();
           value v2 = stack.top();
           stack.pop();
           stack.push(v1);
           stack.push(v2);
+        }
           """);
         } else if (value == "over") {
-          // ?
+          code.add("// OVER");
+          tooLittleItemsPanic(2);
+          code.add("""
+        {
+          value v1 = stack.top();
+          stack.pop();
+          value v2 = stack.top();
+          stack.push(v1);
+          stack.push(v2);
+        }
+          """);
         } else if (value == "count") {
           code.add("// COUNT");
-          code.add("stack.push(std::to_string(stack.size()));");
+          code.add("""
+        {
+          value v;
+          v.type = "integer";
+          v.value = std::to_string(stack.size());
+          stack.push(v);
+        }
+          """);
         } else if (value == "reverse") {
           code.add("// REVERSE");
           code.add("{\nstd::stack<value> temp;");
@@ -452,7 +468,7 @@ class Compiler {
         {
           value v;
           v.type = "string";
-          v.value = std::to_string(stack.top().value);
+          v.value = stack.top().value;
           stack.pop();
           stack.push(v);
         }
@@ -462,7 +478,7 @@ class Compiler {
         else if (value == "if") {
           code.add("// IF");
           emptyPanic();
-          code.add("if (stack.top().value == \"true\")");
+          code.add("if (IFPOP().value == \"true\")");
         } else if (value == "set") {
           if (_isAtEnd()) {
             report.error(
@@ -492,199 +508,267 @@ class Compiler {
           code.add("// JUMP");
           code.add("goto ${tokens[i].value};");
         } else if (value == "free") {
-          // No operation in C++
+          // report.error(file, line, message, "NO MESSAGE YET");
         }
         // String
         else if (value == "concat") {
-          // ifTooLittleItemsThrowError(2, "concat");
-          // Token a = _pop();
-          // Token b = _pop();
-          // if (a.type != TokenType.STRING || b.type != TokenType.STRING) {
-          //   report.error(file, line,
-          //       "Command `concat` failed. Both items on stack must be of type string.");
-          //   _errorExit();
-          // }
-          // _push(Token(file, TokenType.STRING, line, i, b.value + a.value));
+          code.add("// CONCAT");
+          tooLittleItemsPanic(2);
+          code.add("""
+        {
+          value v1 = stack.top();
+          stack.pop();
+          value v2 = stack.top();
+          stack.pop();
+          if (v1.type != "string" || v2.type != "string") panic("concat", "Invalid stack value");
+          v1.value = v2.value + v1.value;
+          stack.push(v1);
+        }
+          """);
         } else if (value == "trim") {
-          // ifIsEmptyThrowError("trim");
-          // Token a = _pop();
-          // if (a.type != TokenType.STRING) {
-          //   report.error(file, line,
-          //       "Command `trim` failed. Item on stack must be of type string.");
-          //   _errorExit();
-          // }
-          // _push(Token(file, TokenType.STRING, line, i, a.value.trim()));
+          code.add("// TRIM");
+          emptyPanic();
+          code.add("""
+        {
+          value v = stack.top();
+          stack.pop();
+          if (v.type != "string") panic("trim", "Invalid stack value");
+          v.value = trim(v.value);
+          stack.push(v);
+        }
+          """);
         } else if (value == "split") {
-          // ifTooLittleItemsThrowError(2, "split");
-          // Token a = _pop();
-          // Token b = _pop();
-          // if (a.type != TokenType.STRING || b.type != TokenType.STRING) {
-          //   report.error(file, line,
-          //       "Command `split` failed. Both items on stack must be of type string.");
-          //   _errorExit();
-          // }
-          // for (String s in b.value.split(a.value)) {
-          //   _push(Token(file, TokenType.STRING, line, i, s));
+          code.add("// SPLIT");
+          tooLittleItemsPanic(2);
+          // Split string by delim in c++ and push results to stack by one
+          code.add("""
+        {
+          // split b by a
+            value b = IFPOP();
+            value a = IFPOP();
+            if (a.type != "string") panic("split", "Expected string, got " + a.type);
+            if (b.type != "string") panic("split", "Expected string, got " + b.type);
+            std::string str = a.value;
+            std::string delim = b.value;
+            std::vector<std::string> result;
+            size_t pos = 0;
+            std::string token;
+            while ((pos = str.find(delim)) != std::string::npos) {
+                token = str.substr(0, pos);
+                result.push_back(token);
+                str.erase(0, pos + delim.length());
+            }
+            result.push_back(str);
+            for (int i = 0; i < result.size(); i++) {
+                value v;
+                v.type = "string";
+                v.value = result[i];
+                stack.push(v);
+            }
+        }
+          """);
           // }
         } else if (value == "revsplit") {
-          // ifTooLittleItemsThrowError(2, "revsplit");
-          // Token a = _pop();
-          // Token b = _pop();
-          // if (a.type != TokenType.STRING || b.type != TokenType.STRING) {
-          //   report.error(file, line,
-          //       "Command `split` failed. Both items on stack must be of type string.");
-          //   _errorExit();
-          // }
-
-          // List<String> split = b.value.split(a.value);
-          // for (int i = split.length - 1; i >= 0; i--) {
-          //   _push(Token(file, TokenType.STRING, line, i, split[i]));
+          code.add("// REVSPLIT");
+          tooLittleItemsPanic(2);
+          // Split string by delim in c++ and push results to stack by one
+          code.add("""
+        {
+          // split b by a
+            value b = IFPOP();
+            value a = IFPOP();
+            if (a.type != "string") panic("split", "Expected string, got " + a.type);
+            if (b.type != "string") panic("split", "Expected string, got " + b.type);
+            std::string str = a.value;
+            std::string delim = b.value;
+            std::vector<std::string> result;
+            size_t pos = 0;
+            std::string token;
+            while ((pos = str.find(delim)) != std::string::npos) {
+                token = str.substr(0, pos);
+                result.push_back(token);
+                str.erase(0, pos + delim.length());
+            }
+            result.push_back(str);
+            for (int i = result.size() - 1; i >= 0; i--) {
+                value v;
+                v.type = "string";
+                v.value = result[i];
+                stack.push(v);
+            }
+        }
+          """);
           // }
         } else if (value == "length") {
-          // ifIsEmptyThrowError("length");
-          // Token a = _pop();
-          // if (a.type != TokenType.STRING) {
-          //   report.error(file, line,
-          //       "Command `length` failed. Item on stack must be of type string.");
-          //   _errorExit();
-          // }
-          // _push(Token(file, TokenType.INTEGER, line, i, a.value.length));
+          code.add("// LENGTH");
+          emptyPanic();
+          code.add("""
+        {
+          value v = stack.top();
+          stack.pop();
+          if (v.type != "string") panic("length", "Invalid stack value");
+          v.type = "integer";
+          v.value = std::to_string(v.value.length());
+          stack.push(v);
+        }
+          """);
         } else if (value == "replace") {
-          // ifTooLittleItemsThrowError(3, "replace");
-          // Token a = _pop();
-          // Token b = _pop();
-          // Token c = _pop();
-          // if (a.type != TokenType.STRING ||
-          //     b.type != TokenType.STRING ||
-          //     c.type != TokenType.STRING) {
-          //   report.error(file, line,
-          //       "Command `replace` failed. All items on stack must be of type string.");
-          //   _errorExit();
-          // }
-          // _push(Token(file, TokenType.STRING, line, i,
-          // c.value.replaceAll(b.value, a.value)));
+          code.add("// REPLACE");
+          tooLittleItemsPanic(3);
+          code.add("""
+  	    {
+          value a = stack.top();
+          stack.pop();
+          value b = stack.top();
+          stack.pop();
+          value c = stack.top();
+          stack.pop();
+          if (a.type != "string" || b.type != "string" || c.type != "string") panic("replace", "Invalid stack value");
+          std::string code = c.value;
+          findAndReplaceAll(code, b.value, a.value);
+          value v;
+          v.type = "string";
+          v.value = code;
+          stack.push(v);
+        }
+          """);
         } else if (value == "contains") {
-          // ifTooLittleItemsThrowError(2, "contains");
-          // Token a = _pop();
-          // Token b = _pop();
-          // if (a.type != TokenType.STRING || b.type != TokenType.STRING) {
-          //   report.error(file, line,
-          //       "Command `contains` failed. Both items on stack must be of type string.");
-          //   _errorExit();
-          // }
-          // _push(Token(
-          //     file, TokenType.BOOLEAN, line, i, b.value.contains(a.value)));
+          code.add("// CONTAINS");
+          tooLittleItemsPanic(2);
+          code.add("""
+        {
+          value v1 = stack.top();
+          stack.pop();
+          value v2 = stack.top();
+          stack.pop();
+          if (v1.type != "string" || v2.type != "string") panic("contains", "Invalid stack value");
+          v1.type = "boolean";
+          v1.value = v2.value.find(v1.value) != std::string::npos ? "true" : "false";
+          stack.push(v1);
+        }
+          """);
         } else if (value == "startswith") {
-          // ifTooLittleItemsThrowError(2, "startswith");
-          // Token a = _pop();
-          // Token b = _pop();
-          // if (a.type != TokenType.STRING || b.type != TokenType.STRING) {
-          //   report.error(file, line,
-          //       "Command `startswith` failed. Both items on stack must be of type string.");
-          //   _errorExit();
-          // }
-          // _push(Token(
-          //     file, TokenType.BOOLEAN, line, i, b.value.startsWith(a.value)));
+          code.add("// STARTSWITH");
+          tooLittleItemsPanic(2);
+          code.add("""
+        {
+          value v1 = stack.top();
+          stack.pop();
+          value v2 = stack.top();
+          stack.pop();
+          if (v1.type != "string" || v2.type != "string") panic("startswith", "Invalid stack value");
+          v1.type = "boolean";
+          v1.value = v2.value.find(v1.value) == 0 ? "true" : "false";
+          stack.push(v1);
+        }
+          """);
         } else if (value == "endswith") {
-          // ifTooLittleItemsThrowError(2, "endswith");
-          // Token a = _pop();
-          // Token b = _pop();
-          // if (a.type != TokenType.STRING || b.type != TokenType.STRING) {
-          //   report.error(file, line,
-          //       "Command `endswith` failed. Both items on stack must be of type string.");
-          //   _errorExit();
-          // }
-          // _push(Token(
-          //     file, TokenType.BOOLEAN, line, i, b.value.endsWith(a.value)));
+          code.add("// ENDSWITH");
+          tooLittleItemsPanic(2);
+          code.add("""
+        {
+          value v1 = stack.top();
+          stack.pop();
+          value v2 = stack.top();
+          stack.pop();
+          if (v1.type != "string" || v2.type != "string") panic("endswith", "Invalid stack value");
+          v1.type = "boolean";
+          v1.value = v2.value.rfind(v1.value) == v2.value.length() - v1.value.length() ? "true" : "false";
+          stack.push(v1);
+        }
+          """);
         }
         // FileStream
         else if (value == "fRead") {
-          // ifIsEmptyThrowError("fRead");
-          // Token a = _pop();
-          // if (a.type != TokenType.STRING) {
-          //   report.error(file, line,
-          //       "Command `fRead` failed. Item on stack must be of type string.");
-          //   _errorExit();
-          // }
-          // try {
-          //   _push(Token(file, TokenType.STRING, line, i,
-          //       File(a.value).readAsStringSync()));
-          // } catch (e) {
-          //   report.error(file, line,
-          //       "Command `fRead` failed. File does not exist or is not readable.");
-          //   _errorExit();
-          // }
+          code.add("// fREAD");
+          emptyPanic();
+          code.add("""
+        {
+          value v = stack.top();
+          stack.pop();
+          if (v.type != "string") panic("fRead", "Expected string, got " + v.type);
+          std::ifstream file(v.value);
+          if (!file.is_open())
+            panic("fRead", "Failed to open file");
+          std::string str((std::istreambuf_iterator<char>(file)),
+                          std::istreambuf_iterator<char>());
+          v.type = "string";
+          v.value = str;
+          stack.push(v);
+        }
+          """);
         } else if (value == "fWrite") {
-          // ifTooLittleItemsThrowError(2, "fWrite");
-          // Token a = _pop();
-          // Token b = _pop();
-          // if (a.type != TokenType.STRING || b.type != TokenType.STRING) {
-          //   report.error(file, line,
-          //       "Command `fWrite` failed. Both items on stack must be of type string.");
-          //   _errorExit();
-          // }
-          // try {
-          //   File(a.value).writeAsStringSync(b.value);
-          // } catch (e) {
-          //   report.error(file, line,
-          //       "Command `fWrite` failed. File does not exist or is not writable.");
-          //   _errorExit();
-          // }
+          code.add("// fWRITE");
+          tooLittleItemsPanic(2);
+          code.add("""
+        {
+          value a = IFPOP();
+          value b = IFPOP();
+          if (a.type != "string") panic("fWrite", "Expected string, got " + a.type);
+          if (b.type != "string") panic("fWrite", "Expected string, got " + b.type);
+          std::ofstream file(a.value);
+          if (!file.is_open())
+            panic("fWrite", "Failed to open file");
+          file << b.value;
+          file.close();
+        }
+          """);
         } else if (value == "fAppend") {
-          // ifTooLittleItemsThrowError(2, "fAppend");
-          // Token a = _pop();
-          // Token b = _pop();
-          // if (a.type != TokenType.STRING || b.type != TokenType.STRING) {
-          //   report.error(file, line,
-          //       "Command `fAppend` failed. Both items on stack must be of type string.");
-          //   _errorExit();
-          // }
-          // try {
-          //   File(a.value).writeAsStringSync(b.value, mode: FileMode.append);
-          // } catch (e) {
-          //   report.error(file, line,
-          //       "Command `fAppend` failed. File does not exist or is not writable.");
-          //   _errorExit();
-          // }
+          code.add("// fAPPEND");
+          tooLittleItemsPanic(2);
+          code.add("""
+        {
+          value a = IFPOP();
+          value b = IFPOP();
+          if (a.type != "string") panic("fAppend", "Expected string, got " + a.type);
+          if (b.type != "string") panic("fAppend", "Expected string, got " + b.type);
+          std::ofstream file(a.value, std::ios_base::app);
+          if (!file.is_open())
+            panic("fAppend", "Failed to open file");
+          file << b.value;
+          file.close();
+        }
+        """);
         } else if (value == "fDelete") {
-          // ifIsEmptyThrowError("fDelete");
-          // Token a = _pop();
-          // if (a.type != TokenType.STRING) {
-          //   report.error(file, line,
-          //       "Command `fDelete` failed. Item on stack must be of type string.");
-          //   _errorExit();
-          // }
-          // try {
-          //   File(a.value).deleteSync();
-          // } catch (e) {
-          //   report.error(file, line,
-          //       "Command `fDelete` failed. File does not exist or is not writable.");
-          //   _errorExit();
-          // }
+          code.add("// fDELETE");
+          emptyPanic();
+          code.add("""
+        {
+          value v = stack.top();
+          stack.pop();
+          if (v.type != "string") panic("fDelete", "Expected string, got " + v.type);
+          if (std::remove(v.value.c_str()) != 0)
+            panic("fDelete", "Failed to delete file");
+        }
+        """);
         } else if (value == "fExists") {
-          // ifIsEmptyThrowError("fExists");
-          // Token a = _pop();
-          // if (a.type != TokenType.STRING) {
-          //   report.error(file, line,
-          //       "Command `fExists` failed. Item on stack must be of type string.");
-          //   _errorExit();
-          // }
-          // _push(Token(
-          //     file, TokenType.BOOLEAN, line, i, File(a.value).existsSync()));
+          code.add("// fEXISTS");
+          emptyPanic();
+          code.add("""
+        {
+          value v = stack.top();
+          stack.pop();
+          if (v.type != "string") panic("fExists", "Expected string, got " + v.type);
+          v.type = "boolean";
+          std::ifstream file(v.value);
+          v.value = file ? "true" : "false";
+          stack.push(v);
+        }
+        """);
         } else if (value == "fCreate") {
-          // ifIsEmptyThrowError("fCreate");
-          // Token a = _pop();
-          // if (a.type != TokenType.STRING) {
-          //   report.error(file, line,
-          //       "Command `fCreate` failed. Item on stack must be of type string.");
-          //   _errorExit();
-          // }
-          // try {
-          //   File(a.value).createSync();
-          // } catch (e) {
-          //   report.error(file, line, "Command `fCreate` failed.");
-          //   _errorExit();
-          // }
+          code.add("// fCREATE");
+          emptyPanic();
+          code.add("""
+        {
+          value v = stack.top();
+          stack.pop();
+          if (v.type != "string") panic("fCreate", "Expected string, got " + v.type);
+          std::ofstream file(v.value);
+          if (!file.is_open())
+            panic("fCreate", "Failed to create file");
+          file.close();
+        }
+        """);
         }
         // Unknown keyword
         else {
@@ -698,6 +782,7 @@ class Compiler {
         if (!_isAtEnd()) {
           report.error(file, line, "Unexpected end of file.");
         }
+        code.add("// END\nreturn 0;\n}");
       } else {
         String? stype;
         if (type == TokenType.STRING) stype = "string";
@@ -717,7 +802,6 @@ class Compiler {
           """);
       }
     }
-    code.add("// END\nreturn 0;\n}");
 
     File("test.cpp").writeAsStringSync(code.join('\n'));
     return code;

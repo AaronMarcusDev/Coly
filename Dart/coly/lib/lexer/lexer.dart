@@ -8,7 +8,7 @@ import 'package:coly/reporter/reporter.dart';
 Reporter error = Reporter();
 
 class Lexer {
-  List<Token> lex(file, source) {
+  List<Token> lex(String mode, String file, String source) {
     if (source.trim() == "") return [];
 
     List<Token> tokens = [];
@@ -265,19 +265,24 @@ class Lexer {
                 errors++;
                 break;
               } else if (chars[curr] == '"') {
-                tokens.add(Token(
-                    file,
-                    TokenType.STRING,
-                    line,
-                    start,
-                    stringArray
-                        .join("")
-                        .replaceAll("\\n", "\n")
-                        .replaceAll("\\t", "\t")
-                        .replaceAll("\\r", "\r")
-                        .replaceAll("\\b", "\b")
-                        .replaceAll("\\f", "\f")
-                        .replaceAll("\\\\", "\\")));
+                if (mode == "compile") {
+                  tokens.add(Token(file, TokenType.STRING, line, curr,
+                      stringArray.join("").replaceAll('"', '\\"')));
+                } else {
+                  tokens.add(Token(
+                      file,
+                      TokenType.STRING,
+                      line,
+                      start,
+                      stringArray
+                          .join("")
+                          .replaceAll("\\n", "\n")
+                          .replaceAll("\\t", "\t")
+                          .replaceAll("\\r", "\r")
+                          .replaceAll("\\b", "\b")
+                          .replaceAll("\\f", "\f")
+                          .replaceAll("\\\\", "\\")));
+                }
                 break;
               }
               stringArray.add(chars[curr]);
@@ -301,19 +306,24 @@ class Lexer {
                 errors++;
                 break;
               } else if (chars[curr] == "'") {
-                tokens.add(Token(
-                    file,
-                    TokenType.STRING,
-                    line,
-                    start,
-                    stringArray
-                        .join("")
-                        .replaceAll("\\n", "\n")
-                        .replaceAll("\\t", "\t")
-                        .replaceAll("\\r", "\r")
-                        .replaceAll("\\b", "\b")
-                        .replaceAll("\\f", "\f")
-                        .replaceAll("\\\\", "\\")));
+                if (mode == "compile") {
+                  tokens.add(Token(file, TokenType.STRING, line, curr,
+                      stringArray.join("").replaceAll('"', '\\"')));
+                } else {
+                  tokens.add(Token(
+                      file,
+                      TokenType.STRING,
+                      line,
+                      start,
+                      stringArray
+                          .join("")
+                          .replaceAll("\\n", "\n")
+                          .replaceAll("\\t", "\t")
+                          .replaceAll("\\r", "\r")
+                          .replaceAll("\\b", "\b")
+                          .replaceAll("\\f", "\f")
+                          .replaceAll("\\\\", "\\")));
+                }
                 break;
               }
               stringArray.add(chars[curr]);
