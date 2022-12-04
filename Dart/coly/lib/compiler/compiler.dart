@@ -1,3 +1,4 @@
+// ignore_for_file: non_constant_identifier_names
 // Dart
 import 'dart:io';
 // Custom
@@ -15,9 +16,18 @@ class Compiler {
     // Init
     code.add(init.init);
     code.add("int main(int argc, char *argv[]) {");
-    code.add("// INIT\nclock_t start = clock();");
+    code.add("""
+// INIT
+      clock_t start = clock();
+      for (int i = 1; i < argc; ++i)
+        {
+          value v;
+          v.type = "string";
+          v.value = argv[i];
+          stack.push(v);
+        };
+    """);
 
-    // Iterate over tokens (interpret)
     for (int i = 0; i < tokens.length; i++) {
       Token token = tokens[i];
       TokenType type = token.type;
@@ -344,12 +354,12 @@ class Compiler {
         }
         // Basic stack operations
         else if (value == "dump") {
-          emptyPanic();
           code.add("// DUMP");
+          emptyPanic();
           code.add("stack.pop();");
         } else if (value == "dup") {
-          emptyPanic();
           code.add("// DUP");
+          emptyPanic();
           code.add("stack.push(stack.top());");
         } else if (value == "clear") {
           code.add("// CLEAR");
@@ -802,8 +812,25 @@ class Compiler {
           """);
       }
     }
-
-    File("test.cpp").writeAsStringSync(code.join('\n'));
     return code;
+  }
+
+  String build(List<String> IR) {
+    return IR.join("\n");
+  }
+
+  void compile(String filename, String code) {
+    if (Platform.isWindows) {
+      File("COLYOUTPUT.cpp").writeAsStringSync(code);
+      Process.runSync("g++", ["COLYOUTPUT.cpp", "-o", "$filename.exe"]);
+      File("COLYOUTPUT.cpp").deleteSync();
+    } else if (Platform.isLinux) {
+      File("COLYOUTPUT.cpp").writeAsStringSync(code);
+      Process.runSync("g++", ["COLYOUTPUT.cpp", "-o", filename]);
+      File("COLYOUTPUT.cpp").deleteSync();
+    } else {
+      report.error("<lang>", 0, "Unsupported platform.");
+      exit(1);
+    }
   }
 }
