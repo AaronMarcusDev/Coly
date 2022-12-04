@@ -1,6 +1,7 @@
 String init = """
 #include <stack>
 #include <string>
+#include <cmath>
 #include <iostream>
 
 void panic(std::string cmd, std::string msg)

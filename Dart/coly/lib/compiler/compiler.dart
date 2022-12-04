@@ -30,7 +30,7 @@ class Compiler {
       dynamic value = token.value;
 
       void emptyPanic() {
-        code.add("if (stack.size() == 0) panic(\"$value\", \"Empty stack\");");
+        code.add("if (stack.empty()) panic(\"$value\", \"Empty stack\");");
       }
 
       void tooLittleItemsPanic(amountOfItems) {
@@ -279,14 +279,13 @@ class Compiler {
       } else if (type == TokenType.KEYWORD) {
         // System
         if (value == "exit") {
-          // if (stack.isEmpty) exit(0);
-          // Token a = _pop();
-          // if (a.type != TokenType.INTEGER) {
-          //   report.error(file, line,
-          //       "Command `exit` failed. Item on stack must be an integer.");
-          //   _errorExit();
-          // }
-          // exit(a.value);
+          code.add("// EXIT");
+          code.add("""
+          if (stack.empty()) exit(0);
+          value v = stack.top();
+          stack.pop();
+          if (v.type == "integer") exit(std::stoi(v.value)); else panic("exit", "Invalid stack value");
+          """);
         } else if (value == "system") {
           // ifIsEmptyThrowError("system");
           // Token a = _pop();
@@ -330,177 +329,170 @@ class Compiler {
           code.add("// ENDL");
           code.add("std::cout << std::endl;");
         } else if (value == "peek") {
-          // ifIsEmptyThrowError("peek");
-          // stdout.write(stack[stack.length - 1].value);
+          code.add("// PEEK");
+          emptyPanic();
+          code.add("std::cout << stack.top().value;");
         } else if (value == "input") {
-          // _push(Token(file, TokenType.STRING, line, i, stdin.readLineSync()));
+          code.add("// INPUT");
+          code.add("""
+        {
+          std::string input;
+          std::cin >> input;
+          value v;
+          v.type = "string";
+          v.value = input;
+          stack.push(v);
+        }
+          """);
         }
         // Basic stack operations
         else if (value == "dump") {
-          // ifIsEmptyThrowError("dump");
-          // _pop();
+          emptyPanic();
+          code.add("// DUMP");
+          code.add("stack.pop();");
         } else if (value == "dup") {
-          // ifIsEmptyThrowError("dup");
-          // _push(stack.last);
+          emptyPanic();
+          code.add("// DUP");
+          code.add("stack.push(stack.top());");
         } else if (value == "clear") {
-          // stack = [];
+          code.add("// CLEAR");
+          code.add("stack = std::stack<value>();");
         } else if (value == "swap") {
-          // ifTooLittleItemsThrowError(2, "swap");
-          // Token a = _pop();
-          // Token b = _pop();
-          // _push(a);
-          // _push(b);
+          code.add("// SWAP");
+          tooLittleItemsPanic(2);
+          code.add("""
+          value v1 = stack.top();
+          stack.pop();
+          value v2 = stack.top();
+          stack.pop();
+          stack.push(v1);
+          stack.push(v2);
+          """);
         } else if (value == "over") {
-          // ifTooLittleItemsThrowError(2, "over");
-          // Token a = _pop();
-          // Token b = _pop();
-          // _push(b);
-          // _push(a);
-          // _push(b);
+          // ?
         } else if (value == "count") {
-          //   _push(Token(file, TokenType.INTEGER, line, i, stack.length));
-          // } else if (value == "reverse") {
-          //   stack = stack.reversed.toList();
+          code.add("// COUNT");
+          code.add("stack.push(std::to_string(stack.size()));");
+        } else if (value == "reverse") {
+          code.add("// REVERSE");
+          code.add("{\nstd::stack<value> temp;");
+          code.add(
+              "while (!stack.empty()) { temp.push(stack.top()); stack.pop(); }");
+          code.add("stack = temp;\n}");
         }
         // Type conversion commands
         else if (value == "stoi") {
-          // ifIsEmptyThrowError("stoi"); // String To Integer
-          // try {
-          //   _push(Token(
-          //       file, TokenType.INTEGER, line, i, int.parse(_pop().value)));
-          // } catch (e) {
-          //   report.error(file, line,
-          //       "Command `stoi` failed. string must contain only an integer number.");
-          //   _errorExit();
-          // }
+          code.add("// STOI");
+          emptyPanic();
+          code.add("""
+        {
+          value v = stack.top();
+          stack.pop();
+          if (v.type != "string") panic("stoi", "Invalid stack value");
+          v.type = "integer";
+          try {
+                  v.value = std::to_string(std::stoi(v.value));
+          } catch (...) {
+                  panic("stoi", "Invalid stack value");
+          }
+          stack.push(v);
+        }
+          """);
         } else if (value == "stof") {
-          // ifIsEmptyThrowError("stof"); // String To Float
-          // try {
-          //   _push(Token(
-          //       file, TokenType.FLOAT, line, i, double.parse(_pop().value)));
-          // } catch (e) {
-          //   report.error(file, line,
-          //       "Command `stof` failed. string must only contain a floating-point number.");
-          //   _errorExit();
-          // }
+          code.add("// STOF");
+          emptyPanic();
+          code.add("""
+        {
+          value v = stack.top();
+          stack.pop();
+          if (v.type != "string") panic("stof", "Invalid stack value");
+          v.type = "float";
+          try {
+                  v.value = std::to_string(std::stof(v.value));
+          } catch (...) {
+                  panic("stof", "Invalid stack value");
+          }
+          stack.push(v);
+        }
+          """);
         } else if (value == "itof") {
-          // ifIsEmptyThrowError("itof"); // Integer to Float
-          // try {
-          //   _push(Token(file, TokenType.FLOAT, line, i, _pop().value / 1));
-          // } catch (e) {
-          //   report.error(file, line,
-          //       "Command `itof` failed. Item on stack must be of type integer.");
-          //   _errorExit();
-          // }
+          code.add("// ITOF");
+          emptyPanic();
+          code.add("""
+        {
+          value v = stack.top();
+          stack.pop();
+          if (v.type != "integer") panic("itof", "Invalid stack value");
+          v.type = "float";
+          v.value = std::to_string(std::stof(v.value));
+          stack.push(v);
+        }
+          """);
         } else if (value == "ftoi") {
-          // ifIsEmptyThrowError("ftoi");
-          // try {
-          //   _push(Token(file, TokenType.INTEGER, line, i, _pop().value ~/ 1));
-          // } catch (e) {
-          //   report.error(file, line,
-          //       "Command `ftoi` failed. Item on stack must be of type float.");
-          //   _errorExit();
-          // }
+          code.add("// FTOI");
+          emptyPanic();
+          code.add("""
+        {
+          value v = stack.top();
+          stack.pop();
+          if (v.type != "float") panic("ftoi", "Invalid stack value");
+          v.type = "integer";
+          try {
+                  v.value = std::to_string(floor(std::stof(v.value)));
+          } catch (...) {
+                  panic("stof", "Invalid stack value");
+          }
+          stack.push(v);
+        }
+          """);
         } else if (value == "atos") {
-          // ifIsEmptyThrowError("atos"); // Any To String
-          // _push(
-          //     Token(file, TokenType.STRING, line, i, _pop().value.toString()));
+          code.add("// ATOS");
+          emptyPanic();
+          code.add("""
+        {
+          value v;
+          v.type = "string";
+          v.value = std::to_string(stack.top().value);
+          stack.pop();
+          stack.push(v);
+        }
+          """);
         }
         // Control flow
         else if (value == "if") {
-          //   ifIsEmptyThrowError("if");
-
-          //   Token a = _pop();
-
-          //   if (a.type != TokenType.BOOLEAN) {
-          //     report.error(file, line,
-          //         "Command `if` failed. Item on stack must be of type boolean.");
-          //     _errorExit();
-          //   }
-
-          //   if (_isAtEnd()) {
-          //     report.error(file, line, "Command `if` is not followed by a block");
-          //     _errorExit();
-          //   }
-          //   i++;
-
-          //   if (tokens[i].value != Tokens.LEFT_BRACE) {
-          //     report.error(
-          //         file, line, "Command `if` is not followed by a block.");
-          //     _errorExit();
-          //   }
-          //   i++;
-
-          //   int startJMP = i - 1;
-          //   int nest = 0;
-          //   while (true) {
-          //     if (_isAtEnd()) {
-          //       report.error(
-          //           file, line, "Block has not been closed. Missing '{'.");
-          //       _errorExit();
-          //     } else if (tokens[i].value == Tokens.LEFT_BRACE) {
-          //       nest++;
-          //     } else if (tokens[i].value == Tokens.RIGHT_BRACE) {
-          //       if (nest == 0) {
-          //         if (!a.value) break;
-          //         i = startJMP;
-          //         break;
-          //       } else {
-          //         nest--;
-          //       }
-          //     }
-
-          //     i++;
-          //   }
-          // } else if (value == "set") {
-          //   if (_isAtEnd()) {
-          //     report.error(
-          //         file, line, "Command `set` is not followed by a name.");
-          //     _errorExit();
-          //   }
-          //   i++;
-          //   if (tokens[i].type != TokenType.KEYWORD) {
-          //     report.error(file, line,
-          //         "Command `set` is not followed by a name. Expected identifier.");
-          //     _errorExit();
-          //   }
-          //   jumpLocations[tokens[i].value] = i;
+          code.add("// IF");
+          emptyPanic();
+          code.add("if (stack.top().value == \"true\")");
+        } else if (value == "set") {
+          if (_isAtEnd()) {
+            report.error(
+                file, line, "Command `set` is not followed by a name.");
+            exit(1);
+          }
+          i++;
+          if (tokens[i].type != TokenType.KEYWORD) {
+            report.error(file, line,
+                "Command `set` is not followed by a name. Expected identifier.");
+            exit(1);
+          }
+          code.add("// SET");
+          code.add("${tokens[i].value}:");
         } else if (value == "jump") {
-          // if (_isAtEnd()) {
-          //   report.error(
-          //       file, line, "Command `set` is not followed by a name.");
-          //   _errorExit();
-          // }
-          // i++;
-          // if (tokens[i].type != TokenType.KEYWORD) {
-          //   report.error(file, line,
-          //       "Command `set` is not followed by a name. Expected identifier.");
-          //   _errorExit();
-          // }
-          // try {
-          //   i = jumpLocations[tokens[i].value]!;
-          // } catch (e) {
-          //   report.error(file, line,
-          //       "Command `jump` failed. Jump location does not exist.");
-          //   _errorExit();
-          // }
+          if (_isAtEnd()) {
+            report.error(
+                file, line, "Command `set` is not followed by a name.");
+            exit(1);
+          }
+          i++;
+          if (tokens[i].type != TokenType.KEYWORD) {
+            report.error(file, line,
+                "Command `set` is not followed by a name. Expected identifier.");
+            exit(1);
+          }
+          code.add("// JUMP");
+          code.add("goto ${tokens[i].value};");
         } else if (value == "free") {
-          // if (_isAtEnd()) {
-          //   report.error(
-          //       file, line, "Command `set` is not followed by a name.");
-          //   _errorExit();
-          // }
-          // i++;
-          // if (tokens[i].type != TokenType.KEYWORD) {
-          //   report.error(file, line,
-          //       "Command `set` is not followed by a name. Expected identifier.");
-          //   _errorExit();
-          // }
-          // if (jumpLocations.remove(tokens[i].value) == null) {
-          //   report.error(file, line,
-          //       "Command `free` failed. Jump location does not exist.");
-          //   _errorExit();
-          // }
+          // No operation in C++
         }
         // String
         else if (value == "concat") {
@@ -699,20 +691,22 @@ class Compiler {
           report.error(file, line, "Unknown command `$value`.");
           exit(1);
         }
+      } else if (type == TokenType.CHARACTER) {
+        if (value == Tokens.LEFT_BRACE) code.add('{');
+        if (value == Tokens.RIGHT_BRACE) code.add('}');
       } else if (type == TokenType.LANGUAGE) {
         if (!_isAtEnd()) {
           report.error(file, line, "Unexpected end of file.");
         }
       } else {
-        if (type != TokenType.CHARACTER) {
-          String? stype;
-          if (type == TokenType.STRING) stype = "string";
-          if (type == TokenType.INTEGER) stype = "integer";
-          if (type == TokenType.FLOAT) stype = "float";
-          if (type == TokenType.BOOLEAN) stype = "boolean";
+        String? stype;
+        if (type == TokenType.STRING) stype = "string";
+        if (type == TokenType.INTEGER) stype = "integer";
+        if (type == TokenType.FLOAT) stype = "float";
+        if (type == TokenType.BOOLEAN) stype = "boolean";
 
-          code.add("// PUSH $stype($value)");
-          code.add("""
+        code.add("// PUSH");
+        code.add("""
           {
               value v;
               v.type = "$stype";
@@ -721,7 +715,6 @@ class Compiler {
           }
 
           """);
-        }
       }
     }
     code.add("// END\nreturn 0;\n}");

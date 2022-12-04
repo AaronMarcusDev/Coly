@@ -9,4 +9,3 @@ macro endLoop {
 macro closeLoop {
     free LOOP
 }
-
