@@ -389,6 +389,11 @@ class Interpreter {
                 "Command `set` is not followed by a name. Expected identifier.");
             _errorExit();
           }
+          if (jumpLocations.containsKey(tokens[i].value)) {
+            report.error(file, line,
+                "Command `set` is followed by an already declared location.");
+            exit(1);
+          }
           jumpLocations[tokens[i].value] = i;
         } else if (value == "jump") {
           if (_isAtEnd()) {
@@ -407,23 +412,6 @@ class Interpreter {
           } catch (e) {
             report.error(file, line,
                 "Command `jump` failed. Jump location does not exist.");
-            _errorExit();
-          }
-        } else if (value == "free") {
-          if (_isAtEnd()) {
-            report.error(
-                file, line, "Command `set` is not followed by a name.");
-            _errorExit();
-          }
-          i++;
-          if (tokens[i].type != TokenType.KEYWORD) {
-            report.error(file, line,
-                "Command `set` is not followed by a name. Expected identifier.");
-            _errorExit();
-          }
-          if (jumpLocations.remove(tokens[i].value) == null) {
-            report.error(file, line,
-                "Command `free` failed. Jump location does not exist.");
             _errorExit();
           }
         }

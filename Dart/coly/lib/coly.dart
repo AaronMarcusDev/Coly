@@ -34,7 +34,7 @@ void run(List<String> args) {
       }
 
       String source = tools.loadFile(file);
-      List<Token> tokens = lexer.lex("compile", args[0], source);
+      List<Token> tokens = lexer.lex("compile", file, source);
       List<Token> CFG = parser.parse("compile", tokens);
       List<String> IR = compiler.generate(CFG);
       String cpp = compiler.build(IR);
@@ -43,7 +43,7 @@ void run(List<String> args) {
       passthrough.args = args.sublist(2);
 
       String source = tools.loadFile(file);
-      List<Token> tokens = lexer.lex("interpret", args[0], source);
+      List<Token> tokens = lexer.lex("interpret", file, source);
       List<Token> CFG = parser.parse("interpret", tokens);
       interpreter.interpret(CFG);
     } else {

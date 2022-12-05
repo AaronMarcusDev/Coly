@@ -1,23 +1,18 @@
-macro emptyCLIArgs {
-    count
-    set start
-        dup 0 != if {
-            1 -
-            swap dump
-            jump start
-        }
-    free start
+count 0 != if {
+    dup fExists if {
+        fRead puts
+        0 exit
+    }
+    "ERROR: File does not exist." puts
+    1 exit
 }
 
-emptyCLIArgs
-
-"CAT - Written in Coly by AaronMarcusDev\n" puts
+"CAT\n" puts
 "Type anything to get it printed back onto the screen." puts
 "Type `stop` to exit." puts
 
 set start
 input dup "stop" = if {
-    free start
      0 exit
 }
 puts

@@ -13,6 +13,7 @@ Stopwatch stopwatch = Stopwatch()..start();
 class Compiler {
   List<String> generate(List<Token> tokens) {
     List<String> code = [];
+    List<String> jumpLocations = [];
     // Init
     code.add(init.init);
     code.add("int main(int argc, char *argv[]) {");
@@ -501,8 +502,14 @@ class Compiler {
                 "Command `set` is not followed by a name. Expected identifier.");
             exit(1);
           }
+          if (jumpLocations.contains(tokens[i].value)) {
+            report.error(file, line,
+                "Command `set` is followed by an already declared location.");
+            exit(1);
+          }
           code.add("// SET");
           code.add("${tokens[i].value}:");
+          jumpLocations.add(tokens[i].value);
         } else if (value == "jump") {
           if (_isAtEnd()) {
             report.error(
@@ -517,8 +524,6 @@ class Compiler {
           }
           code.add("// JUMP");
           code.add("goto ${tokens[i].value};");
-        } else if (value == "free") {
-          // report.error(file, line, message, "NO MESSAGE YET");
         }
         // String
         else if (value == "concat") {
