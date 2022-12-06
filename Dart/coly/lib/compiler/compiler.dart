@@ -826,13 +826,23 @@ class Compiler {
 
   void compile(String filename, String code) {
     if (Platform.isWindows) {
-      File("COLYOUTPUT.cpp").writeAsStringSync(code);
-      Process.runSync("g++", ["COLYOUTPUT.cpp", "-o", "$filename.exe"]);
-      File("COLYOUTPUT.cpp").deleteSync();
+      try {
+        File("COLYOUTPUT.cpp").writeAsStringSync(code);
+        Process.runSync("g++", ["COLYOUTPUT.cpp", "-o", "$filename.exe"]);
+        File("COLYOUTPUT.cpp").deleteSync();
+      } catch (e) {
+        print("\x1B[31m[ERROR] g++ was not found.\x1B[0m");
+        exit(1);
+      }
     } else if (Platform.isLinux) {
-      File("COLYOUTPUT.cpp").writeAsStringSync(code);
-      Process.runSync("g++", ["COLYOUTPUT.cpp", "-o", filename]);
-      File("COLYOUTPUT.cpp").deleteSync();
+      try {
+        File("COLYOUTPUT.cpp").writeAsStringSync(code);
+        Process.runSync("g++", ["COLYOUTPUT.cpp", "-o", filename]);
+        File("COLYOUTPUT.cpp").deleteSync();
+      } catch (e) {
+        print("\x1B[31m[ERROR] g++ was not found.\x1B[0m");
+        exit(1);
+      }
     } else {
       report.error("<lang>", 0, "Unsupported platform.");
       exit(1);
