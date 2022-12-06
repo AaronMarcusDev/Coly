@@ -24,7 +24,7 @@ I will also be making a compiler for Coly.
 ## Learn
 
 **Learn more about Coly:**
-- [Datatypes](https://github.com/AaronMarcusDev/Coly/blob/main/md/datatypes.md)
+- [Datatypes](https://github.com/AaronMarcusDev/Coly/blob/main/coly/md/datatypes.md)
 
 ## Contributing
 [Pull requests](https://github.com/AaronMarcusDev/Coly/pulls) are welcome, make sure to write a good description.

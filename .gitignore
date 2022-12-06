@@ -24,17 +24,11 @@ docs/site/
 Manifest.toml
 
 # Custom
-Julia/sketches
-Julia/test
-Julia/src/input.coly
-Julia/src/alt_interpreter.jl
-Julia/src/checker.jl
-
-Dart/coly/.dart_tool
-Dart/coly/.packages
-Dart/coly/bin/*.coly
-Dart/coly/bin/*.bat
-Dart/coly/bin/*.ll
-Dart/coly/bin/*.js
-Dart/coly/bin/*.exe
-Dart/coly/bin/*.cpp
+coly/.dart_tool
+coly/.packages
+coly/bin/*.coly
+coly/bin/*.bat
+coly/bin/*.ll
+coly/bin/*.js
+coly/bin/*.exe
+coly/bin/*.cpp
