@@ -233,15 +233,15 @@ class Interpreter {
           try {
             // make a shell command and print the result
             ProcessResult result = Process.runSync(cmd, keywords);
-            _push(Token(file, TokenType.STRING, line, i, result.stdout));
+            print(result.stdout);
           } catch (e) {
             report.error(file, line,
                 "Command `system` failed. Could not run command `${a.value}`.");
             _errorExit();
           }
         } else if (value == "elapsed") {
-          _push(Token(
-              file, TokenType.STRING, line, i, (stopwatch.elapsedMilliseconds / 1000).toString()));
+          _push(Token(file, TokenType.STRING, line, i,
+              (stopwatch.elapsedMilliseconds / 1000).toString()));
         }
         // Input / Output
         else if (value == "out") {

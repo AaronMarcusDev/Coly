@@ -1,3 +1,0 @@
-include "cmd.coly"
-
-"echo hello" wincmd

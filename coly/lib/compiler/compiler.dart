@@ -295,7 +295,6 @@ class Compiler {
           """);
         } else if (value == "system") {
           code.add("// SYSTEM");
-          // make c++ program call a system command for value
           tooLittleItemsPanic(1);
           code.add("""
         {

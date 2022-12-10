@@ -1,3 +1,8 @@
+// Windows
 macro wincmd {
-    "cmd.exe /c" swap concat system puts
+    "cmd.exe /c" swap concat system
+}
+
+macro winstart {
+    "cmd.exe /c start " swap concat system
 }
