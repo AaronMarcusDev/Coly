@@ -1,0 +1,36 @@
+// Terminal Window IO
+macro peek {
+    dup out
+}
+
+macro peekln {
+    dup puts
+}
+
+macro putsAll {
+    count
+    set PUTSALLSTART
+    dup 0 != if {
+        1 -
+        swap puts
+        jump PUTSALLSTART
+    }
+}
+
+macro outAll {
+    count
+    set PUTSALLSTART
+    dup 0 != if {
+        1 -
+        swap out
+        jump PUTSALLSTART
+    }
+}
+// File IO
+macro fReadLines {
+    fRead '\n' split
+}
+
+macro fReadRevLines {
+    fRead '\n' revsplit
+}

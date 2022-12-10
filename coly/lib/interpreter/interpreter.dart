@@ -36,8 +36,6 @@ class Interpreter {
       String file = token.file;
       dynamic value = token.value;
 
-      // print("Type: $type, Value: $value");
-
       bool _isAtEnd() => i >= tokens.length - 1;
 
       void ifIsEmptyThrowError(String command) {
@@ -254,9 +252,6 @@ class Interpreter {
           print(_pop().value);
         } else if (value == "endl") {
           print("");
-        } else if (value == "peek") {
-          ifIsEmptyThrowError("peek");
-          stdout.write(stack[stack.length - 1].value);
         } else if (value == "input") {
           _push(Token(file, TokenType.STRING, line, i, stdin.readLineSync()));
         }

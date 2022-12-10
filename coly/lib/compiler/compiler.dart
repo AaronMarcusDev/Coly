@@ -336,10 +336,6 @@ class Compiler {
         } else if (value == "endl") {
           code.add("// ENDL");
           code.add("std::cout << std::endl;");
-        } else if (value == "peek") {
-          code.add("// PEEK");
-          emptyPanic();
-          code.add("std::cout << stack.top().value;");
         } else if (value == "input") {
           code.add("// INPUT");
           code.add("""
