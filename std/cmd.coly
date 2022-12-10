@@ -1,0 +1,3 @@
+macro wincmd {
+    "cmd.exe /c" swap concat system puts
+}
