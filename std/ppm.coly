@@ -1,0 +1,43 @@
+// Init PPM file
+macro initPPM {
+    // `string` initPPM
+    "image.ppm" fCreate
+    "P3\n" swap concat "255\n\n" concat "image.ppm" fAppend
+}
+
+macro HWtoPixels {
+    // `integer` `integer` HWtoPixels
+    *
+}
+
+macro HWtoPPMPixels {
+    // `integer` `integer` HWtoPPMPixels
+    atos swap atos ' ' swap concat concat '\n' concat
+}
+
+// Macros for adding color pixels to the PPM file
+macro addPixel {
+    // `string` addPixel
+    "image.ppm" fAppend
+}
+
+// Sample Colors
+macro addPixelRed {
+    "255 0 0\n" "image.ppm" fAppend
+}
+
+macro addPixelGreen {
+    "0 255 0\n" "image.ppm" fAppend
+}
+
+macro addPixelBlue {
+    "0 0 255\n" "image.ppm" fAppend
+}
+
+macro addPixelBlack {
+    "0 0 0\n" "image.ppm" fAppend
+}
+
+macro addPixelWhite {
+    "255 255 255\n" "image.ppm" fAppend
+}
