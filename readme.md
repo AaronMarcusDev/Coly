@@ -20,7 +20,7 @@ Projects using Coly
 ## Contributing
 [Pull requests](https://github.com/AaronMarcusDev/Coly/pulls) are welcome, make sure to write a good description.
 
-Please report issues at the [Issues Page](https://github.com/AaronMarcusDev/Coly/issues).
+Please report issues and bugs at the [Issues Page](https://github.com/AaronMarcusDev/Coly/issues).
 
 ## License
 Coly is licensed under the [MIT license](https://choosealicense.com/licenses/mit/).
