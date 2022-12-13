@@ -1,6 +1,7 @@
 // Init PPM file
 macro initPPM {
     // `string` initPPM
+    "image.ppm" fExists if { "image.ppm" fDelete }
     "image.ppm" fCreate
     "P3\n" swap concat "255\n\n" concat "image.ppm" fAppend
 }
@@ -19,6 +20,18 @@ macro HWtoPPMPixels {
 macro addPixel {
     // `string` addPixel
     "image.ppm" fAppend
+}
+
+macro fillColorPPM {
+    // 'string' 'integer' fillColorPPM
+    set start
+    dup 0 != if {
+        1 -
+        swap
+        dup "image.ppm" fAppend
+        swap
+        jump start
+    }
 }
 
 // Sample Colors
