@@ -397,6 +397,7 @@ class Interpreter {
             report.error(file, line,
                 "Command `set` is followed by an already declared location.");
             exit(1);
+            //TODO: Make a `set` varient that overwrites the old value
           }
           jumpLocations[tokens[i].value] = i;
         } else if (value == "jump") {

@@ -19,11 +19,11 @@ macro putsAll {
 
 macro outAll {
     count
-    set PUTSALLSTART
+    set OUTLLSTART
     dup 0 != if {
         1 -
         swap out
-        jump PUTSALLSTART
+        jump OUTALLSTART
     }
 }
 
