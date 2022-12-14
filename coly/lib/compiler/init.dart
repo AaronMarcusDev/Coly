@@ -4,6 +4,8 @@ String init = """
 #include <vector>
 #include <cmath>
 #include <time.h>
+#include <chrono>
+#include <thread>
 #include <iostream>
 #include <fstream>
 

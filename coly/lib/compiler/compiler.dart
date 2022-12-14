@@ -316,6 +316,17 @@ class Compiler {
             stack.push(v);
           }
         """);
+        } else if (value == "sleep") {
+          code.add("// SLEEP");
+          tooLittleItemsPanic(1);
+          code.add("""
+        {
+          value v = stack.top();
+          stack.pop();
+          if (v.type != "integer") panic("sleep", "Invalid stack value");
+          std::this_thread::sleep_for(std::chrono::milliseconds(std::stoi(v.value)));
+        }
+          """);
         }
         // Input / Output
         else if (value == "out") {

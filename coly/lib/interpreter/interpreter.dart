@@ -242,6 +242,15 @@ class Interpreter {
         } else if (value == "elapsed") {
           _push(Token(file, TokenType.STRING, line, i,
               (stopwatch.elapsedMilliseconds / 1000).toString()));
+        } else if (value == "sleep") {
+          ifIsEmptyThrowError("sleep");
+          Token a = _pop();
+          if (a.type != TokenType.INTEGER) {
+            report.error(file, line,
+                "Command `sleep` failed. Item on stack must be an integer.");
+            _errorExit();
+          }
+          sleep(Duration(milliseconds: a.value));
         }
         // Input / Output
         else if (value == "out") {
