@@ -29,7 +29,7 @@ class Interpreter {
         // print("\x1B[34m[INFOR] Error(s) found. Interpreting failed.\x1B[0m");
         exit(1);
       }
-
+      
       Token token = tokens[i];
       TokenType type = token.type;
       int line = token.line;

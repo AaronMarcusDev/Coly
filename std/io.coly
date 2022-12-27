@@ -29,9 +29,31 @@ macro outAll {
 
 // File IO
 macro fReadLines {
-    fRead '\n' split
+    fRead 
+    '\n' split
 }
 
 macro fReadRevLines {
-    fRead '\n' revsplit
+    fRead 
+    '\n' revsplit
+}
+
+macro fReadWords {
+    fRead 
+    ' ' split
+}
+
+macro fReadRevWords {
+    fRead 
+    ' ' revsplit
+}
+
+macro fReadSplit {
+    fRead
+    swap split
+}
+
+macro fReadRevSplit {
+    fRead
+    swap revsplit
 }
