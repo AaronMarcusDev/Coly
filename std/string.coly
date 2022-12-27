@@ -5,3 +5,20 @@ macro splitChar {
 macro revsplitChar {
     '' revsplit
 }
+
+macro join {
+    set joinStart
+    count 1 != if {
+        concat
+        jump joinStart
+    }
+}
+
+macro revJoin {
+    reverse
+    set revJoinStart
+    count 1 != if {
+        concat
+        jump revJoinStart
+    }
+}
