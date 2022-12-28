@@ -1,0 +1,20 @@
+macro HTMLOutputFile { "index.html" }
+
+macro initHtml {
+    // Clears or creates the output file
+    "" HTMLOutputFile fWrite
+}
+
+macro pushHtml {
+    HTMLOutputFile fAppend
+}
+
+macro tag { 
+    "<" swap ">\n" concat concat 
+    HTMLOutputFile fAppend
+}
+
+macro cTag {
+    "</" swap ">\n" concat concat
+    HTMLOutputFile fAppend
+}
