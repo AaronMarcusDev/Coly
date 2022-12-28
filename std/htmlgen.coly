@@ -6,15 +6,18 @@ macro initHtml {
 }
 
 macro pushHtml {
+    // `string` fAppend
     HTMLOutputFile fAppend
 }
 
-macro tag { 
+macro tag {
+    // `string` tag
     "<" swap ">\n" concat concat 
     HTMLOutputFile fAppend
 }
 
 macro cTag {
+    // `string` cTag
     "</" swap ">\n" concat concat
     HTMLOutputFile fAppend
 }
