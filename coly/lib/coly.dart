@@ -20,6 +20,7 @@ void run(List<String> args) {
   if (args.length < 2) {
     print("\x1B[31m[ERROR] Unexpected amount of arguments provided.\x1B[0m");
     print("[INFOR] Usage: coly <mode> <file> [args]");
+    print("[INFOR] Modes: run, build");
     exit(1);
   } else {
     String mode = args[0];
@@ -41,7 +42,6 @@ void run(List<String> args) {
       compiler.compile("output", cpp);
     } else if (mode == "run") {
       passthrough.args = args.sublist(2);
-
       String source = tools.loadFile(file);
       List<Token> tokens = lexer.lex("interpret", file, source);
       List<Token> CFG = parser.parse("interpret", tokens);
