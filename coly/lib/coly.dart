@@ -17,6 +17,8 @@ Interpreter interpreter = Interpreter();
 Compiler compiler = Compiler();
 
 void run(List<String> args) {
+  // String flib = "io.coly";
+  // print("${Platform.environment["COLY_LIB"]}$flib");
   if (args.length < 2) {
     print("\x1B[31m[ERROR] Unexpected amount of arguments provided.\x1B[0m");
     print("[INFOR] Usage: coly <mode> <file> [args]");

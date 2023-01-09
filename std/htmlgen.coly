@@ -7,7 +7,7 @@ macro initHtml {
 
 macro pushHtml {
     // `string` fAppend
-    HTMLOutputFile fAppend
+    "\n" concat HTMLOutputFile fAppend
 }
 
 macro tag {
@@ -20,4 +20,11 @@ macro cTag {
     // `string` cTag
     "</" swap ">\n" concat concat
     HTMLOutputFile fAppend
+}
+
+macro wTag {
+    // `string` `string` wTag
+    dup tag
+    swap "\n" concat HTMLOutputFile fAppend
+    cTag
 }

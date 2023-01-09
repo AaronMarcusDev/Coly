@@ -27,6 +27,10 @@ macro outAll {
     }
 }
 
+macro prompt {
+    out input
+}
+
 // File IO
 macro fReadLines {
     fRead 

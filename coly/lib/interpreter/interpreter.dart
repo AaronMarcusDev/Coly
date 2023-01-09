@@ -145,6 +145,7 @@ class Interpreter {
             _errorExit();
           }
           _push(Token(file, TokenType.FLOAT, line, i, b.value / a.value));
+        //TODO: Float Modulo
         }
       } else if (type == TokenType.COMPARATOR) {
         if (value == Tokens.EQUAL_EQUAL) {
