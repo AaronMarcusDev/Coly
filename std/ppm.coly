@@ -47,10 +47,27 @@ macro addPixelBlue {
     "0 0 255\n" "image.ppm" fAppend
 }
 
+macro addPixelLightBlue {
+    "0 255 255\n" "image.ppm" fAppend
+}
+
 macro addPixelBlack {
     "0 0 0\n" "image.ppm" fAppend
+}
+
+macro addPixelGrey {
+    "128 128 128\n" "image.ppm" fAppend
 }
 
 macro addPixelWhite {
     "255 255 255\n" "image.ppm" fAppend
 }
+
+macro addPixelYellow {
+    "255 255 0\n" "image.ppm" fAppend
+}
+
+macro addPixelPurple {
+    "127 0 255\n" "image.ppm" fAppend
+}
+
