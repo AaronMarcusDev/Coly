@@ -1,11 +1,11 @@
 macro HTMLOutputFile { "index.html" }
 
-macro initHtml {
+macro initHTML {
     // Clears or creates the output file
     "" HTMLOutputFile fWrite
 }
 
-macro pushHtml {
+macro pushHTML {
     // `string` fAppend
     "\n" concat HTMLOutputFile fAppend
 }
@@ -27,4 +27,17 @@ macro wTag {
     dup tag
     swap "\n" concat HTMLOutputFile fAppend
     cTag
+}
+
+macro linkCSS {
+    // `string` linkCSS
+    "<link rel='stylesheet' type='text/css' href='" 
+    swap "'>\n" concat concat
+    HTMLOutputFile fAppend
+}
+
+macro linkJS {
+    // `string` linkJS
+    "<script src='" swap "'></script>\n" concat concat
+    HTMLOutputFile fAppend
 }
