@@ -1,3 +1,5 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
 // Dart
 import 'dart:io';
 // Custom
@@ -185,6 +187,21 @@ class Lexer {
                 curr++;
               }
               curr--;
+            } else if (peek(curr) == '*') {
+              curr++;
+              while (true) {
+                if (_isAtEnd()) {
+                  break;
+                }
+                if (chars[curr] == '*' && peek(curr) == '/') {
+                  curr++;
+                  break;
+                }
+                if (chars[curr] == '\n') {
+                  line++;
+                }
+                curr++;
+              }
             } else if (peek(curr) == '.') {
               tokens.add(Token(
                   file, TokenType.OPERATOR, line, curr, Tokens.FLOAT_SLASH));

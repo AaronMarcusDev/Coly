@@ -19,6 +19,20 @@ Compiler compiler = Compiler();
 void run(List<String> args) {
   // String flib = "io.coly";
   // print("${Platform.environment["COLY_LIB"]}$flib");
+
+  try {
+    Process.runSync("g++", ["--version"]);
+  } catch (e) {
+    print("\x1B[31m[ERROR] G++ could not be located.\x1B[0m");
+    if (Platform.isWindows) {
+      print("[INFOR] Please install G++ from https://code.visualstudio.com/docs/cpp/config-mingw");
+    } else {
+      print("[INFOR] Please install G++ from your package manager.");
+      print("[INFOR] Example: sudo apt install g++ (Debian/Ubuntu)");
+    }
+    exit(1);
+  } 
+
   if (args.length < 2) {
     print("\x1B[31m[ERROR] Unexpected amount of arguments provided.\x1B[0m");
     print("[INFOR] Usage: coly <mode> <file> [args]");

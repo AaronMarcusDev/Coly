@@ -1,5 +1,8 @@
-import 'dart:io';
+// ignore_for_file: no_leading_underscores_for_local_identifiers
 
+//Dart
+import 'dart:io';
+// Custom
 import 'package:coly/token/token.dart';
 import 'package:coly/token/token_type.dart';
 import 'package:coly/reporter/reporter.dart';
