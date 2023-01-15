@@ -188,16 +188,19 @@ class Lexer {
               }
               curr--;
             } else if (peek(curr) == '*') {
+              int nest = 0;
               curr++;
               while (true) {
                 if (_isAtEnd()) {
                   break;
-                }
-                if (chars[curr] == '*' && peek(curr) == '/') {
+                } else if (chars[curr] == '*' && peek(curr) == '/') {
                   curr++;
-                  break;
-                }
-                if (chars[curr] == '\n') {
+                  if (nest == 0) break;
+                  nest--;
+                } else if (chars[curr] == '/' && peek(curr) == '*') {
+                  nest++;
+                  curr++;
+                } else if (chars[curr] == '\n') {
                   line++;
                 }
                 curr++;
