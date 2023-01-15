@@ -36,7 +36,7 @@ void run(List<String> args) {
   if (args.length < 2) {
     print("\x1B[31m[ERROR] Unexpected amount of arguments provided.\x1B[0m");
     print("[INFOR] Usage: coly <mode> <file> [args]");
-    print("[INFOR] Modes: run, build");
+    print("[INFOR] Modes: run, build, IR");
     exit(1);
   } else {
     String mode = args[0];
@@ -62,10 +62,23 @@ void run(List<String> args) {
       List<Token> tokens = lexer.lex("interpret", file, source);
       List<Token> CFG = parser.parse("interpret", tokens);
       interpreter.interpret(CFG);
-    } else {
+    } else if (mode == "IR") {
+      String source = tools.loadFile(file);
+      List<Token> tokens = lexer.lex("compile", file, source);
+      List<Token> CFG = parser.parse("compile", tokens);
+      List<String> IR = compiler.generate(CFG);
+      try { 
+        File('output.cpp').writeAsStringSync(compiler.build(IR));
+      }  catch (e) {
+        print("\x1B[31m[ERROR] Could not write to file.\x1B[0m");
+        print("[INFOR] Please check permissions.");
+        exit(1);
+      }
+    } 
+    else {
       print("\x1B[31m[ERROR] Invalide mode.\x1B[0m");
       print("[INFOR] Usage: coly <mode> <file> [args]");
-      print("[INFOR] Modes: run, build");
+      print("[INFOR] Modes: run, build, IR");
       exit(1);
     }
   }
