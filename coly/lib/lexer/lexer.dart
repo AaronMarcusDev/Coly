@@ -155,6 +155,9 @@ class Lexer {
                       curr++;
                     }
                     break;
+                  } else if (chars[curr] == '_') {
+                    curr++;
+                    continue;
                   } else {
                     tokens.add(Token(file, TokenType.INTEGER, line, curr,
                         int.parse(numberArray.join(""))));
@@ -393,6 +396,9 @@ class Lexer {
                       curr++;
                     }
                     break;
+                  } else if (chars[curr] == '_') {
+                    curr++;
+                    continue;
                   } else {
                     tokens.add(Token(file, TokenType.INTEGER, line, curr,
                         int.parse(numberArray.join(""))));
