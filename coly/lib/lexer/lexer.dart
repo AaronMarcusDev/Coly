@@ -360,7 +360,7 @@ class Lexer {
             if (_isLetter(chars[curr])) {
               List<String> keywordArray = [];
               while (true) {
-                if (_isAtEnd() || !_isLetter(chars[curr])) {
+                if (_isAtEnd() || (!_isLetter(chars[curr]) && chars[curr] != "_" && !_isNumber(chars[curr]))) {
                   String value = keywordArray.join("");
                   if (value == "true" || value == "false") {
                     value == "true"

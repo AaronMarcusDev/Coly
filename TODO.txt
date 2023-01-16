@@ -10,7 +10,7 @@ Must:
 - _ for big numbers? ✅
     100_000_000
 
-! - Numbers in macro names 
+! - Numbers in macro names ✅
 
 ! - Standard library -> not local (ENVIV'S?)
 
