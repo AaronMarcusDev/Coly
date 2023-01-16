@@ -1,17 +1,21 @@
+Must:
+
 - Nesting of multiline comments ✅
 /*
     /* text */
 */
 
-- Numbers in macro names
+- Emit IR <- c++ as an option ✅
 
-- Standard library -> not local
+- _ for big numbers? ✅
+    100_000_000
+
+! - Numbers in macro names 
+
+! - Standard library -> not local (ENVIV'S?)
+
+Optional:
 
 - Registers?
 
 - Variables?
-
-- _ for big numbers? 
-    100_000_000
-
-- Emit IR <- c++ as an option
