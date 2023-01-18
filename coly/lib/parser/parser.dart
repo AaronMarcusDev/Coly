@@ -12,7 +12,7 @@ Reporter report = Reporter();
 Lexer lexer = Lexer();
 
 class Parser {
-  List<Token> parse(String mode, List<Token> tokens) {
+  List<Token> parse(String mode, List<Token> tokens, String stdLibPath) {
     List<Token> preresult = [];
     int errors = 0;
     Map macros = {};
@@ -43,6 +43,32 @@ class Parser {
         }
         List<Token> lexedTokens =
             lexer.lex(mode, fileName, File(fileName).readAsStringSync());
+        for (Token token in lexedTokens.sublist(0, lexedTokens.length - 1)) {
+          preresult.add(token);
+        }
+      } else if (tokens[i].type == TokenType.KEYWORD && tokens[i].value == "use") {
+        if (_isAtEnd()) {
+          report.error(tokens[i].file, tokens[i].line,
+              "Expected a string after `use`.");
+          errors++;
+          break;
+        }
+        i++;
+        if (tokens[i].type != TokenType.STRING) {
+          report.error(tokens[i].file, tokens[i].line,
+              "Expected a string after `use`.");
+          errors++;
+          break;
+        }
+        String fileName = tokens[i].value.trim();
+        if (!File("$stdLibPath\\$fileName.coly").existsSync()) {
+          report.error(tokens[i].file, tokens[i].line,
+              "File `$fileName` does not exist in the standard library.");
+          errors++;
+          break;
+        }
+        List<Token> lexedTokens =
+            lexer.lex(mode, "$fileName.coly", File("$stdLibPath\\$fileName.coly").readAsStringSync());
         for (Token token in lexedTokens.sublist(0, lexedTokens.length - 1)) {
           preresult.add(token);
         }

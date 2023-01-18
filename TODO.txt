@@ -12,7 +12,7 @@ Must:
 
 ! - Numbers in macro names ✅
 
-! - Standard library -> not local (ENVIV'S?)
+! - Standard library -> not local (ENVIV'S?) ✅
 
 Optional:
 

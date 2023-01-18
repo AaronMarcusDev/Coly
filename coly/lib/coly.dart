@@ -58,7 +58,7 @@ void run(List<String> args) {
 
       String source = tools.loadFile(file);
       List<Token> tokens = lexer.lex("compile", file, source);
-      List<Token> CFG = parser.parse("compile", tokens);
+      List<Token> CFG = parser.parse("compile", tokens, "$scriptFolderPath/stdlib");
       List<String> IR = compiler.generate(CFG);
       String cpp = compiler.build(IR);
       compiler.compile("output", cpp);
@@ -66,12 +66,12 @@ void run(List<String> args) {
       passthrough.args = args.sublist(2);
       String source = tools.loadFile(file);
       List<Token> tokens = lexer.lex("interpret", file, source);
-      List<Token> CFG = parser.parse("interpret", tokens);
+      List<Token> CFG = parser.parse("interpret", tokens, "$scriptFolderPath/stdlib");
       interpreter.interpret(CFG);
     } else if (mode == "IR") {
       String source = tools.loadFile(file);
       List<Token> tokens = lexer.lex("compile", file, source);
-      List<Token> CFG = parser.parse("compile", tokens);
+      List<Token> CFG = parser.parse("compile", tokens, "$scriptFolderPath/stdlib");
       List<String> IR = compiler.generate(CFG);
       try { 
         File('output.cpp').writeAsStringSync(compiler.build(IR));
