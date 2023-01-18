@@ -17,8 +17,14 @@ Interpreter interpreter = Interpreter();
 Compiler compiler = Compiler();
 
 void run(List<String> args) {
-  // String flib = "io.coly";
-  // print("${Platform.environment["COLY_LIB"]}$flib");
+  
+  String scriptFolderPath = Platform.resolvedExecutable.replaceAll("coly.exe", '');
+
+  if (!Directory("$scriptFolderPath/stdlib").existsSync()) {
+    print("\x1B[31m[ERROR] Standard library could not be located.\x1B[0m");
+    print("[INFOR] Please check if the standard library is in the same folder as the executable.");
+    exit(1);
+  }
 
   try {
     Process.runSync("g++", ["--version"]);
