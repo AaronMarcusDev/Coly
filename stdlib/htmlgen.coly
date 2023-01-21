@@ -1,4 +1,12 @@
-macro HTMLOutputFile { "index.html" }
+//! A HTMLOutputFile macro is REQUIRED!
+// Example:
+//
+// macro HTMLOutputFile {
+//      "index.html"   
+// }
+
+
+// Library
 
 macro initHTML {
     // Clears or creates the output file
