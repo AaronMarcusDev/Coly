@@ -1,6 +1,6 @@
 # Coly Programming Language
 
-Coly is a open-source, modern, compiled stack-oriented programming language.\
+Coly is a open-source, high-level, compiled stack-oriented programming language.\
 It has an interpreter and a compiler for windows and linux based operating systems.
 
 ```c
