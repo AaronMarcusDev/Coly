@@ -16,9 +16,5 @@ macro join {
 
 macro revJoin {
     reverse
-    set revJoinStart
-    count 1 != if {
-        concat
-        jump revJoinStart
-    }
+    join
 }
