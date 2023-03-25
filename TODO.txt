@@ -19,6 +19,10 @@ Must:
     [ERROR] file:1 Unterminated string
     [TRACE] --> "hello puts
 
+    [ERROR] Unterminated string
+    [TRACE] <file>
+            1 | "hello puts
+
 Optional:
 
 - Registers?

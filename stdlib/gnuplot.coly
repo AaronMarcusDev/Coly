@@ -48,7 +48,7 @@ macro buildGraph {
 }
 
 // Sample program
-
+/* 
 makeGraphFile
 "png" setTerminal
 "image.png" setOutput
@@ -67,3 +67,5 @@ plotGdat
 "9" "0" xy
 
 buildGraph
+
+*/
