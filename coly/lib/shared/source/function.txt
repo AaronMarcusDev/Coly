@@ -1,0 +1,5 @@
+What does this folder do?
+
+This folder contains the source of the file that 
+was entered as argument for compilation / execution.
+It is useful for error reporting during compilation / execution.

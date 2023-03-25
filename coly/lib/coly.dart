@@ -4,12 +4,13 @@
 import 'dart:io';
 // Custom
 import 'package:coly/tools/tools.dart' as tools;
+import 'package:coly/shared/source/source.dart' as shared_source;
+import 'package:coly/token/token.dart';
 import 'package:coly/lexer/lexer.dart';
 import 'package:coly/parser/parser.dart';
 import 'package:coly/interpreter/interpreter.dart';
-import 'package:coly/compiler/compiler.dart';
 import 'package:coly/interpreter/passthrough.dart' as passthrough;
-import 'package:coly/token/token.dart';
+import 'package:coly/compiler/compiler.dart';
 
 Lexer lexer = Lexer();
 Parser parser = Parser();
@@ -57,6 +58,7 @@ void run(List<String> args) {
       }
 
       String source = tools.loadFile(file);
+      shared_source.source = source;
       List<Token> tokens = lexer.lex("compile", file, source);
       List<Token> CFG = parser.parse("compile", tokens, "$scriptFolderPath/stdlib");
       List<String> IR = compiler.generate(CFG);
@@ -65,11 +67,13 @@ void run(List<String> args) {
     } else if (mode == "run") {
       passthrough.args = args.sublist(2);
       String source = tools.loadFile(file);
+      shared_source.source = source;
       List<Token> tokens = lexer.lex("interpret", file, source);
       List<Token> CFG = parser.parse("interpret", tokens, "$scriptFolderPath/stdlib");
       interpreter.interpret(CFG);
     } else if (mode == "IR") {
       String source = tools.loadFile(file);
+      shared_source.source = source;
       List<Token> tokens = lexer.lex("compile", file, source);
       List<Token> CFG = parser.parse("compile", tokens, "$scriptFolderPath/stdlib");
       List<String> IR = compiler.generate(CFG);
