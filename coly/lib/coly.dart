@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names, curly_braces_in_flow_control_structures
+// ignore_for_file: non_constant_identifier_names
 
 // Dart
 import 'dart:io';
@@ -20,17 +20,15 @@ Compiler compiler = Compiler();
 
 void run(List<String> args) async {
   String scriptFolderPath;
-  if (Platform.isWindows) scriptFolderPath = Platform.resolvedExecutable.replaceAll("coly.exe", '');
-  else scriptFolderPath = Platform.resolvedExecutable.replaceAll("coly", '');
-  (bool, String) hasUpdate = await update.hasUpdate();
-
-  if (hasUpdate.$1) {
-    print(
-        "[INFOR] There is a newer version of coly available (Version ${hasUpdate.$2})");
+  if (Platform.isWindows) {
+    scriptFolderPath = Platform.resolvedExecutable.replaceAll("coly.exe", '');
+  } else {
+    scriptFolderPath = Platform.resolvedExecutable.replaceAll("coly", '');
   }
 
-  scriptFolderPath =
-      Platform.resolvedExecutable.replaceAll("coly.exe", '');
+  (bool, String) hasUpdate = await update.hasUpdate();
+
+  scriptFolderPath = Platform.resolvedExecutable.replaceAll("coly.exe", '');
 
   if (!Directory("$scriptFolderPath/stdlib").existsSync()) {
     print("\x1B[31m[ERROR] Standard library could not be located.\x1B[0m");
@@ -51,6 +49,12 @@ void run(List<String> args) async {
       print("[INFOR] Example: sudo apt install g++ (Debian/Ubuntu)");
     }
     exit(1);
+  }
+
+  if (hasUpdate.$1) {
+    print(
+        "[INFOR] There is a newer version of coly available (Version ${hasUpdate.$2})");
+    print("[INFOR] You can update by running 'coly update'");
   }
 
   if (args.length < 2) {
@@ -100,6 +104,8 @@ void run(List<String> args) async {
         print("[INFOR] Please check permissions.");
         exit(1);
       }
+    } else if (mode == "update") {
+      update.update();
     } else {
       print("\x1B[31m[ERROR] Invalide mode.\x1B[0m");
       print("[INFOR] Usage: coly <mode> <file> [args]");
