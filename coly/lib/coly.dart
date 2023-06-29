@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, curly_braces_in_flow_control_structures
 
 // Dart
 import 'dart:io';
@@ -29,7 +29,7 @@ void run(List<String> args) async {
         "[INFOR] There is a newer version of coly available (Version ${hasUpdate.$2})");
   }
 
-  String scriptFolderPath =
+  scriptFolderPath =
       Platform.resolvedExecutable.replaceAll("coly.exe", '');
 
   if (!Directory("$scriptFolderPath/stdlib").existsSync()) {
