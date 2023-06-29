@@ -26,6 +26,11 @@ void run(List<String> args) async {
     scriptFolderPath = Platform.resolvedExecutable.replaceAll("coly", '');
   }
 
+  bool isUpdating = false;
+  if (args.length == 1 && args[0] == "update") {
+    isUpdating = true;
+  }
+
   (bool, String) hasUpdate = await update.hasUpdate();
 
   scriptFolderPath = Platform.resolvedExecutable.replaceAll("coly.exe", '');
@@ -51,13 +56,15 @@ void run(List<String> args) async {
     exit(1);
   }
 
-  if (hasUpdate.$1) {
+  if (hasUpdate.$1 && !isUpdating) {
     print(
         "[INFOR] There is a newer version of coly available (Version ${hasUpdate.$2})");
     print("[INFOR] You can update by running 'coly update'");
   }
 
-  if (args.length < 2) {
+  if (isUpdating) {
+    await update.update();
+  } else if (args.length < 2) {
     print("\x1B[31m[ERROR] Unexpected amount of arguments provided.\x1B[0m");
     print("[INFOR] Usage: coly <mode> <file> [args]");
     print("[INFOR] Modes: run, build, IR");
@@ -104,8 +111,6 @@ void run(List<String> args) async {
         print("[INFOR] Please check permissions.");
         exit(1);
       }
-    } else if (mode == "update") {
-      update.update();
     } else {
       print("\x1B[31m[ERROR] Invalide mode.\x1B[0m");
       print("[INFOR] Usage: coly <mode> <file> [args]");
