@@ -8,6 +8,7 @@ String init = """
 #include <thread>
 #include <iostream>
 #include <fstream>
+#include <sys/stat.h>
 
 struct value
 {

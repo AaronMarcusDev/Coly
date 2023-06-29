@@ -1,3 +1,5 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
 // Dart
 import 'dart:io';
 // Custom
@@ -221,6 +223,7 @@ class Interpreter {
           }
           exit(a.value);
         } else if (value == "system") {
+          //TODO: Make an option to put the result back onto the stack (needed for cURL)
           ifIsEmptyThrowError("system");
           Token a = _pop();
           if (a.type != TokenType.STRING) {
@@ -612,6 +615,44 @@ class Interpreter {
             report.error(file, line, "Command `fCreate` failed.");
             _errorExit();
           }
+        } else if (value == "fCreateDir") {
+          ifIsEmptyThrowError("fCreateDir");
+          Token a = _pop();
+          if (a.type != TokenType.STRING) {
+            report.error(file, line,
+                "Command `fCreateDir` failed. Item on stack must be of type string.");
+            _errorExit();
+          }
+          try {
+            Directory(a.value).createSync();
+          } catch (e) {
+            report.error(file, line, "Command `fCreateDir` failed.");
+            _errorExit();
+          }
+        } else if (value == "fDeleteDir") {
+          ifIsEmptyThrowError("fDeleteDir");
+          Token a = _pop();
+          if (a.type != TokenType.STRING) {
+            report.error(file, line,
+                "Command `fDeleteDir` failed. Item on stack must be of type string.");
+            _errorExit();
+          }
+          try {
+            Directory(a.value).deleteSync(recursive: true);
+          } catch (e) {
+            report.error(file, line, "Command `fDeleteDir` failed.");
+            _errorExit();
+          }
+        } else if (value == "fDirExists") {
+          ifIsEmptyThrowError("fDirExists");
+          Token a = _pop();
+          if (a.type != TokenType.STRING) {
+            report.error(file, line,
+                "Command `fDirExists` failed. Item on stack must be of type string.");
+            _errorExit();
+          }
+          _push(Token(file, TokenType.BOOLEAN, line, i,
+              Directory(a.value).existsSync()));
         }
         // Unknown keyword
         else {

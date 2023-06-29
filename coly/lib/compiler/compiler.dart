@@ -790,6 +790,45 @@ class Compiler {
           file.close();
         }
         """);
+        } else if (value == "fCreateDir") {
+          code.add("// fCREATEDIR");
+          emptyPanic();
+          code.add("""
+        {
+          value v = stack.top();
+          stack.pop();
+          if (v.type != "string") panic("fCreateDir", "Expected string, got " + v.type);
+          if (std::filesystem::create_directory(v.value) == false)
+            panic("fCreateDir", "Failed to create directory");
+        }
+        """);
+        } else if (value == "fDeleteDir") {
+          code.add("// fDELETEDIR");
+          emptyPanic();
+          code.add("""
+        {
+          value v = stack.top();
+          stack.pop();
+          if (v.type != "string") panic("fDeleteDir", "Expected string, got " + v.type);
+          if (std::filesystem::remove_all(v.value) == false)
+            panic("fDeleteDir", "Failed to delete directory");
+        }
+        """);
+        } else if (value == "fDirExists") {
+          code.add("// fDIREXISTS");
+          emptyPanic();
+          code.add("""
+        {
+          value v = stack.top();
+          stack.pop();
+          if (v.type != "string") panic("fDirExists", "Expected string, got " + v.type);
+          v.type = "boolean";
+          const char* dir = v.value.c_str();
+          struct stat sb;
+          v.value = (stat(dir, &sb) == 0) ? "true" : "false";
+          stack.push(v);
+        }
+        """);
         }
         // Unknown keyword
         else {

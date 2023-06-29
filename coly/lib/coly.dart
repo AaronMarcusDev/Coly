@@ -18,8 +18,9 @@ Interpreter interpreter = Interpreter();
 Compiler compiler = Compiler();
 
 void run(List<String> args) {
-  
-  String scriptFolderPath = Platform.resolvedExecutable.replaceAll("coly.exe", '');
+  String scriptFolderPath;
+  if (Platform.isWindows) scriptFolderPath = Platform.resolvedExecutable.replaceAll("coly.exe", '');
+  else scriptFolderPath = Platform.resolvedExecutable.replaceAll("coly", '');
 
   if (!Directory("$scriptFolderPath/stdlib").existsSync()) {
     print("\x1B[31m[ERROR] Standard library could not be located.\x1B[0m");
