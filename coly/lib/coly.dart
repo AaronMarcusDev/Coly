@@ -26,12 +26,17 @@ void run(List<String> args) async {
     scriptFolderPath = Platform.resolvedExecutable.replaceAll("coly", '');
   }
 
+  (bool, String) hasUpdate = await update.hasUpdate();
+
   bool isUpdating = false;
   if (args.length == 1 && args[0] == "update") {
-    isUpdating = true;
+    if (hasUpdate.$1) {
+      isUpdating = true;
+    } else {
+      print("[INFOR] You are already on the latest version.");
+      exit(0);
+    }
   }
-
-  (bool, String) hasUpdate = await update.hasUpdate();
 
   scriptFolderPath = Platform.resolvedExecutable.replaceAll("coly.exe", '');
 

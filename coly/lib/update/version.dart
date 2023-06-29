@@ -8,7 +8,7 @@ String version() {
         .readAsStringSync();
   } else {
     v = File(
-            "${Platform.resolvedExecutable.replaceAll("coly", '')}/stdlib/.version")
+            "${Platform.resolvedExecutable.replaceAll('coly', '')}/stdlib/.version")
         .readAsStringSync();
   }
   return v;
