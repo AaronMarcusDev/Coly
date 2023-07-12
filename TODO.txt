@@ -14,7 +14,7 @@ Must:
 
 ! - Standard library -> not local (ENVIV'S?) ✅
 
-- Error messages show the line in message
+- Error messages show the line in message ✅
     Example:
     [ERROR] file:1 Unterminated string
     [TRACE] --> "hello puts
@@ -23,8 +23,13 @@ Must:
     [TRACE] <file>
             1 | "hello puts
 
+- Updater for the standard library ✅
+
+- Updater for the language executable
+
 Optional:
+- Null support
 
-- Registers?
+- Registers
 
-- Variables?
+- Variables

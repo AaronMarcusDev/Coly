@@ -11,6 +11,7 @@ Future<(bool, String)> hasUpdate() async {
 }
 
 Future<void> update() async {
+  print("[INFOR] Updating the standard library...");
   String scriptFolderPath;
   if (Platform.isWindows) {
     scriptFolderPath = Platform.resolvedExecutable.replaceAll("coly.exe", '');

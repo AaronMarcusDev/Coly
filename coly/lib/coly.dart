@@ -26,6 +26,13 @@ void run(List<String> args) async {
     scriptFolderPath = Platform.resolvedExecutable.replaceAll("coly", '');
   }
 
+  if (!Directory("$scriptFolderPath/stdlib").existsSync()) {
+    print("\x1B[31m[ERROR] Standard library could not be located.\x1B[0m");
+    print(
+        "[INFOR] Please check if the standard library is in the same folder as the executable.");
+    exit(1);
+  }
+
   (bool, String) hasUpdate = await update.hasUpdate();
 
   bool isUpdating = false;
@@ -39,13 +46,6 @@ void run(List<String> args) async {
   }
 
   scriptFolderPath = Platform.resolvedExecutable.replaceAll("coly.exe", '');
-
-  if (!Directory("$scriptFolderPath/stdlib").existsSync()) {
-    print("\x1B[31m[ERROR] Standard library could not be located.\x1B[0m");
-    print(
-        "[INFOR] Please check if the standard library is in the same folder as the executable.");
-    exit(1);
-  }
 
   try {
     Process.runSync("g++", ["--version"]);

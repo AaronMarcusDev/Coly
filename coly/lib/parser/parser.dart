@@ -135,7 +135,11 @@ class Parser {
                   "Macro creation failed. Block was not terminated.");
               errors++;
               break;
-            } else if (tokens[i].value == Tokens.LEFT_BRACE) {
+            } else if (tokens[i].type == TokenType.KEYWORD && tokens[i].value == name) {
+              report.error(file, line, "Macro creation failed. Macro cannot be recursive.");
+              errors++;
+            } 
+            else if (tokens[i].value == Tokens.LEFT_BRACE) {
               nest++;
               macroTokens.add(tokens[i]);
             } else if (tokens[i].value == Tokens.RIGHT_BRACE) {
