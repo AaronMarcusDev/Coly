@@ -33,7 +33,7 @@ void run(List<String> args) async {
     exit(1);
   }
 
-  (bool, String) hasUpdate = await update.hasUpdate();
+  (bool, String) hasUpdate = await update.hasUpdate() ?? (false, "");
 
   bool isUpdating = false;
   if (args.length == 1 && args[0] == "update") {

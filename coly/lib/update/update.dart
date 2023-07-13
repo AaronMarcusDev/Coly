@@ -4,10 +4,14 @@ import 'package:http/http.dart' as http;
 // Custom
 import 'version.dart';
 
-Future<(bool, String)> hasUpdate() async {
-  String latest = await http.read(Uri.parse(
-      "https://raw.githubusercontent.com/AaronMarcusDev/Coly/main/stdlib/.version"));
-  return (!(version() == latest), latest);
+Future<(bool, String)?> hasUpdate() async {
+  try {
+    String latest = await http.read(Uri.parse(
+        "https://raw.githubusercontent.com/AaronMarcusDev/Coly/main/stdlib/.version"));
+    return (!(version() == latest), latest);
+  } catch (e) {
+    return null;
+  }
 }
 
 Future<void> update() async {
