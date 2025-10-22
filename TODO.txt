@@ -33,3 +33,7 @@ Optional:
 - Registers
 
 - Variables
+
+- Constants
+
+- Include files over the internet (lib's from online)
